@@ -451,3 +451,9 @@ textarea.field { resize: vertical; line-height: 1.5; }
 .chip input:checked + label .chip-pic { outline: 2px solid var(--on-ink); }
 .credits { margin: 0 0 10px; padding-left: 18px; font-size: 13px; }
 .credits a { color: var(--link); }
+/* Mode cuisine sur grand écran : la fenêtre tient toujours dans l'écran, les boutons restent visibles */
+@media (min-width: 881px) {
+  .cook { max-height: calc(100vh - 32px); }
+  .cook-inner { height: min(720px, calc(100vh - 32px)); min-height: 0; }
+}
+@media (max-height: 760px) { .cook-photo { max-height: 110px; } }

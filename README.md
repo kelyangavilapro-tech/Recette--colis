@@ -48,6 +48,17 @@ Dans `recettes.json`, une recette ressemble à ceci :
 - `qte` (facultatif) : les grammes par portion quand ils diffèrent de la portion habituelle, pour les valeurs nutritionnelles. Exemple : `{"riz": 35, "lait": 250}`.
 - Les régimes n'ont pas besoin d'étiquettes. L'appli retire les ingrédients exclus (par exemple thon et sardines pour « Végétarien ») et cache la recette s'il ne reste aucune alternative.
 
+## Photos
+
+Les photos des plats (`photos/recettes/`) et des ingrédients (`photos/ingredients/`) sont des photos libres de droits trouvées sur [Openverse](https://openverse.org) : CC0, domaine public, CC BY ou CC BY-SA. Elles sont recadrées, et chacune est créditée dans l'appli (bas de page › « Crédits photos »), avec l'auteur, la licence et un lien vers l'original.
+
+Pour ajouter ou remplacer une photo, par exemple une vraie photo d'un plat cuisiné par un étudiant :
+1. Mets l'image dans `photos/recettes/` (640 × 480 conseillé), nommée d'après le titre de la recette en minuscules, sans accents, avec des tirets : `puree-maison-a-la-fourchette.jpg`.
+2. Déclare-la dans la partie `"photos"` de `recettes.json` : `"puree-maison-a-la-fourchette": {"src": "photos/recettes/puree-maison-a-la-fourchette.jpg", "credit": "Prénom Nom, avec son accord"}`.
+3. Lance `node verifier-recettes.js` : il signale un nom ou un fichier incorrect, ou un crédit manquant.
+
+Une recette ou un ingrédient sans photo garde son illustration.
+
 ## Mettre en ligne une modification
 
 ```bash
