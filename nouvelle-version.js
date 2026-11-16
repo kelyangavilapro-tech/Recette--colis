@@ -11,7 +11,7 @@ const next = current + 1;
 
 for (const f of ["sw.js", "index.html", "asso.html", "app.js"]) {
   let s = fs.readFileSync(path(f), "utf8");
-  s = s.split(`?v=${current}"`).join(`?v=${next}"`)
+  s = s.split(`?v=${current}"`).join(`?v=${next}"`).split(`?v=${current}\``).join(`?v=${next}\``)
        .replace(`const VERSION = "v${current}";`, `const VERSION = "v${next}";`)
        .split(`>Version ${current}<`).join(`>Version ${next}<`);
   fs.writeFileSync(path(f), s);

@@ -7,13 +7,14 @@ Application web installable (PWA) pour aider les étudiants à cuisiner avec ce 
 
 ## Ce que fait l'appli
 
-- **Pour les étudiants.** On coche ce qu'on a (avec une recherche rapide) ou on **scanne les codes-barres** de ses produits. On indique son équipement : plaque, micro-ondes, four, air fryer, bouilloire. L'appli classe 37 recettes en trois niveaux : faisables tout de suite, un seul ingrédient manquant, pour plus tard.
+- **Pour les étudiants.** On coche ce qu'on a (avec une recherche rapide) ou on **scanne les codes-barres** de ses produits. On indique son équipement : plaque, micro-ondes, four, air fryer, bouilloire, mixeur, grille-pain, cuiseur à riz, autocuiseur, gaufrier, appareil à croque-monsieur. L'appli classe 51 recettes en trois niveaux : faisables tout de suite, un seul ingrédient manquant, pour plus tard.
 - **Premier lancement guidé** : trois questions (équipement, régime, cocher / scanner / voir un exemple).
 - **Portions** : pour 1, 2 ou 4 personnes ; les quantités des étapes s'ajustent, avec des repères sans balance (« ≈ un verre », « ≈ 2 grosses poignées »). Les recettes individuelles (mug cake, porridge…) portent `"portions": 1`, celles écrites par personne `"portions": "par personne"`.
 - **Filtres et recherche** : 10 min ou moins, sans cuisson, micro-ondes, sucré (`"sucree": true`), riche en protéines ; recherche par nom ou ingrédient.
 - **Coût estimé par portion**, d'après les prix moyens de la partie `"prix"` de `recettes.json` (euros par kg ou par litre).
 - **Mode cuisine** : lecture des étapes à voix haute (voix du téléphone), puis « J'ai cuisiné ça ! » qui retire de « Ce que j'ai » les ingrédients finis et compte le repas.
 - **Compteur** (menu › Mes repas) : repas cuisinés ce mois-ci et courses évitées, calculés sur le coût estimé.
+- **Menu de la semaine** : 5 repas variés avec ce qu'on a, chaque jour peut être changé, et ce qui manque part dans la liste de courses.
 - **À finir vite** : on marque ce qui va bientôt périmer ; les recettes qui l'utilisent passent en premier.
 - **Mes recettes** : chaque étudiant peut créer, modifier et supprimer ses propres recettes. Elles restent sur son téléphone (clé `colis-mes-recettes`) et profitent de tout le reste : portions, repères, mode cuisine, coût, valeurs nutritionnelles.
 - **Régimes.** Végétarien, végan, halal / sans porc, sans lactose, sans gluten, et allergies : sans œufs, sans poisson, sans arachides, sans fruits à coque, sans soja. Ces filtres retirent les ingrédients concernés, mais on rappelle de toujours vérifier les étiquettes (traces possibles).
@@ -69,13 +70,13 @@ Une recette ou un ingrédient sans photo garde son illustration.
 
 ## Langues
 
-L'appli existe en français et en anglais. Elle choisit la langue du téléphone à la première ouverture : français pour un téléphone en français, anglais sinon. Les personnes qui l'utilisaient déjà restent en français. On change de langue dans Menu › « Langue · Language ».
+L'appli existe en français, en anglais et en espagnol. Elle choisit la langue du téléphone à la première ouverture : français, espagnol, ou anglais pour les autres langues. Les personnes qui l'utilisaient déjà restent en français. On change de langue dans Menu › « Langue · Language · Idioma ».
 
-- `i18n-en.json` : les textes de l'interface. La clé est le texte français, la valeur sa traduction.
-- `recettes.en.json` : les noms des ingrédients, les recettes (titre, ustensile, étapes, astuce) et les conseils de conservation, rangés d'après leur nom français.
-- `node verifier-recettes.js` signale toute recette, tout ingrédient ou tout texte d'interface sans traduction anglaise.
+- `i18n-en.json`, `i18n-es.json` : les textes de l'interface. La clé est le texte français, la valeur sa traduction.
+- `recettes.en.json`, `recettes.es.json` : les noms des ingrédients, les régimes, les recettes (titre, ustensile, étapes, astuce) et les conseils de conservation, rangés d'après leur nom français.
+- `node verifier-recettes.js` signale toute recette, tout ingrédient ou tout texte d'interface sans traduction anglaise ou espagnole.
 
-Dans les étapes en anglais, écris les quantités comme en français (« 200 g », « 400 ml », « 2 eggs », « 1 teaspoon », « per person ») : l'appli les ajuste au nombre de personnes et ajoute les repères.
+Dans les étapes traduites, écris les quantités comme en français (« 200 g », « 400 ml », « 2 eggs » / « 2 huevos », « 1 teaspoon » / « 1 cucharadita », « per person » / « por persona ») : l'appli les ajuste au nombre de personnes et ajoute les repères.
 
 La page pour les associations reste en français.
 

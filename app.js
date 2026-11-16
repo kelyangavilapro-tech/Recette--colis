@@ -48,12 +48,13 @@ let searching = false;
 const $ = id => document.getElementById(id);
 
 /* ---------- Langue ---------- */
-/* Les textes sont écrits en français ; en anglais, t() cherche la traduction dans i18n-en.json.
+/* Les textes sont écrits en français ; dans une autre langue, t() cherche la traduction dans i18n-<langue>.json.
    Les {mots} entre accolades sont remplacés par les valeurs données. */
+const LANGS = ["fr", "en", "es"];
 let LANG = "fr";
-let EN = {};
+let DICT = {};           // français -> langue choisie
 function t(fr, vars) {
-  let out = (LANG === "en" && EN[fr]) || fr;
+  let out = (LANG !== "fr" && DICT[fr]) || fr;
   if (vars) out = out.replace(/\{(\w+)\}/g, (m, k) => (vars[k] != null ? vars[k] : m));
   return out;
 }
@@ -448,6 +449,18 @@ const QTY = {
     glasses: n => `${fmtNum(n)} glasses`,
     handful: n => n === 0.5 ? "a small handful" : `${fmtNum(n)} big handful${n > 1 ? "s" : ""}`,
     breast: n => `${fmtNum(n)} chicken breast${n > 1 ? "s" : ""}`
+  },
+  es: {
+    count: /(\d+)(\s+(?:o|a)\s+)?(\d+)?\s+(huevos?|patatas?|cucharaditas?|cucharadas?)/g,
+    sing: { huevos: "huevo", patatas: "patata", cucharadas: "cucharada", cucharaditas: "cucharadita" },
+    plur: { huevo: "huevos", patata: "patatas", cucharada: "cucharadas", cucharadita: "cucharaditas" },
+    spoon: /cuchar/, perPerson: /por persona/,
+    kw: { pates: /pasta|macarrones|espaguetis/, poulet: /pollo/, riz: /arroz/, semoule: /semola|cuscus/, farine: /harina/, avoine: /avena/ },
+    glass: { 0: "unas cucharadas", 0.25: "un cuarto de vaso", 0.5: "medio vaso", 0.75: "tres cuartos de vaso", 1: "1 vaso",
+      1.25: "algo más de un vaso", 1.5: "1 vaso y medio", 1.75: "casi 2 vasos", 2: "2 vasos", 2.25: "algo más de 2 vasos", 2.5: "2 vasos y medio" },
+    glasses: n => `${fmtNum(n)} vasos`,
+    handful: n => n === 0.5 ? "un puñado pequeño" : `${fmtNum(n)} puñado${n > 1 ? "s" : ""} grande${n > 1 ? "s" : ""}`,
+    breast: n => `${fmtNum(n)} pechuga${n > 1 ? "s" : ""} de pollo`
   }
 };
 const Q = () => QTY[LANG] || QTY.fr;
@@ -509,6 +522,7 @@ function costOf(r) {
 const fmtEuros = e => {
   const v = (Math.round(Math.max(e, 0.1) * 20) / 20).toFixed(2);
   if (LANG === "en") return e < 0.1 ? "under €0.10" : `€${v}`;
+  if (LANG === "es") return e < 0.1 ? "menos de 0,10 €" : `${v.replace(".", ",")} €`;
   return e < 0.1 ? "moins de 0,10 €" : `${v.replace(".", ",")} €`;
 };
 
@@ -564,7 +578,7 @@ function card(r, a, state, i) {
   const factor = recipeFactor(r);
   const notes = [];
   if (r.portions === 1 && portions > 1) notes.push(t("Recette pour 1 personne : prépare-la {n} fois.", { n: portions }));
-  const usesCan = r.steps.some(s => /boîte|\bcan\b/.test(s));
+  const usesCan = r.steps.some(s => /boîte|\btin\b|\bcan\b|\blata\b/.test(s));
   if (usesCan && factor < 1) notes.push(t("Pour 1 personne, utilise une demi-boîte et garde le reste au frigo dans un bol fermé, 2 à 3 jours."));
   if (usesCan && factor > 1) notes.push(t("Pour {n} personnes, prends 2 boîtes.", { n: portions }));
   if (scaled.some(s => s.includes("(≈"))) notes.push(t("Repères : un verre = un verre à eau (20 cl), une poignée = ce que tient ta main."));
@@ -957,7 +971,7 @@ async function makeDecoder() {
       return codes.length ? codes[0].rawValue : null;
     };
   }
-  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=14");
+  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=15");
   const Z = window.ZXing;
   const reader = new Z.MultiFormatReader();
   const hints = new Map();
@@ -1150,7 +1164,7 @@ function releaseAwake() {
 
 /* Durée trouvée dans le texte d'une étape : « 10 à 12 minutes » -> 10 min, « 30 secondes » -> 30 s. */
 function stepDuration(text) {
-  const m = text.match(/(\d+)\s*(?:(?:à|to)\s*\d+\s*)?(minutes?|min\b|secondes?|seconds?)/i);
+  const m = text.match(/(\d+)\s*(?:(?:à|to|a)\s*\d+\s*)?(minutes?|minutos?|min\b|secondes?|seconds?|segundos?)/i);
   if (!m) return null;
   const n = Number(m[1]);
   const secs = /^s/i.test(m[2]) ? n : n * 60;
@@ -1470,7 +1484,7 @@ function speak(text) {
   try {
     window.speechSynthesis.cancel();
     const u = new SpeechSynthesisUtterance(text.replace(/\(≈[^)]*\)/g, ""));
-    u.lang = LANG === "en" ? "en-GB" : "fr-FR";
+    u.lang = { en: "en-GB", es: "es-ES" }[LANG] || "fr-FR";
     u.rate = 0.95;
     window.speechSynthesis.speak(u);
   } catch (err) { /* pas de voix disponible */ }
@@ -1628,11 +1642,13 @@ function focusOnJump(linkSel, targetId) {
 
 function pickLang() {
   const saved = readJSON(KEYS.lang);
-  if (saved === "fr" || saved === "en") return saved;
+  if (LANGS.includes(saved)) return saved;
   /* Quelqu'un qui utilisait déjà l'appli (en français) le reste : pas de changement surprise. */
   if (readJSON(KEYS.have) !== null) return "fr";
   const nav = (navigator.languages && navigator.languages[0]) || navigator.language || "fr";
-  return /^fr\b/i.test(nav) ? "fr" : "en";
+  if (/^fr\b/i.test(nav)) return "fr";
+  if (/^es\b/i.test(nav)) return "es";
+  return "en";
 }
 /* Traduit les textes fixes de la page (titres, boutons, aides) d'après le dictionnaire. */
 function translateStatic() {
@@ -1642,19 +1658,19 @@ function translateStatic() {
   while (walker.nextNode()) nodes.push(walker.currentNode);
   nodes.forEach(n => {
     const k = key(n.nodeValue);
-    if (k && EN[k]) n.nodeValue = n.nodeValue.replace(n.nodeValue.trim(), EN[k]);
+    if (k && DICT[k]) n.nodeValue = n.nodeValue.replace(n.nodeValue.trim(), DICT[k]);
   });
   document.querySelectorAll("[placeholder],[aria-label],[title],[alt]").forEach(el => {
     ["placeholder", "aria-label", "title", "alt"].forEach(a => {
       const v = el.getAttribute(a);
-      if (v && EN[key(v)]) el.setAttribute(a, EN[key(v)]);
+      if (v && DICT[key(v)]) el.setAttribute(a, DICT[key(v)]);
     });
   });
-  if (EN[document.title]) document.title = EN[document.title];
+  if (DICT[document.title]) document.title = DICT[document.title];
   const desc = document.querySelector('meta[name="description"]');
-  if (desc && EN[desc.content]) desc.content = EN[desc.content];
+  if (desc && DICT[desc.content]) desc.content = DICT[desc.content];
 }
-/* Applique la traduction anglaise du contenu (ingrédients, recettes, conseils). */
+/* Applique la traduction du contenu (ingrédients, recettes, conseils). */
 function applyContent(en, data) {
   data.groupes.forEach(g => {
     if (en.groupes && en.groupes[g.titre]) g.titre = en.groupes[g.titre];
@@ -1686,13 +1702,13 @@ async function init() {
   LANG = pickLang();
   document.documentElement.lang = LANG;
   let enContent = null;
-  if (LANG === "en") {
+  if (LANG !== "fr") {
     try {
       const [ui, content] = await Promise.all([
-        fetch("i18n-en.json?v=14", { cache: "no-cache" }).then(r => r.json()),
-        fetch("recettes.en.json?v=14", { cache: "no-cache" }).then(r => r.json())
+        fetch(`i18n-${LANG}.json?v=15`, { cache: "no-cache" }).then(r => r.json()),
+        fetch(`recettes.${LANG}.json?v=15`, { cache: "no-cache" }).then(r => r.json())
       ]);
-      EN = ui; enContent = content;
+      DICT = ui; enContent = content;
       translateStatic();
     } catch (err) { LANG = "fr"; document.documentElement.lang = "fr"; }
   }

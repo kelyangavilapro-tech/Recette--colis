@@ -1,0 +1,673 @@
+{
+ "groupes": {
+  "Équipement": "Equipo",
+  "Féculents": "Féculas",
+  "Conserves": "Conservas",
+  "Frais": "Frescos",
+  "Placard": "Despensa",
+  "Mon régime": "Mi dieta"
+ },
+ "noms": {
+  "plaque": "Fuego / placa",
+  "micro": "Microondas",
+  "four": "Horno",
+  "airfryer": "Freidora de aire",
+  "bouilloire": "Hervidor",
+  "pates": "Pasta",
+  "riz": "Arroz",
+  "semoule": "Cuscús / sémola",
+  "pain": "Pan",
+  "pdt": "Patatas",
+  "nouilles": "Fideos orientales",
+  "avoine": "Copos de avena",
+  "farine": "Harina",
+  "tomates": "Tomate en lata",
+  "thon": "Atún",
+  "sardines": "Sardinas",
+  "lentilles": "Lentejas",
+  "poischiches": "Garbanzos",
+  "haricots": "Alubias",
+  "legboite": "Verduras en lata",
+  "mais": "Maíz",
+  "compote": "Compota de manzana",
+  "oeufs": "Huevos",
+  "lait": "Leche",
+  "yaourt": "Yogur natural",
+  "fromage": "Queso",
+  "beurre": "Mantequilla",
+  "creme": "Nata",
+  "jambon": "Jamón cocido",
+  "poulet": "Pollo o pavo",
+  "oignon": "Cebolla o ajo",
+  "legfrais": "Verduras frescas",
+  "fruits": "Fruta fresca",
+  "huile": "Aceite",
+  "sel": "Sal y pimienta",
+  "curry": "Curry o especias",
+  "sucre": "Azúcar",
+  "soja": "Salsa de soja",
+  "bouillon": "Pastilla de caldo",
+  "chocolat": "Chocolate",
+  "mixeur": "Batidora",
+  "grillepain": "Tostadora",
+  "cacahuetes": "Crema de cacahuete",
+  "cuiseur": "Arrocera",
+  "autocuiseur": "Olla exprés (Instant Pot…)",
+  "gaufrier": "Gofrera",
+  "croque": "Sandwichera"
+ },
+ "regimes": {
+  "vege": "Vegetariana",
+  "vegan": "Vegana",
+  "halal": "Halal / sin cerdo",
+  "sanslactose": "Sin lactosa",
+  "sansgluten": "Sin gluten",
+  "sansoeufs": "Sin huevo",
+  "sanspoisson": "Sin pescado",
+  "sansarachides": "Sin cacahuete",
+  "sansfruitsacoque": "Sin frutos secos",
+  "sanssoja": "Sin soja"
+ },
+ "noteRegimes": "Alergias: quitamos los ingredientes afectados, pero revisa siempre las etiquetas, puede haber trazas (por ejemplo, frutos secos en el chocolate). Halal: acuérdate de comprar pollo halal.",
+ "recettes": {
+  "Pâtes tout-en-une tomate-thon": {
+   "title": "Pasta con tomate y atún en una olla",
+   "tool": "1 cazo",
+   "steps": [
+    "Opcional: sofríe la cebolla en rodajas con aceite durante 2 minutos.",
+    "Añade la lata de tomate, 400 ml de agua y una pizca de sal. Lleva a ebullición.",
+    "Añade 200 g de pasta. Cuece de 10 a 12 minutos, removiendo a menudo, hasta que el líquido casi se absorba.",
+    "Fuera del fuego, añade el atún desmigado (o lo que tengas en su lugar), pimienta y el queso."
+   ],
+   "swap": "Sin atún: sardinas, garbanzos, alubias o maíz también sirven."
+  },
+  "Riz sauté vide-frigo": {
+   "title": "Arroz salteado de aprovechamiento",
+   "tool": "1 sartén",
+   "steps": [
+    "Cuece el arroz si hace falta (unos 120 g en crudo), escúrrelo y deja que se enfríe un poco.",
+    "Saltea las verduras 3 minutos con un poco de aceite.",
+    "Apártalas a un lado, casca 2 huevos en el hueco y revuélvelos 1 minuto.",
+    "Añade el arroz, remueve a fuego fuerte de 3 a 4 minutos y sazona."
+   ],
+   "swap": "Sin huevos: atún o garbanzos. Sin arroz: pasta corta cocida o cuscús."
+  },
+  "Curry express de légumineuses": {
+   "title": "Curry exprés de legumbres",
+   "tool": "1 cazo",
+   "steps": [
+    "Opcional: sofríe la cebolla con aceite durante 3 minutos.",
+    "Añade 1 cucharadita de curry y remueve 30 segundos.",
+    "Añade media lata de tomate y las legumbres enjuagadas. Cuece a fuego suave 10 minutos.",
+    "Fuera del fuego, añade un poco de leche o un yogur. Sírvelo con arroz, pan o cuscús."
+   ],
+   "swap": "Sin lentejas ni garbanzos: cualquier legumbre en lata sirve."
+  },
+  "Pain perdu anti-gaspi": {
+   "title": "Torrijas de aprovechamiento",
+   "tool": "1 sartén",
+   "steps": [
+    "Bate 2 huevos con 150 ml de leche y añade azúcar (versión dulce) o sal y pimienta (versión salada).",
+    "Moja cada rebanada de pan duro unos segundos por cada lado.",
+    "Dóralas en la sartén de 2 a 3 minutos por cada lado."
+   ],
+   "swap": "Sin leche: con agua también salen, solo un poco menos tiernas."
+  },
+  "Omelette vide-frigo": {
+   "title": "Tortilla de aprovechamiento",
+   "tool": "1 sartén",
+   "steps": [
+    "Corta en trocitos lo que tengas: verduras, cebolla, restos de patata cocida.",
+    "Saltéalos de 3 a 5 minutos con un poco de aceite.",
+    "Bate 3 o 4 huevos con sal y pimienta y viértelos en la sartén.",
+    "Cuaja a fuego suave de 4 a 5 minutos, sin remover, hasta que la parte de arriba esté hecha."
+   ],
+   "swap": "Si tienes queso, échalo justo antes de terminar."
+  },
+  "Salade de semoule façon taboulé": {
+   "title": "Ensalada de cuscús tipo tabulé",
+   "tool": "1 bol + agua caliente",
+   "steps": [
+    "Pon 150 g de cuscús en un bol con una pizca de sal y un chorrito de aceite.",
+    "Cúbrelo con el mismo volumen de agua hirviendo (hervidor, fuego o microondas). Tápalo 5 minutos.",
+    "Suéltalo con un tenedor y añade las verduras escurridas y, si tienes, atún o garbanzos."
+   ],
+   "swap": "Aguanta 2 días en la nevera en un táper cerrado: perfecto para comer al día siguiente."
+  },
+  "Salade express sans cuisson": {
+   "title": "Ensalada exprés sin cocción",
+   "tool": "1 bol",
+   "steps": [
+    "Enjuaga y escurre las alubias o las lentejas.",
+    "Mézclalas con el atún, el maíz o lo que tengas.",
+    "Aliña con un chorrito de aceite, sal, pimienta y un poco de cebolla picada si tienes."
+   ],
+   "swap": "Nada de cocinar: ideal si no tienes ni fuego ni microondas."
+  },
+  "Soupe de légumes express": {
+   "title": "Sopa de verduras exprés",
+   "tool": "1 cazo",
+   "steps": [
+    "Corta las verduras y las patatas en trocitos.",
+    "Sofríe la cebolla con aceite, añade las verduras y cúbrelas justo con agua. Sala.",
+    "Cuece de 15 a 20 minutos. Si tienes pasta o lentejas en lata, añádelas los últimos 10 minutos.",
+    "Aplasta con un tenedor para una sopa más espesa."
+   ],
+   "swap": "Media lata de tomate le da más sabor a la sopa."
+  },
+  "Riz au lait": {
+   "title": "Arroz con leche",
+   "tool": "1 cazo",
+   "steps": [
+    "Calienta 500 ml de leche con 2 cucharadas de azúcar hasta que empiece a hervir.",
+    "Añade 70 g de arroz y cuécelo a fuego muy suave 30 minutos, removiendo a menudo.",
+    "El arroz está listo cuando está tierno y la leche ha espesado. Tómalo templado o frío."
+   ],
+   "swap": "Lo ideal es arroz redondo, pero el largo también sirve."
+  },
+  "Omelette en tasse au micro-ondes": {
+   "title": "Tortilla en taza al microondas",
+   "tool": "1 taza grande",
+   "steps": [
+    "Bate 2 huevos en una taza grande con un poco de leche, sal y pimienta.",
+    "Añade queso o unas verduras escurridas si quieres.",
+    "Calienta 1 minuto, remueve y luego de 30 a 60 segundos más, hasta que cuaje del todo."
+   ],
+   "swap": "Para quien solo tiene microondas: una comida caliente en 3 minutos."
+  },
+  "Œufs pochés à la tomate": {
+   "title": "Huevos escalfados en tomate",
+   "tool": "1 sartén",
+   "steps": [
+    "Opcional: sofríe la cebolla en rodajas con aceite durante 2 minutos.",
+    "Vierte la lata de tomate, una pizca de sal y especias. Cuece a fuego suave 5 minutos.",
+    "Haz 4 huecos en la salsa y casca un huevo en cada uno.",
+    "Tapa y cuece a fuego suave de 5 a 6 minutos, hasta que las claras cuajen. Sírvelo con pan."
+   ],
+   "swap": "Sin tapa: un plato encima de la sartén sirve igual."
+  },
+  "Pâtes au fromage express": {
+   "title": "Pasta con queso exprés",
+   "tool": "1 cazo",
+   "steps": [
+    "Cuece 200 g de pasta en agua con sal, el tiempo que indique el paquete.",
+    "Guarda medio vaso del agua de cocción, escurre la pasta y vuelve a ponerla en el cazo, fuera del fuego.",
+    "Añade queso rallado o en dados, un chorrito de leche o de agua de cocción y pimienta.",
+    "Remueve hasta que quede cremosa."
+   ],
+   "swap": "Sin queso: yogur natural, un chorrito de aceite y mucha pimienta hacen una salsa cremosa."
+  },
+  "Purée maison à la fourchette": {
+   "title": "Puré casero con tenedor",
+   "tool": "1 cazo",
+   "steps": [
+    "Pela 4 o 5 patatas y córtalas en trozos grandes.",
+    "Cúbrelas con agua fría con sal y cuécelas de 15 a 20 minutos: un cuchillo debe entrar fácilmente.",
+    "Escúrrelas, vuelve a ponerlas en el cazo y aplástalas con un tenedor.",
+    "Añade un poco de leche caliente o un chorrito de aceite, sal y pimienta, y mezcla."
+   ],
+   "swap": "Aún mejor con queso rallado. Con lo que sobre, haz una tortilla al día siguiente."
+  },
+  "Pommes de terre sautées": {
+   "title": "Patatas salteadas",
+   "tool": "1 sartén",
+   "steps": [
+    "Corta 4 patatas en dados pequeños (no hace falta pelarlas si las lavas bien).",
+    "Calienta 2 cucharadas de aceite en la sartén y pon los dados en una sola capa.",
+    "Tapa y cuece 10 minutos a fuego medio, luego destapa y deja que se doren 10 minutos, removiendo de vez en cuando.",
+    "Sala y pimienta. Añade la cebolla los últimos 5 minutos si tienes."
+   ],
+   "swap": "Fríe un huevo en una esquina de la sartén al final: comida completa."
+  },
+  "Pomme de terre garnie au micro-ondes": {
+   "title": "Patata rellena al microondas",
+   "tool": "1 plato",
+   "steps": [
+    "Lava 1 patata grande por persona y pínchala 6 o 7 veces con un tenedor.",
+    "Ponla en un plato y calienta 5 minutos, dale la vuelta y luego de 3 a 4 minutos más. Está hecha cuando un cuchillo entra fácilmente.",
+    "Córtala por la mitad, aplasta un poco el interior y añade sal y pimienta.",
+    "Rellénala con lo que tengas: queso, atún, yogur, alubias o maíz."
+   ],
+   "swap": "Cuidado, sale muy caliente: déjala reposar 1 minuto antes de cortarla."
+  },
+  "Semoule au lait": {
+   "title": "Sémola con leche",
+   "tool": "1 cazo",
+   "steps": [
+    "Calienta 500 ml de leche con 3 cucharadas de azúcar.",
+    "Cuando la leche empiece a hervir, echa 60 g de sémola en forma de lluvia sin dejar de remover.",
+    "Cuece 5 minutos a fuego suave, removiendo todo el rato, hasta que espese.",
+    "Viértela en cuencos. Tómala templada o fría."
+   ],
+   "swap": "El postre más rápido con un lote de comida: la sémola se hace 4 veces más rápido que el arroz."
+  },
+  "Riz à la tomate tout-en-un": {
+   "title": "Arroz con tomate en una olla",
+   "tool": "1 cazo",
+   "steps": [
+    "Opcional: sofríe la cebolla con aceite durante 2 minutos.",
+    "Añade 150 g de arroz y remueve 1 minuto.",
+    "Vierte la lata de tomate, 300 ml de agua, sal y especias. Tapa.",
+    "Cuece a fuego suave de 15 a 18 minutos, hasta que el arroz esté tierno. Añade el atún o las alubias al final."
+   ],
+   "swap": "Remueve de vez en cuando y añade un poco de agua si se pega al fondo."
+  },
+  "Chili sans viande": {
+   "title": "Chili sin carne",
+   "tool": "1 cazo",
+   "steps": [
+    "Sofríe la cebolla con aceite 3 minutos si tienes.",
+    "Añade 1 cucharadita de especias, la lata de tomate y las alubias enjuagadas.",
+    "Añade el maíz escurrido si tienes. Cuece a fuego suave de 10 a 15 minutos.",
+    "Sírvelo con arroz o pan, y una cucharada de yogur por encima."
+   ],
+   "swap": "¿Sin especias mexicanas? El curry, el pimentón o solo pimienta van muy bien."
+  },
+  "Rillettes de thon ou de sardines": {
+   "title": "Paté de atún o sardinas",
+   "tool": "1 bol",
+   "steps": [
+    "Escurre el atún o las sardinas y aplástalos con un tenedor en un bol.",
+    "Añade 2 cucharadas de yogur (o queso fresco), pimienta y un poco de cebolla muy picada si tienes.",
+    "Mezcla bien y úntalo en pan."
+   ],
+   "swap": "Sin cocción. Aguanta 1 día en la nevera en un táper cerrado."
+  },
+  "Houmous à la fourchette": {
+   "title": "Hummus con tenedor",
+   "tool": "1 bol",
+   "steps": [
+    "Enjuaga y escurre los garbanzos, guardando 3 cucharadas del líquido.",
+    "Aplástalos bien con un tenedor con 3 cucharadas de aceite y un poco del líquido, hasta tener una pasta.",
+    "Añade sal, pimienta y un poco de ajo machacado o especias si tienes.",
+    "Cómelo con pan o con verduras crudas en bastones."
+   ],
+   "swap": "Sin garbanzos: las alubias blancas hacen una crema muy suave."
+  },
+  "Soupe de lentilles à la tomate": {
+   "title": "Sopa de lentejas con tomate",
+   "tool": "1 cazo",
+   "steps": [
+    "Sofríe la cebolla con aceite 3 minutos si tienes, con 1 cucharadita de especias.",
+    "Añade las lentejas escurridas, la lata de tomate y 400 ml de agua. Sala.",
+    "Cuece 15 minutos a fuego suave.",
+    "Aplasta con un tenedor para espesar. Sírvela con pan y una cucharada de yogur."
+   ],
+   "swap": "Aún mejor al día siguiente: haz el doble y guárdala 3 días en la nevera."
+  },
+  "Pâtes au micro-ondes": {
+   "title": "Pasta al microondas",
+   "tool": "1 bol grande",
+   "steps": [
+    "Pon 100 g de pasta corta por persona en un bol grande, cúbrela bien de agua y sala.",
+    "Calienta a máxima potencia 4 minutos más de lo que indica el paquete, removiendo cada 4 minutos.",
+    "Escurre con cuidado: el bol quema, usa un paño.",
+    "Añade queso, salsa de tomate o atún, remueve y calienta 1 minuto más."
+   ],
+   "swap": "Usa un bol mucho más grande de lo necesario: el agua hace espuma y puede desbordarse."
+  },
+  "Bol de riz au micro-ondes": {
+   "title": "Bol de arroz al microondas",
+   "tool": "1 bol grande",
+   "steps": [
+    "Pon 75 g de arroz por persona en un bol grande con el doble de su volumen de agua y sal.",
+    "Calienta de 10 a 12 minutos a máxima potencia, removiendo a mitad. Deja reposar tapado 2 minutos.",
+    "Añade el atún desmigado (o las alubias) y las verduras escurridas.",
+    "Aliña con un poco de salsa de soja o aceite. Con un huevo: bátelo, mézclalo con el arroz y calienta 1 minuto más."
+   ],
+   "swap": "El mismo bol sirve para el cuscús: con agua hirviendo, listo en 5 minutos."
+  },
+  "Croque au fromage à la poêle": {
+   "title": "Sándwich de queso a la sartén",
+   "tool": "1 sartén",
+   "steps": [
+    "Pon queso entre dos rebanadas de pan, y un poco de atún si tienes.",
+    "Calienta la sartén con unas gotas de aceite.",
+    "Pon el sándwich, aplástalo con una espátula y deja que se dore de 2 a 3 minutos.",
+    "Dale la vuelta y dóralo 2 minutos más, hasta que el queso se funda."
+   ],
+   "swap": "Versión de lujo: moja el sándwich en huevo batido antes de cocinarlo."
+  },
+  "Riz au lait au micro-ondes": {
+   "title": "Arroz con leche al microondas",
+   "tool": "1 bol grande",
+   "steps": [
+    "Pon 50 g de arroz y 350 ml de leche en un bol muy grande.",
+    "Calienta 4 minutos a máxima potencia y remueve.",
+    "Sigue de 12 a 14 minutos a potencia media, removiendo cada 3 minutos para que no se desborde.",
+    "Añade 2 cucharadas de azúcar, remueve y deja reposar: espesa al enfriarse."
+   ],
+   "swap": "Vigílalo: la leche sube rápido. Si se desborda, baja la potencia."
+  },
+  "Salade de pâtes": {
+   "title": "Ensalada de pasta",
+   "tool": "1 cazo",
+   "steps": [
+    "Cuece 200 g de pasta corta en agua con sal, escúrrela y pásala por agua fría.",
+    "Si tienes huevos, cuécelos 9 minutos en el agua de la pasta: saldrán duros.",
+    "Mezcla la pasta con el atún (o los garbanzos) y las verduras escurridas.",
+    "Aliña con aceite, sal y pimienta, o con una salsa de yogur y pimienta."
+   ],
+   "swap": "Aguanta 2 días en la nevera: perfecta para comer en la uni."
+  },
+  "Porridge express": {
+   "title": "Porridge exprés",
+   "tool": "1 bol grande",
+   "steps": [
+    "Pon 50 g de copos de avena y 200 ml de leche (o agua) en un bol grande.",
+    "Calienta 1 minuto en el microondas, remueve y 1 minuto más. Al fuego: 3 minutos a fuego suave, removiendo.",
+    "Añade una fruta aplastada, compota, un poco de azúcar o una onza de chocolate."
+   ],
+   "swap": "Un desayuno que te aguanta hasta el mediodía, por unos céntimos."
+  },
+  "Crêpes": {
+   "title": "Crepes",
+   "tool": "1 sartén + 1 bol",
+   "steps": [
+    "En un bol, mezcla 125 g de harina y 2 huevos, y añade poco a poco 300 ml de leche, batiendo con un tenedor.",
+    "Deja reposar 10 minutos si tienes tiempo.",
+    "Engrasa ligeramente la sartén caliente con un poco de aceite o mantequilla, vierte un cucharón pequeño de masa e inclina la sartén para extenderla.",
+    "Cuece 1 minuto más o menos, dale la vuelta y deja 30 segundos. Rellena con algo dulce o salado."
+   ],
+   "swap": "Si no tienes bastante leche: mitad leche, mitad agua. Versión salada con queso y jamón."
+  },
+  "Mug cake au chocolat": {
+   "title": "Bizcocho de chocolate en taza",
+   "tool": "1 taza grande",
+   "steps": [
+    "En una taza grande, mezcla 1 huevo, 2 cucharadas de azúcar y 2 cucharadas de leche o aceite.",
+    "Añade 4 cucharadas de harina y trocitos de chocolate. Mezcla bien.",
+    "Calienta 1 minuto en el microondas y luego de 15 en 15 segundos si hace falta: debe subir y quedar tierno por dentro."
+   ],
+   "swap": "Sin chocolate: una cucharada de compota en el centro de la masa."
+  },
+  "Nouilles sautées": {
+   "title": "Fideos salteados",
+   "tool": "1 sartén",
+   "steps": [
+    "Cuece los fideos 3 minutos en un poco de agua hirviendo en la sartén y escúrrelos.",
+    "Con pollo: córtalo en trocitos y cuécelo de 6 a 8 minutos con un poco de aceite, hasta que no quede rosado por dentro.",
+    "Añade las verduras y saltéalas 3 minutos.",
+    "Añade los fideos y 2 huevos batidos (o el atún), remueve 2 minutos a fuego fuerte y aliña con salsa de soja."
+   ],
+   "swap": "Valen los fideos instantáneos: usa solo la mitad del sobre de sazonador, es muy salado."
+  },
+  "Pâtes crème et jambon": {
+   "title": "Pasta con nata y jamón",
+   "tool": "1 cazo",
+   "steps": [
+    "Cuece 200 g de pasta en agua con sal y escúrrela.",
+    "Vuelve a ponerla en el cazo a fuego suave con 3 cucharadas de nata (o un poco de leche y queso).",
+    "Añade el jamón en dados y pimienta, y remueve 1 minuto."
+   ],
+   "swap": "Sin jamón: atún o maíz. Versión halal: cambia el jamón por atún."
+  },
+  "Poulet au curry": {
+   "title": "Pollo al curry",
+   "tool": "1 sartén",
+   "steps": [
+    "Corta 250 g de pollo en trozos. Lávate las manos después de tocar carne cruda.",
+    "Dóralo con un poco de aceite 8 minutos, con la cebolla si tienes. No debe quedar rosado por dentro.",
+    "Añade 1 cucharadita de curry y remueve 30 segundos.",
+    "Vierte 3 cucharadas de nata (o un yogur fuera del fuego, o media lata de tomate) y cuece a fuego suave 5 minutos. Sírvelo con arroz o pan."
+   ],
+   "swap": "Sin pollo: con garbanzos sale un curry igual de bueno (mira el curry exprés de legumbres)."
+  },
+  "Potatoes au four ou à l'air fryer": {
+   "title": "Patatas gajo al horno o en freidora de aire",
+   "tool": "horno o freidora de aire",
+   "steps": [
+    "Lava 3 o 4 patatas y córtalas en gajos, con piel.",
+    "Mézclalas con 1 cucharada de aceite, sal y especias.",
+    "Freidora de aire: de 18 a 20 minutos a 200 °C, agitando la cesta a mitad. Horno: 30 minutos a 220 °C, dándoles la vuelta una vez.",
+    "Sírvelas con una salsa de yogur, sal y pimienta."
+   ],
+   "swap": "Los boniatos o las zanahorias se hacen igual."
+  },
+  "Pois chiches croustillants": {
+   "title": "Garbanzos crujientes",
+   "tool": "horno o freidora de aire",
+   "steps": [
+    "Enjuaga los garbanzos y sécalos bien con un paño limpio.",
+    "Mézclalos con 1 cucharada de aceite, sal y especias.",
+    "Freidora de aire: de 12 a 15 minutos a 200 °C, agitando dos veces. Horno: 25 minutos a 200 °C."
+   ],
+   "swap": "Perfectos para picar, o sobre una ensalada o una sopa. Aguantan 2 días en un táper, algo menos crujientes."
+  },
+  "Œufs cocotte": {
+   "title": "Huevos al plato en cazuelita",
+   "tool": "1 cazuelita o 1 taza",
+   "steps": [
+    "Pon 1 cucharada de nata en el fondo de una cazuelita, y un poco de jamón o verduras si tienes.",
+    "Casca 1 o 2 huevos encima, añade sal, pimienta y un poco de queso.",
+    "Horno: de 10 a 12 minutos a 180 °C. Freidora de aire: 8 minutos a 160 °C. Microondas: pincha la yema con un tenedor (si no, puede explotar), calienta 45 segundos y añade 15 segundos si hace falta.",
+    "Sírvelos con pan para mojar."
+   ],
+   "swap": "En el microondas, tapa la cazuelita con un plato para que no salpique."
+  },
+  "Soupe de nouilles express": {
+   "title": "Sopa de fideos exprés",
+   "tool": "1 bol grande",
+   "steps": [
+    "Pon los fideos, media pastilla de caldo desmenuzada y unas verduras escurridas en un bol grande.",
+    "Vierte 400 ml de agua hirviendo (hervidor, fuego o microondas).",
+    "Tapa de 3 a 4 minutos y remueve."
+   ],
+   "swap": "Para variar, añade una cucharada de salsa de soja o un poco de curry."
+  },
+  "Salade de fruits au yaourt": {
+   "title": "Macedonia con yogur",
+   "tool": "1 bol",
+   "steps": [
+    "Corta la fruta en trozos.",
+    "Mézclala con un yogur o con compota.",
+    "Añade unos copos de avena para que cruja."
+   ],
+   "swap": "La fruta algo pasada es perfecta aquí: la receta antidesperdicio por excelencia."
+  },
+  "Smoothie aux fruits": {
+   "title": "Batido de fruta",
+   "tool": "1 batidora",
+   "steps": [
+    "Pon 1 plátano u otra fruta en trozos en la batidora.",
+    "Añade 200 ml de leche, o un yogur con un poco de agua.",
+    "Añade 1 cucharada de copos de avena o de crema de cacahuete si quieres y bate 30 segundos."
+   ],
+   "swap": "La fruta muy madura es perfecta: congélala en trozos para un batido bien frío."
+  },
+  "Pancakes": {
+   "title": "Tortitas",
+   "tool": "1 sartén + 1 bol",
+   "steps": [
+    "En un bol, mezcla 150 g de harina, 1 huevo y 2 cucharadas de azúcar.",
+    "Añade poco a poco 200 ml de leche removiendo: la masa debe quedar espesa.",
+    "Calienta la sartén con un poco de aceite y vierte un cucharón pequeño de masa por tortita.",
+    "Cuando salgan burbujas, a los 2 minutos más o menos, dale la vuelta y cuece 1 minuto."
+   ],
+   "swap": "Por encima: fruta, compota, chocolate o crema de cacahuete."
+  },
+  "Nouilles sauce cacahuète": {
+   "title": "Fideos con salsa de cacahuete",
+   "tool": "1 cazo",
+   "steps": [
+    "Cuece los fideos o la pasta y escúrrelos, guardando medio vaso del agua de cocción.",
+    "En el cazo, mezcla 2 cucharadas de crema de cacahuete, 1 cucharada de salsa de soja y un poco de agua de cocción.",
+    "Vuelve a poner los fideos, añade las verduras y remueve 1 minuto a fuego suave."
+   ],
+   "swap": "Sin salsa de soja: un poco de sal y unas gotas de vinagre o limón."
+  },
+  "Tartine cacahuète-banane": {
+   "title": "Tostada de cacahuete y plátano",
+   "tool": "1 cuchillo",
+   "steps": [
+    "Tuesta el pan si tienes tostadora (opcional).",
+    "Unta una capa de crema de cacahuete.",
+    "Añade rodajas de plátano u otra fruta."
+   ],
+   "swap": "Un desayuno o merienda que llena, rico en proteínas."
+  },
+  "Pain grillé à la tomate": {
+   "title": "Pan con tomate",
+   "tool": "tostadora o sartén",
+   "steps": [
+    "Tuesta las rebanadas de pan: tostadora, sartén sin aceite u horno.",
+    "Frótalas con un poco de ajo si tienes.",
+    "Unta tomate triturado por encima (de lata, o un tomate fresco rallado), un chorrito de aceite y sal."
+   ],
+   "swap": "Añade atún o queso para hacer una comida completa."
+  },
+  "Galettes de pommes de terre": {
+   "title": "Tortitas de patata",
+   "tool": "1 sartén + 1 bol",
+   "steps": [
+    "Ralla 3 patatas (o córtalas muy pequeñas) y estrújalas en un paño limpio para quitarles el agua.",
+    "Mézclalas con 1 huevo, sal, pimienta y un poco de cebolla si tienes.",
+    "Calienta 2 cucharadas de aceite en la sartén y forma tortitas pequeñas y planas.",
+    "Cuécelas 5 minutos por cada lado a fuego medio, hasta que estén bien doradas."
+   ],
+   "swap": "Sin huevo: con 2 cucharadas de harina se mantienen unidas."
+  },
+  "Salade de riz": {
+   "title": "Ensalada de arroz",
+   "tool": "1 cazo",
+   "steps": [
+    "Cuece 150 g de arroz en agua con sal, escúrrelo y pásalo por agua fría.",
+    "Mézclalo con el atún (o huevos duros, alubias) y las verduras escurridas.",
+    "Aliña con aceite, sal y pimienta."
+   ],
+   "swap": "Métela en la nevera enseguida y cómela el mismo día: el arroz cocido no aguanta mucho."
+  },
+  "Pomme cuite": {
+   "title": "Manzana asada",
+   "tool": "1 bol",
+   "steps": [
+    "Lava 1 manzana o pera por persona y quítale el corazón con un cuchillo.",
+    "Ponla en un bol, añade un poco de azúcar y 1 cucharada de agua.",
+    "Calienta de 3 a 4 minutos en el microondas (o 25 minutos en el horno a 180 °C), hasta que esté blanda."
+   ],
+   "swap": "Riquísima con un yogur o unos copos de avena: un postre por unos céntimos."
+  },
+  "Riz tout-en-un au cuiseur": {
+   "title": "Arroz completo en arrocera",
+   "tool": "1 arrocera",
+   "steps": [
+    "Enjuaga 150 g de arroz y ponlo en la arrocera con 300 ml de agua (o lo que indique tu arrocera).",
+    "Añade media pastilla de caldo desmenuzada y las verduras escurridas.",
+    "Enciende la arrocera, unos 20 minutos.",
+    "Añade el atún o los garbanzos, remueve y deja reposar tapado 5 minutos."
+   ],
+   "swap": "La arrocera lo mantiene caliente: ponla por la mañana y la cena te estará esperando."
+  },
+  "Soupe de légumes à l'autocuiseur": {
+   "title": "Sopa de verduras en olla exprés",
+   "tool": "1 olla exprés",
+   "steps": [
+    "Corta las verduras y las patatas en trozos.",
+    "Ponlas en la olla exprés con la cebolla, una pastilla de caldo y 800 ml de agua.",
+    "Cierra y cuece 10 minutos desde que empiece a silbar (o 10 minutos en presión en una Instant Pot).",
+    "Deja que baje toda la presión antes de abrir, y aplasta con un tenedor o tritura."
+   ],
+   "swap": "Nunca abras una olla exprés que aún tenga presión: espera a que baje la válvula."
+  },
+  "Gaufres": {
+   "title": "Gofres",
+   "tool": "1 gofrera + 1 bol",
+   "steps": [
+    "En un bol, mezcla 250 g de harina, 2 huevos y 2 cucharadas de azúcar.",
+    "Añade poco a poco 400 ml de leche y 2 cucharadas de aceite, removiendo hasta que no queden grumos.",
+    "Calienta la gofrera y engrásala ligeramente.",
+    "Vierte un cucharón de masa, cierra y cuece de 3 a 4 minutos, hasta que el gofre esté dorado."
+   ],
+   "swap": "Con azúcar, compota, chocolate o fruta. Se congelan bien y se recalientan en la tostadora."
+  },
+  "Gaufres de pommes de terre": {
+   "title": "Gofres de patata",
+   "tool": "1 gofrera + 1 bol",
+   "steps": [
+    "Aplasta patatas cocidas o restos de puré: hacen falta unos 2 vasos.",
+    "Mézclalo con 1 huevo, 2 cucharadas de harina, sal, pimienta y queso si tienes.",
+    "Calienta la gofrera, engrásala y extiende la mezcla.",
+    "Cuece de 5 a 6 minutos, hasta que estén crujientes."
+   ],
+   "swap": "La receta antidesperdicio perfecta para los restos de puré."
+  },
+  "Croque-monsieur à l'appareil": {
+   "title": "Sándwich mixto en sandwichera",
+   "tool": "1 sandwichera",
+   "steps": [
+    "Unta un poco de mantequilla por fuera de 2 rebanadas de pan (o unas gotas de aceite).",
+    "Pon queso entre las rebanadas, y jamón o atún si tienes.",
+    "Cuece de 3 a 4 minutos en la sandwichera caliente, hasta que se dore."
+   ],
+   "swap": "Versión halal o vegetariana: cambia el jamón por atún o tomate."
+  },
+  "Croque sucré banane-chocolat": {
+   "title": "Sándwich dulce de plátano y chocolate",
+   "tool": "sandwichera o sartén",
+   "steps": [
+    "Pon rodajas de plátano (o compota) entre 2 rebanadas de pan.",
+    "Añade una onza de chocolate o un poco de crema de cacahuete si tienes.",
+    "Cuece 3 minutos en la sandwichera, o 2 minutos por cada lado en una sartén."
+   ],
+   "swap": "Una merienda caliente por unos céntimos, ideal con plátanos muy maduros."
+  }
+ },
+ "conservation": {
+  "Les dates sur les emballages": {
+   "titre": "Las fechas de los envases",
+   "texte": "«Fecha de caducidad»: no te pases de la fecha, es una cuestión de seguridad (carne, pescado fresco, lácteos frescos). «Consumir preferentemente antes de»: el producto sigue estando bien después de la fecha si se ha guardado bien (pasta, arroz, latas, galletas)."
+  },
+  "Une conserve ouverte": {
+   "titre": "Una lata abierta",
+   "texte": "No guardes lo que sobra en la lata de metal: pásalo a un bol o a un táper cerrado en la nevera y cómelo en 2 o 3 días."
+  },
+  "Une conserve abîmée": {
+   "titre": "Una lata dañada",
+   "texte": "Lata hinchada, que gotea o que huele raro al abrirla: tírala sin probarla. Una lata un poco abollada pero intacta se puede consumir."
+  },
+  "Le riz cuit": {
+   "titre": "El arroz cocido",
+   "texte": "Mételo en la nevera menos de una hora después de cocinarlo y cómelo en 24 horas. Recaliéntalo hasta que esté muy caliente, una sola vez."
+  },
+  "Les restes de plats cuisinés": {
+   "titre": "Las sobras de platos cocinados",
+   "texte": "A la nevera menos de 2 horas después de cocinar, en un táper cerrado, y a comer en 2 o 3 días. Para guardarlas más tiempo, congélalas en raciones."
+  },
+  "Le pain": {
+   "titre": "El pan",
+   "texte": "Córtalo en rebanadas y congélalo: se tuesta directamente sin descongelar. Duro, sirve para hacer torrijas."
+  },
+  "Le lait ouvert": {
+   "titre": "La leche abierta",
+   "texte": "En la nevera, cerrada, y termínala en los días que indica el envase (a menudo 3 días)."
+  },
+  "Les œufs": {
+   "titre": "Los huevos",
+   "texte": "Guárdalos lejos de los cambios de temperatura, mejor en la nevera. Un huevo rajado se cocina enseguida y bien hecho."
+  },
+  "Le fromage": {
+   "titre": "El queso",
+   "texte": "Bien envuelto en la nevera. El queso rallado se puede congelar y usar sin descongelar."
+  },
+  "La viande crue": {
+   "titre": "La carne cruda",
+   "texte": "En la parte más fría de la nevera, y cocínala antes de la fecha de caducidad. Nunca vuelvas a congelar carne cruda descongelada. Lávate las manos después de tocarla."
+  },
+  "Les fruits et légumes": {
+   "titre": "La fruta y la verdura",
+   "texte": "Una mancha de moho en una verdura dura (zanahoria, col, patata): corta bien alrededor. En una fruta o verdura blanda (tomate, melocotón, fresa): tírala. Las patatas y las cebollas se guardan en un sitio seco y oscuro, no en la nevera."
+  },
+  "Les fruits trop mûrs": {
+   "titre": "La fruta muy madura",
+   "texte": "Perfecta para el porridge, la macedonia o las torrijas. También puedes congelarla en trozos."
+  },
+  "Bien congeler": {
+   "titre": "Congelar bien",
+   "texte": "Congela en raciones pequeñas y apunta la fecha. Descongela en la nevera, no encima de la mesa."
+  },
+  "Le frigo": {
+   "titre": "La nevera",
+   "texte": "Ponla a unos 4 °C y no la llenes demasiado: el aire tiene que circular. Pon delante lo que caduca antes."
+  }
+ }
+}

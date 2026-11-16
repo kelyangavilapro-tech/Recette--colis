@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=14">
+<link rel="stylesheet" href="style.css?v=15">
 </head>
 <body>
 <div class="appbar">
@@ -137,7 +137,7 @@
     <summary>Crédits photos</summary>
     <ul class="credits" id="credits-list"></ul>
   </details>
-  <p class="version">Version 14</p>
+  <p class="version">Version 15</p>
 </footer>
 
 <!-- Menu latéral -->
@@ -173,10 +173,11 @@
       </div>
     </section>
     <section class="drawer-section" aria-labelledby="set-lang">
-      <h3 id="set-lang">Langue · Language</h3>
-      <div class="segmented segmented-2" role="radiogroup" aria-labelledby="set-lang">
+      <h3 id="set-lang">Langue · Language · Idioma</h3>
+      <div class="segmented" role="radiogroup" aria-labelledby="set-lang">
         <input type="radio" name="lang" id="lang-fr" value="fr"><label for="lang-fr">Français</label>
         <input type="radio" name="lang" id="lang-en" value="en"><label for="lang-en">English</label>
+        <input type="radio" name="lang" id="lang-es" value="es"><label for="lang-es">Español</label>
       </div>
     </section>
     <section class="drawer-section" aria-labelledby="set-regime">
@@ -194,7 +195,7 @@
       <button type="button" class="menu-item" data-go="privacy"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Confidentialité</button>
       <button type="button" class="menu-item" id="reset-app"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>Tout remettre à zéro</button>
     </nav>
-    <p class="drawer-foot" id="drawer-version">Version 14</p>
+    <p class="drawer-foot" id="drawer-version">Version 15</p>
   </div>
 </dialog>
 
@@ -365,7 +366,7 @@
 
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script src="config.js?v=14"></script>
-<script src="app.js?v=14"></script>
+<script src="config.js?v=15"></script>
+<script src="app.js?v=15"></script>
 </body>
 </html>
