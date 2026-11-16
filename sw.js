@@ -1,6 +1,6 @@
 /* Service worker : l'appli marche hors connexion une fois ouverte une première fois.
    Pense à changer VERSION à chaque mise en ligne pour que les téléphones récupèrent la nouvelle version. */
-const VERSION = "v2";
+const VERSION = "v3";
 const CACHE = "colis-" + VERSION;
 const FILES = ["./", "index.html", "style.css", "app.js", "recettes.json", "manifest.webmanifest",
   "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];

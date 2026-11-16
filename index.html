@@ -51,6 +51,25 @@
 
 <footer>Projet étudiant de Kelyan Gavila, Université Toulouse Capitole. Les recettes sont pour 2 portions. Vérifie toujours les étiquettes en cas d'allergie.</footer>
 
+<dialog class="cook" id="cook" aria-labelledby="cook-title">
+  <div class="cook-inner">
+    <div class="cook-top">
+      <p class="cook-progress" id="cook-progress"></p>
+      <button type="button" class="cook-close" id="cook-close" aria-label="Fermer le mode cuisine">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <div class="cook-bar" id="cook-bar" aria-hidden="true"></div>
+    <h2 class="cook-title" id="cook-title"></h2>
+    <div class="cook-step" id="cook-step" aria-live="polite"></div>
+    <p class="cook-wake" id="cook-wake"></p>
+    <div class="cook-nav">
+      <button type="button" class="btn btn-sec" id="cook-prev">Précédent</button>
+      <button type="button" class="btn btn-pri" id="cook-next">C'est parti</button>
+    </div>
+  </div>
+</dialog>
+
 <script src="app.js"></script>
 </body>
 </html>
