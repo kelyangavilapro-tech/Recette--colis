@@ -1,12 +1,14 @@
 /* Service worker : l'appli marche hors connexion une fois ouverte une première fois.
-   Pense à changer VERSION à chaque mise en ligne pour que les téléphones récupèrent la nouvelle version. */
-const VERSION = "v3";
+   À chaque mise en ligne, augmente VERSION ici ET le ?v= de style.css et app.js dans index.html. */
+const VERSION = "v4";
 const CACHE = "colis-" + VERSION;
-const FILES = ["./", "index.html", "style.css", "app.js", "recettes.json", "manifest.webmanifest",
+const FILES = ["./", "index.html", "style.css?v=4", "app.js?v=4", "recettes.json", "manifest.webmanifest",
   "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", e => {
-  e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
+  e.waitUntil(caches.open(CACHE)
+    .then(c => c.addAll(FILES.map(f => new Request(f, { cache: "reload" }))))
+    .then(() => self.skipWaiting()));
 });
 
 self.addEventListener("activate", e => {
@@ -15,18 +17,22 @@ self.addEventListener("activate", e => {
     .then(() => self.clients.claim()));
 });
 
-/* Réseau d'abord (recettes à jour), cache en secours (hors connexion). */
+/* Réseau d'abord, en revalidant toujours auprès du serveur (jamais le cache du navigateur) ;
+   la copie locale ne sert que hors connexion. */
 self.addEventListener("fetch", e => {
-  if (e.request.method !== "GET") return;
+  const req = e.request;
+  if (req.method !== "GET") return;
+  const sameOrigin = new URL(req.url).origin === self.location.origin;
+  const network = sameOrigin ? fetch(req.url, { cache: "no-cache", credentials: "same-origin" }) : fetch(req);
   e.respondWith(
-    fetch(e.request)
+    network
       .then(res => {
         if (res.ok && (res.type === "basic" || res.type === "cors")) {
           const copy = res.clone();
-          caches.open(CACHE).then(c => c.put(e.request, copy));
+          caches.open(CACHE).then(c => c.put(req, copy));
         }
         return res;
       })
-      .catch(() => caches.match(e.request, { ignoreSearch: true }))
+      .catch(() => caches.match(req).then(hit => hit || caches.match(req, { ignoreSearch: true })))
   );
 });

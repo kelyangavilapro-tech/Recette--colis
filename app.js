@@ -220,14 +220,23 @@ function flash(btn, text) {
   setTimeout(() => { label.textContent = old; }, 2200);
 }
 
+async function copyText(text) {
+  try { await navigator.clipboard.writeText(text); return true; } catch (err) { /* on essaie l'ancienne méthode */ }
+  try {
+    const ta = document.createElement("textarea");
+    ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+    document.body.appendChild(ta); ta.select(); ta.setSelectionRange(0, text.length);
+    const ok = document.execCommand("copy"); ta.remove(); return ok;
+  } catch (err) { return false; }
+}
+
 async function shareRecipe(r, btn) {
   const text = recipeText(r);
   if (navigator.share) {
     try { await navigator.share({ title: r.title, text }); return; }
     catch (err) { if (err.name === "AbortError") return; }
   }
-  try { await navigator.clipboard.writeText(text); flash(btn, "Recette copiée !"); }
-  catch (err) { flash(btn, "Copie impossible"); }
+  flash(btn, (await copyText(text)) ? "Recette copiée !" : "Copie impossible");
 }
 
 /* ---------- Mode cuisine ---------- */
@@ -270,7 +279,9 @@ function renderCook() {
 async function openCook(r) {
   cook.r = r; cook.step = 0;
   renderCook();
-  $("cook").showModal();
+  const dlg = $("cook");
+  if (typeof dlg.showModal === "function") dlg.showModal();
+  else { dlg.setAttribute("open", ""); dlg.classList.add("cook-fallback"); document.body.style.overflow = "hidden"; }
   $("cook-next").focus();
   const ok = await keepAwake();
   $("cook-wake").textContent = ok
@@ -280,21 +291,29 @@ async function openCook(r) {
 
 function moveCook(delta) {
   const next = cook.step + delta;
-  if (next > cook.r.steps.length) { $("cook").close(); return; }
+  if (next > cook.r.steps.length) { closeCook(); return; }
   if (next < 0) return;
   cook.step = next;
   renderCook();
+}
+
+function closeCook() {
+  const dlg = $("cook");
+  if (typeof dlg.close === "function" && !dlg.classList.contains("cook-fallback")) { dlg.close(); return; }
+  dlg.removeAttribute("open"); dlg.classList.remove("cook-fallback"); document.body.style.overflow = "";
+  releaseAwake();
 }
 
 function setupCook() {
   const dlg = $("cook");
   $("cook-next").addEventListener("click", () => moveCook(1));
   $("cook-prev").addEventListener("click", () => moveCook(-1));
-  $("cook-close").addEventListener("click", () => dlg.close());
+  $("cook-close").addEventListener("click", closeCook);
   dlg.addEventListener("close", releaseAwake);
   dlg.addEventListener("keydown", e => {
     if (e.key === "ArrowRight") moveCook(1);
     if (e.key === "ArrowLeft") moveCook(-1);
+    if (e.key === "Escape" && dlg.classList.contains("cook-fallback")) closeCook();
   });
   /* Le verrou d'écran saute quand on change d'appli : on le reprend au retour. */
   document.addEventListener("visibilitychange", () => {
@@ -378,6 +397,18 @@ async function init() {
 
 init();
 
+/* Mode hors connexion. Quand une nouvelle version est publiée, l'appli se recharge une fois toute seule. */
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => navigator.serviceWorker.register("sw.js").catch(() => {}));
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    if (!hadController || reloaded) return;
+    reloaded = true;
+    window.location.reload();
+  });
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("sw.js", { updateViaCache: "none" })
+      .then(reg => reg.update())
+      .catch(() => {});
+  });
 }
