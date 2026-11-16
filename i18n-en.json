@@ -238,5 +238,21 @@
  "Sans crème : un yaourt marche aussi.": "No cream: a yoghurt works too.",
  "C'est une recette pour 1 personne (une tasse, un bol…)": "It's a single-serving recipe (a mug, a bowl…)",
  "Enregistrer": "Save",
- "Coche ce qui va bientôt périmer ou ce qui est déjà ouvert : les recettes qui l'utilisent passent en premier. Moins de gaspillage !": "Tick what will go off soon or is already open: recipes that use it come first. Less waste!"
+ "Coche ce qui va bientôt périmer ou ce qui est déjà ouvert : les recettes qui l'utilisent passent en premier. Moins de gaspillage !": "Tick what will go off soon or is already open: recipes that use it come first. Less waste!",
+ "Les boîtes utilisées sont déjà cochées : décoche-les s'il t'en reste.": "The tins you used are already ticked: untick them if you have some left.",
+ "Lundi": "Monday",
+ "Mardi": "Tuesday",
+ "Mercredi": "Wednesday",
+ "Jeudi": "Thursday",
+ "Vendredi": "Friday",
+ "Tu as tout": "You have it all",
+ "Changer": "Change",
+ "Pas assez de recettes possibles avec ce que tu as. Coche plus d'ingrédients ou ton équipement.": "Not enough possible recipes with what you have. Tick more ingredients or your equipment.",
+ "Mon menu de la semaine": "My weekly menu",
+ "Menu de la semaine": "Weekly menu",
+ "5 repas variés avec ce que tu as. Touche « Changer » pour une autre idée, ou le nom d'une recette pour l'ouvrir.": "5 varied meals with what you have. Tap \"Change\" for another idea, or a recipe name to open it.",
+ "Nouveau menu": "New menu",
+ "Ajouter ce qui manque à ma liste": "Add what's missing to my list",
+ "Partager le menu": "Share the menu",
+ "Le menu ne connaît pas les quantités : vérifie qu'il te reste assez de chaque produit pour toute la semaine.": "The menu doesn't know quantities: check you have enough of each product for the whole week."
 }

@@ -6,7 +6,7 @@
 const KEYS = {
   have: "colis-have", groups: "colis-groupes-ouverts", favs: "colis-favoris",
   shop: "colis-courses", theme: "colis-theme", portions: "colis-portions", welcome: "colis-bienvenue-vue", lang: "colis-langue",
-  voice: "colis-voix", history: "colis-repas", urgent: "colis-a-finir", mine: "colis-mes-recettes"
+  voice: "colis-voix", history: "colis-repas", urgent: "colis-a-finir", mine: "colis-mes-recettes", menu: "colis-menu"
 };
 const MOBILE = window.matchMedia("(max-width: 880px)");
 const DARK = window.matchMedia("(prefers-color-scheme: dark)");
@@ -357,6 +357,7 @@ function setupDrawer() {
     if (go === "shop") openShop();
     if (go === "keep") openTips();
     if (go === "create") openCreate(null);
+    if (go === "menu") openMenu();
     if (go === "favs") { setView("favs"); $("results").scrollIntoView(); }
     if (go === "privacy") { $("privacy").open = true; $("privacy").scrollIntoView(); }
   }));
@@ -757,7 +758,7 @@ function updateShopBadge() {
   $("drawer-shop-count").textContent = n;
 }
 
-function addMissingToShop(r, a) {
+function addMissingToShop(r, a, quiet) {
   let added = 0;
   a.missing.forEach(opts => {
     const id = opts[0];
@@ -768,6 +769,7 @@ function addMissingToShop(r, a) {
   });
   saveShop(); updateShopBadge();
   track("courses/ajout", "Ajout à la liste de courses");
+  if (quiet) return added;
   toast(added ? plural(added, "1 ingrédient ajouté à ta liste de courses", "{n} ingrédients ajoutés à ta liste de courses") : t("C'est déjà dans ta liste de courses"));
 }
 
@@ -955,7 +957,7 @@ async function makeDecoder() {
       return codes.length ? codes[0].rawValue : null;
     };
   }
-  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=13");
+  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=14");
   const Z = window.ZXing;
   const reader = new Z.MultiFormatReader();
   const hints = new Map();
@@ -1229,10 +1231,11 @@ function renderCook() {
       ${extras.length ? `<p class="cook-extra">${t("Si tu veux :")} ${esc(extras.join(", "))}.</p>` : ""}`;
   } else if (finish) {
     const used = usedIngredients(r);
+    const cans = likelyFinished(r);
     $("cook-step").innerHTML = `
       <p class="cook-lead">${t("Tu as fini un ingrédient ?")}</p>
-      <p class="cook-extra">${t("Coche ce qu'il ne te reste plus : on le retire de tes ingrédients.")}</p>
-      <div class="chips">${used.map(id => `<span class="chip"><input type="checkbox" id="fin-${esc(id)}" data-id="${esc(id)}"><label for="fin-${esc(id)}">${esc(NAMES[id])}</label></span>`).join("")}</div>`;
+      <p class="cook-extra">${t("Coche ce qu'il ne te reste plus : on le retire de tes ingrédients.")}${cans.size ? " " + t("Les boîtes utilisées sont déjà cochées : décoche-les s'il t'en reste.") : ""}</p>
+      <div class="chips">${used.map(id => `<span class="chip"><input type="checkbox" id="fin-${esc(id)}" data-id="${esc(id)}" ${cans.has(id) ? "checked" : ""}><label for="fin-${esc(id)}">${esc(NAMES[id])}</label></span>`).join("")}</div>`;
   } else {
     const text = stepsOf(r)[cook.step - 1];
     const secs = stepDuration(text);
@@ -1252,6 +1255,15 @@ function usedIngredients(r) {
   return ids.filter(id => INGREDIENTS.has(id));
 }
 
+/* Boîtes de conserve qu'une recette utilise en entier : on les propose comme finies.
+   Pas quand la recette n'en prend que la moitié, ni quand on cuisine pour 1. */
+function likelyFinished(r) {
+  const cans = new Set((GROUPS.find(g => g.items.some(([id]) => id === "thon")) || { items: [] }).items.map(([id]) => id));
+  const half = r.steps.some(s => /demi-boîte|half a tin|media lata/i.test(s));
+  if (half || recipeFactor(r) < 1) return new Set();
+  return new Set(usedIngredients(r).filter(id => cans.has(id)));
+}
+
 /* Fin de recette : on retire ce qui est fini et on compte le repas. */
 function finishCooking() {
   const r = cook.r;
@@ -1266,6 +1278,92 @@ function finishCooking() {
   haveChanged();
   const n = monthStats().meals;
   toast(plural(n, "Bravo ! 1er repas cuisiné ce mois-ci.", "Bravo ! {n} repas cuisinés ce mois-ci."));
+}
+
+/* ---------- Menu de la semaine ---------- */
+
+const DAYS = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi"];
+let weekMenu = [];        // identifiants des recettes, un par jour
+/* Recettes possibles pour un repas : faisables ou presque, pas les desserts, celles « à finir vite » d'abord. */
+function menuCandidates() {
+  const { rows } = computeRows();
+  const ok = rows.filter(x => x.a.equipOk && x.a.missing.length <= 1 && !x.r.sucree);
+  const shuffle = a => a.map(x => [Math.random(), x]).sort((p, q) => p[0] - q[0]).map(x => x[1]);
+  const score = x => (x.a.missing.length === 0 ? 0 : 10) - urgentUsed(x.r).length * 3;
+  return shuffle(ok).sort((x, y) => score(x) - score(y));
+}
+const mainOf = r => pick(r.need[0]);
+/* Choisit une recette en évitant de répéter le même ingrédient principal. */
+function pickForMenu(cands, taken) {
+  const usedMain = new Set(taken.map(id => { const r = RECIPES.find(x => x.id === id); return r ? mainOf(r) : null; }));
+  return cands.find(x => !taken.includes(x.r.id) && !usedMain.has(mainOf(x.r))) || cands.find(x => !taken.includes(x.r.id));
+}
+function newMenu() {
+  const cands = menuCandidates();
+  weekMenu = [];
+  DAYS.forEach(() => { const x = pickForMenu(cands, weekMenu); if (x) weekMenu.push(x.r.id); });
+  writeJSON(KEYS.menu, weekMenu);
+}
+function changeDay(k) {
+  const cands = menuCandidates();
+  const others = weekMenu.filter((_, j) => j !== k);
+  const pool = cands.filter(x => x.r.id !== weekMenu[k]);
+  const x = pickForMenu(pool, others);
+  if (x) weekMenu[k] = x.r.id;
+  writeJSON(KEYS.menu, weekMenu);
+  renderMenu();
+}
+function renderMenu() {
+  const { rows } = computeRows();
+  const byId = new Map(rows.map(x => [x.r.id, x]));
+  weekMenu = weekMenu.filter(id => byId.has(id));
+  $("menu-list").innerHTML = weekMenu.length ? weekMenu.map((id, k) => {
+    const x = byId.get(id), ready = isReady(x);
+    const state = ready ? `<span class="pill ok">${t("Tu as tout")}</span>`
+      : `<span class="pill miss">${t("Il te manque :")} ${esc(x.a.missing.map(o => lower(o[0])).join(", "))}</span>`;
+    return `<li class="menu-day">
+      <span class="menu-dayname">${t(DAYS[k])}</span>
+      <button type="button" class="menu-recipe" data-open="${x.i}">${esc(x.r.title)}<small>${x.r.time} min · ≈ ${fmtEuros(costOf(x.r))} ${t("la portion")}</small></button>
+      ${state}
+      <button type="button" class="link-btn" data-change="${k}">${t("Changer")}</button>
+    </li>`;
+  }).join("") : `<li class="note">${t("Pas assez de recettes possibles avec ce que tu as. Coche plus d'ingrédients ou ton équipement.")}</li>`;
+  $("menu-shop").disabled = !weekMenu.some(id => !isReady(byId.get(id)));
+}
+function openMenu() {
+  const saved = readJSON(KEYS.menu);
+  if (Array.isArray(saved) && saved.length) weekMenu = saved; else newMenu();
+  renderMenu();
+  openDialog($("menu"));
+  track("menu/ouvert", "Menu de la semaine");
+}
+function setupMenu() {
+  $("menu-open-btn").addEventListener("click", openMenu);
+  $("menu-new").addEventListener("click", () => { newMenu(); renderMenu(); });
+  $("menu-list").addEventListener("click", e => {
+    const ch = e.target.closest("[data-change]");
+    if (ch) { changeDay(Number(ch.dataset.change)); return; }
+    const op = e.target.closest("[data-open]");
+    if (op) {
+      closeDialog($("menu"));
+      const i = op.dataset.open;
+      if (view !== "all") setView("all");
+      filters.clear(); recipeQuery = ""; $("recipe-search").value = ""; renderFilters(); renderResults();
+      const d = document.querySelector(`#list details[data-i="${i}"]`);
+      if (d) { d.open = true; d.scrollIntoView({ block: "start" }); }
+    }
+  });
+  $("menu-shop").addEventListener("click", () => {
+    const { rows } = computeRows();
+    const byId = new Map(rows.map(x => [x.r.id, x]));
+    let added = 0;
+    weekMenu.forEach(id => { const x = byId.get(id); if (x && !isReady(x)) added += addMissingToShop(x.r, x.a, true); });
+    toast(added ? plural(added, "1 ingrédient ajouté à ta liste de courses", "{n} ingrédients ajoutés à ta liste de courses") : t("C'est déjà dans ta liste de courses"));
+  });
+  $("menu-share").addEventListener("click", e => {
+    const lines = weekMenu.map((id, k) => { const r = RECIPES.find(x => x.id === id); return r ? `${t(DAYS[k])} : ${r.title}` : ""; }).filter(Boolean);
+    shareText(t("Mon menu de la semaine"), [t("Mon menu de la semaine") + " :", ...lines, "", appUrl()].join("\n"), e.currentTarget);
+  });
 }
 
 /* ---------- Mes recettes : créées par l'étudiant ---------- */
@@ -1591,8 +1689,8 @@ async function init() {
   if (LANG === "en") {
     try {
       const [ui, content] = await Promise.all([
-        fetch("i18n-en.json?v=13", { cache: "no-cache" }).then(r => r.json()),
-        fetch("recettes.en.json?v=13", { cache: "no-cache" }).then(r => r.json())
+        fetch("i18n-en.json?v=14", { cache: "no-cache" }).then(r => r.json()),
+        fetch("recettes.en.json?v=14", { cache: "no-cache" }).then(r => r.json())
       ]);
       EN = ui; enContent = content;
       translateStatic();
@@ -1661,6 +1759,7 @@ async function init() {
   setupWelcome();
   setupUrgent();
   setupCreate();
+  setupMenu();
 
   $("clear").addEventListener("click", () => {
     have.clear();

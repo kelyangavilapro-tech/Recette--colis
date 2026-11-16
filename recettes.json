@@ -3,7 +3,8 @@
   "groupes": [
     { "titre": "Équipement", "type": "equip", "items": [
       ["plaque", "Plaque de cuisson"], ["micro", "Micro-ondes"], ["four", "Four"], ["airfryer", "Air fryer"],
-      ["bouilloire", "Bouilloire"], ["mixeur", "Mixeur ou blender"], ["grillepain", "Grille-pain"] ] },
+      ["bouilloire", "Bouilloire"], ["mixeur", "Mixeur ou blender"], ["grillepain", "Grille-pain"], ["cuiseur", "Cuiseur à riz"],
+      ["autocuiseur", "Autocuiseur (Cookeo, cocotte-minute)"], ["gaufrier", "Gaufrier"], ["croque", "Appareil à croque-monsieur"] ] },
     { "titre": "Féculents", "items": [
       ["pates", "Pâtes"], ["riz", "Riz"], ["semoule", "Semoule"], ["pain", "Pain"],
       ["pdt", "Pommes de terre"], ["nouilles", "Nouilles"], ["avoine", "Flocons d'avoine"], ["farine", "Farine"] ] },
@@ -779,6 +780,107 @@
       "swap": "Délicieuse avec un yaourt ou quelques flocons d'avoine : un dessert pour quelques centimes.",
       "sucree": true,
       "portions": "par personne"
+    },
+    {
+      "title": "Riz tout-en-un au cuiseur",
+      "color": "herbe",
+      "time": 25,
+      "equip": ["cuiseur"],
+      "tool": "1 cuiseur à riz",
+      "need": [["riz"], ["legboite", "legfrais", "mais"], ["thon", "poischiches", "haricots", "sardines"]],
+      "extra": ["bouillon", "soja", "curry", "oignon"],
+      "steps": [
+        "Rince 150 g de riz et mets-le dans le cuiseur avec 300 ml d'eau (ou la quantité indiquée par ton cuiseur).",
+        "Ajoute un demi-cube de bouillon émietté et les légumes égouttés.",
+        "Lance la cuisson, environ 20 minutes.",
+        "Ajoute le thon ou les pois chiches, mélange et laisse reposer 5 minutes couvert."
+      ],
+      "swap": "Le cuiseur garde au chaud : prépare-le le matin, ton repas t'attend le soir.",
+      "qte": {"legboite": 100}
+    },
+    {
+      "title": "Soupe de légumes à l'autocuiseur",
+      "color": "tomate",
+      "time": 25,
+      "equip": ["autocuiseur"],
+      "tool": "1 autocuiseur",
+      "need": [["legfrais", "legboite"], ["pdt", "lentilles", "pates"]],
+      "extra": ["oignon", "bouillon", "huile", "sel", "tomates"],
+      "steps": [
+        "Coupe les légumes et les pommes de terre en morceaux.",
+        "Mets-les dans l'autocuiseur avec l'oignon, un cube de bouillon et 800 ml d'eau.",
+        "Ferme et fais cuire 10 minutes à partir du sifflement (ou 10 minutes sous pression sur un Cookeo).",
+        "Laisse la pression retomber complètement avant d'ouvrir, puis écrase à la fourchette ou mixe."
+      ],
+      "swap": "N'ouvre jamais un autocuiseur encore sous pression : attends que la soupape soit redescendue."
+    },
+    {
+      "title": "Gaufres",
+      "color": "curry",
+      "time": 25,
+      "equip": ["gaufrier"],
+      "tool": "1 gaufrier + 1 bol",
+      "need": [["farine"], ["oeufs"], ["lait"]],
+      "extra": ["sucre", "beurre", "huile", "chocolat", "compote", "fruits", "cacahuetes"],
+      "steps": [
+        "Dans un bol, mélange 250 g de farine, 2 œufs et 2 cuillères à soupe de sucre.",
+        "Ajoute petit à petit 400 ml de lait et 2 cuillères d'huile, en mélangeant jusqu'à ce qu'il n'y ait plus de grumeaux.",
+        "Fais chauffer le gaufrier et graisse-le légèrement.",
+        "Verse une louche de pâte, ferme et laisse cuire 3 à 4 minutes, jusqu'à ce que la gaufre soit dorée."
+      ],
+      "swap": "Avec du sucre, de la compote, du chocolat ou des fruits. Elles se congèlent et se réchauffent au grille-pain.",
+      "qte": {"farine": 65, "oeufs": 25, "lait": 100},
+      "sucree": true
+    },
+    {
+      "title": "Gaufres de pommes de terre",
+      "color": "tomate",
+      "time": 20,
+      "equip": ["gaufrier"],
+      "tool": "1 gaufrier + 1 bol",
+      "need": [["pdt"], ["oeufs"]],
+      "extra": ["farine", "fromage", "oignon", "sel"],
+      "steps": [
+        "Écrase des pommes de terre cuites ou des restes de purée : il en faut environ 2 verres.",
+        "Mélange avec 1 œuf, 2 cuillères de farine, du sel, du poivre et du fromage si tu en as.",
+        "Fais chauffer le gaufrier, graisse-le et étale la préparation.",
+        "Laisse cuire 5 à 6 minutes, jusqu'à ce que ce soit croustillant."
+      ],
+      "swap": "La recette anti-gaspi parfaite pour les restes de purée.",
+      "qte": {"pdt": 200, "oeufs": 25}
+    },
+    {
+      "title": "Croque-monsieur à l'appareil",
+      "color": "nuit",
+      "time": 6,
+      "equip": ["croque"],
+      "tool": "1 appareil à croque",
+      "need": [["pain"], ["fromage"]],
+      "extra": ["jambon", "thon", "tomates", "beurre"],
+      "steps": [
+        "Beurre légèrement l'extérieur de 2 tranches de pain (ou mets quelques gouttes d'huile).",
+        "Mets du fromage entre les tranches, et du jambon ou du thon si tu en as.",
+        "Fais cuire 3 à 4 minutes dans l'appareil bien chaud, jusqu'à ce que ce soit doré."
+      ],
+      "swap": "Version halal ou végétarienne : remplace le jambon par du thon ou de la tomate.",
+      "portions": 1
+    },
+    {
+      "title": "Croque sucré banane-chocolat",
+      "color": "curry",
+      "time": 6,
+      "equip": ["croque", "plaque"],
+      "tool": "appareil à croque ou poêle",
+      "need": [["pain"], ["fruits", "compote"]],
+      "extra": ["chocolat", "cacahuetes", "beurre", "sucre"],
+      "steps": [
+        "Mets des rondelles de banane (ou de la compote) entre 2 tranches de pain.",
+        "Ajoute un carré de chocolat ou un peu de beurre de cacahuète si tu en as.",
+        "Fais cuire 3 minutes dans l'appareil à croque, ou 2 minutes de chaque côté à la poêle."
+      ],
+      "swap": "Un goûter chaud pour quelques centimes, idéal avec des bananes trop mûres.",
+      "portions": 1,
+      "sucree": true
     }
   ],
   "nutrition": {

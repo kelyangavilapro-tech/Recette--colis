@@ -50,7 +50,11 @@
   "chocolat": "Chocolate",
   "mixeur": "Blender",
   "grillepain": "Toaster",
-  "cacahuetes": "Peanut butter"
+  "cacahuetes": "Peanut butter",
+  "cuiseur": "Rice cooker",
+  "autocuiseur": "Pressure cooker (Instant Pot…)",
+  "gaufrier": "Waffle maker",
+  "croque": "Sandwich toaster"
  },
  "regimes": {
   "vege": "Vegetarian",
@@ -542,6 +546,70 @@
     "Heat for 3 to 4 minutes in the microwave (or 25 minutes in the oven at 180 °C), until soft."
    ],
    "swap": "Delicious with a yoghurt or a few rolled oats: a dessert for a few cents."
+  },
+  "Riz tout-en-un au cuiseur": {
+   "title": "One-pot rice cooker rice",
+   "tool": "1 rice cooker",
+   "steps": [
+    "Rinse 150 g of rice and put it in the cooker with 300 ml of water (or the amount your cooker says).",
+    "Add half a crumbled stock cube and the drained vegetables.",
+    "Start the cooker, about 20 minutes.",
+    "Add the tuna or chickpeas, stir and leave to rest, covered, for 5 minutes."
+   ],
+   "swap": "The cooker keeps it warm: start it in the morning, dinner will be waiting."
+  },
+  "Soupe de légumes à l'autocuiseur": {
+   "title": "Pressure cooker vegetable soup",
+   "tool": "1 pressure cooker",
+   "steps": [
+    "Cut the vegetables and potatoes into pieces.",
+    "Put them in the pressure cooker with the onion, a stock cube and 800 ml of water.",
+    "Close and cook for 10 minutes once it starts hissing (or 10 minutes on pressure on an Instant Pot).",
+    "Let the pressure drop completely before opening, then mash with a fork or blend."
+   ],
+   "swap": "Never open a pressure cooker that's still under pressure: wait for the valve to drop."
+  },
+  "Gaufres": {
+   "title": "Waffles",
+   "tool": "1 waffle maker + 1 bowl",
+   "steps": [
+    "In a bowl, mix 250 g of flour, 2 eggs and 2 tablespoons of sugar.",
+    "Gradually add 400 ml of milk and 2 tablespoons of oil, stirring until there are no lumps.",
+    "Heat the waffle maker and grease it lightly.",
+    "Pour in a ladle of batter, close and cook for 3 to 4 minutes, until the waffle is golden."
+   ],
+   "swap": "With sugar, apple sauce, chocolate or fruit. They freeze well and reheat in the toaster."
+  },
+  "Gaufres de pommes de terre": {
+   "title": "Potato waffles",
+   "tool": "1 waffle maker + 1 bowl",
+   "steps": [
+    "Mash some cooked potatoes or leftover mash: you need about 2 glasses.",
+    "Mix with 1 egg, 2 tablespoons of flour, salt, pepper and cheese if you have some.",
+    "Heat the waffle maker, grease it and spread the mixture.",
+    "Cook for 5 to 6 minutes, until crispy."
+   ],
+   "swap": "The perfect no-waste recipe for leftover mash."
+  },
+  "Croque-monsieur à l'appareil": {
+   "title": "Sandwich toaster toastie",
+   "tool": "1 sandwich toaster",
+   "steps": [
+    "Lightly butter the outside of 2 slices of bread (or use a few drops of oil).",
+    "Put cheese between the slices, and ham or tuna if you have some.",
+    "Cook for 3 to 4 minutes in the hot toaster, until golden."
+   ],
+   "swap": "Halal or vegetarian version: replace the ham with tuna or tomato."
+  },
+  "Croque sucré banane-chocolat": {
+   "title": "Sweet banana and chocolate toastie",
+   "tool": "sandwich toaster or frying pan",
+   "steps": [
+    "Put banana slices (or apple sauce) between 2 slices of bread.",
+    "Add a square of chocolate or a little peanut butter if you have some.",
+    "Cook for 3 minutes in the sandwich toaster, or 2 minutes on each side in a frying pan."
+   ],
+   "swap": "A warm snack for a few cents, ideal with overripe bananas."
   }
  },
  "conservation": {
