@@ -125,13 +125,51 @@ function renderResults() {
   if (almost.length) html += '<p class="later-title">Il ne te manque qu\'un ingrédient</p>' + almost.map(x => card(x.r, x.a, "almost")).join("");
   if (later.length) html += '<p class="later-title">Pour plus tard</p>' + later.map(x => card(x.r, x.a, "later")).join("");
 
+  updateJumpBar(ready.length);
+
   const list = document.getElementById("list");
   const openTitles = [...list.querySelectorAll("details[open] h3")].map(h => h.textContent);
   list.innerHTML = html;
   list.querySelectorAll("details").forEach(d => { if (openTitles.includes(d.querySelector("h3").textContent)) d.open = true; });
 }
 
+/* Barre du bas (téléphone) : nombre de recettes faisables, cachée une fois arrivé aux résultats. */
+let lastJumpCount = null;
+function updateJumpBar(n) {
+  const text = document.getElementById("jump-text");
+  text.innerHTML = n === 0 ? "Voir les recettes"
+    : `Voir ${n === 1 ? "ma" : "mes"} <span class="n">${n}</span> recette${n === 1 ? "" : "s"}`;
+  if (lastJumpCount !== null && n !== lastJumpCount) {
+    const btn = document.getElementById("jump-btn");
+    btn.classList.remove("bump"); void btn.offsetWidth; btn.classList.add("bump");
+  }
+  lastJumpCount = n;
+}
+
+function watchResults() {
+  const bar = document.getElementById("jump-bar");
+  const results = document.getElementById("results");
+  if (!("IntersectionObserver" in window)) return;
+  new IntersectionObserver(([e]) => {
+    const reached = e.isIntersecting || e.boundingClientRect.top < 0;
+    bar.classList.toggle("is-hidden", reached);
+  }, { rootMargin: "0px 0px -35% 0px" }).observe(results);
+}
+
+/* Après un saut, on place le focus sur la cible pour les lecteurs d'écran et le clavier. */
+function focusOnJump(linkSel, targetId) {
+  document.querySelectorAll(linkSel).forEach(a => a.addEventListener("click", () => {
+    const t = document.getElementById(targetId);
+    if (!t.hasAttribute("tabindex")) t.setAttribute("tabindex", "-1");
+    setTimeout(() => t.focus({ preventScroll: true }), 0);
+  }));
+}
+
 async function init() {
+  watchResults();
+  focusOnJump("#jump-btn", "results");
+  focusOnJump(".back-link", "pantry");
+
   let data;
   try {
     const res = await fetch("recettes.json", { cache: "no-cache" });

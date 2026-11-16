@@ -39,7 +39,7 @@ h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 
 
 .layout { max-width: 1180px; margin: 0 auto; padding: 16px 20px 40px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
 .pantry { flex: 1 1 340px; max-width: 460px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
-@media (max-width: 760px) { .pantry { max-width: none; } }
+@media (max-width: 880px) { .pantry { max-width: none; } }
 .results { flex: 999 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
 
 .pantry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
@@ -89,6 +89,22 @@ details[open] .chev { transform: rotate(180deg); }
 .swap { grid-column: 1 / -1; border-radius: 12px; padding: 12px 16px; font-size: 15px; margin: 0; }
 .later-title { font-family: var(--font-display); font-weight: 800; font-size: 18px; margin: 12px 0 0; color: var(--muted); }
 .empty { background: var(--card); border: 1px dashed var(--line); border-radius: 18px; padding: 20px; color: var(--muted); margin: 0; }
+
+/* Téléphone : barre « Voir mes recettes » en bas, lien de retour en haut des résultats. */
+.results { scroll-margin-top: 12px; outline: none; }
+.pantry { scroll-margin-top: 12px; }
+.back-link, .jump-bar { display: none; }
+@media (max-width: 880px) {
+  body { padding-bottom: calc(88px + env(safe-area-inset-bottom)); }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; width: fit-content; color: var(--nuit); font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+  .jump-bar { display: block; position: fixed; left: 0; right: 0; bottom: 0; z-index: 10; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: linear-gradient(to top, var(--paper) 70%, rgba(244, 245, 240, 0)); transition: transform .25s, opacity .25s; }
+  .jump-bar.is-hidden { transform: translateY(110%); opacity: 0; pointer-events: none; }
+  .jump-btn { display: flex; align-items: center; justify-content: center; gap: 10px; min-height: 56px; border-radius: 999px; background: var(--ink); color: #FFFFFF; font-weight: 700; font-size: 18px; text-decoration: none; box-shadow: 0 6px 20px rgba(28, 31, 26, 0.25); }
+  .jump-btn .n { font-family: var(--font-display); font-weight: 800; font-size: 22px; font-variant-numeric: tabular-nums; }
+  .jump-btn.bump { animation: bump .3s ease-out; }
+}
+@keyframes bump { 50% { transform: scale(1.04); } }
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
 
 footer { max-width: 1180px; margin: 0 auto; padding: 0 20px 32px; font-size: 14px; color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
