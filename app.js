@@ -1136,10 +1136,11 @@ function applyColisLink(firstVisit) {
 
 function renderCredits() {
   const items = [];
-  RECIPES.forEach(r => { const ph = photoOf("recettes", slug(r.title)); if (ph && ph.credit) items.push([r.title, ph.credit]); });
-  Object.keys(PHOTOS.ingredients || {}).forEach(id => { const ph = photoOf("ingredients", id); if (ph && ph.credit && NAMES[id]) items.push([NAMES[id], ph.credit]); });
+  RECIPES.forEach(r => { const ph = photoOf("recettes", slug(r.title)); if (ph && ph.credit) items.push([r.title, ph]); });
+  Object.keys(PHOTOS.ingredients || {}).forEach(id => { const ph = photoOf("ingredients", id); if (ph && ph.credit && NAMES[id]) items.push([NAMES[id], ph]); });
   $("credits").hidden = items.length === 0;
-  $("credits-list").innerHTML = items.map(([what, who]) => `<li><strong>${esc(what)}</strong> : ${esc(who)}</li>`).join("");
+  const link = ph => /^https:\/\//.test(ph.source || "") ? ` (<a href="${esc(ph.source)}" target="_blank" rel="noopener">source</a>)` : "";
+  $("credits-list").innerHTML = items.map(([what, ph]) => `<li><strong>${esc(what)}</strong> : ${esc(ph.credit)}${link(ph)}</li>`).join("");
 }
 
 function setupFeedback() {

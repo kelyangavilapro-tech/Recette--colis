@@ -450,3 +450,4 @@ textarea.field { resize: vertical; line-height: 1.5; }
 .chip-pic { width: 28px; height: 28px; border-radius: 999px; object-fit: cover; margin: -4px 0; }
 .chip input:checked + label .chip-pic { outline: 2px solid var(--on-ink); }
 .credits { margin: 0 0 10px; padding-left: 18px; font-size: 13px; }
+.credits a { color: var(--link); }
