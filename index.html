@@ -2,23 +2,40 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Qu'est-ce que je cuisine ?</title>
 <meta name="description" content="Coche ce que tu as dans ton colis ou ton frigo : l'appli te dit ce que tu peux cuisiner tout de suite.">
 <meta name="theme-color" content="#F4F5F0">
+<script>try { var t = localStorage.getItem("colis-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body>
+<div class="appbar">
+  <div class="appbar-inner">
+    <button type="button" class="icon-btn" id="menu-open" aria-label="Ouvrir le menu" aria-haspopup="dialog">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <p class="appbar-title">Mon colis</p>
+    <button type="button" class="icon-btn" id="scan-open" aria-label="Scanner un produit">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10 8v8M13 8v8M17 8v8"/></svg>
+    </button>
+    <button type="button" class="icon-btn" id="shop-open" aria-label="Ma liste de courses">
+      <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>
+      <span class="badge" id="shop-badge" hidden>0</span>
+    </button>
+  </div>
+</div>
+
 <header class="top">
   <div class="stripe" aria-hidden="true"><span class="s-tomate"></span><span class="s-herbe"></span><span class="s-curry"></span><span class="s-nuit"></span></div>
   <h1>Qu'est-ce que je cuisine avec mon colis ?</h1>
-  <p class="lead">Coche ce que tu as dans ton colis ou ton frigo, et ton équipement. Les recettes que tu peux faire tout de suite s'affichent en premier.</p>
+  <p class="lead">Coche ce que tu as dans ton colis ou ton frigo, ou scanne tes produits. Les recettes que tu peux faire tout de suite s'affichent en premier.</p>
 </header>
 
 <main class="layout">
@@ -47,11 +64,17 @@
       Modifier ce que j'ai
     </a>
     <div class="summary" aria-live="polite"><span class="big" id="count">0</span><p id="count-text">Chargement des recettes…</p></div>
-    <div class="view-tabs" role="group" aria-label="Recettes à afficher">
-      <button type="button" class="tab" id="view-all" aria-pressed="true">Toutes les recettes</button>
-      <button type="button" class="tab" id="view-favs" aria-pressed="false">
-        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z"/></svg>
-        Mes favoris (<span id="view-favs-count">0</span>)
+    <div class="results-tools">
+      <div class="view-tabs" role="group" aria-label="Recettes à afficher">
+        <button type="button" class="tab" id="view-all" aria-pressed="true">Toutes</button>
+        <button type="button" class="tab" id="view-favs" aria-pressed="false">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z"/></svg>
+          Favoris (<span id="view-favs-count">0</span>)
+        </button>
+      </div>
+      <button type="button" class="tab" id="random-btn">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>
+        Une idée au hasard
       </button>
     </div>
     <p class="note" id="regime-note" hidden></p>
@@ -76,14 +99,115 @@
     <a href="#" target="_blank" rel="noopener" data-avis>Donner mon avis</a>
     <a href="asso.html">Tu es une association ? Crée ton lien « colis du jour »</a>
   </p>
-  <details class="privacy">
+  <details class="privacy" id="privacy">
     <summary>Confidentialité</summary>
-    <p>Pas de compte, pas de cookies. Ce que tu coches, tes favoris et tes réglages restent sur ton appareil : ils ne sont envoyés nulle part.</p>
+    <p>Pas de compte, pas de cookies. Ce que tu coches, tes favoris, ta liste de courses et tes réglages restent sur ton appareil : ils ne sont envoyés nulle part.</p>
+    <p>Quand tu scannes un produit, seul son code-barres est envoyé à Open Food Facts, une base de données publique et gratuite, pour savoir de quel produit il s'agit. Les images de la caméra ne quittent pas ton téléphone.</p>
     <p id="privacy-stats" hidden>Pour savoir si l'appli est utile, on compte les visites et les recettes ouvertes de façon anonyme, avec GoatCounter, un outil sans cookies qui ne permet pas de t'identifier.</p>
   </details>
-  <p class="version">Version 5</p>
+  <p class="version">Version 6</p>
 </footer>
 
+<!-- Menu latéral -->
+<dialog class="drawer" id="drawer" aria-label="Menu">
+  <div class="drawer-inner">
+    <div class="drawer-head">
+      <h2>Menu</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Fermer le menu">
+        <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+    </div>
+    <nav class="drawer-section" aria-label="Raccourcis">
+      <h3>Raccourcis</h3>
+      <button type="button" class="menu-item" data-go="scan"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10 8v8M13 8v8M17 8v8"/></svg>Scanner un produit</button>
+      <button type="button" class="menu-item" data-go="random"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8.5" cy="8.5" r="1.2" fill="currentColor"/><circle cx="15.5" cy="15.5" r="1.2" fill="currentColor"/><circle cx="12" cy="12" r="1.2" fill="currentColor"/></svg>Une idée au hasard</button>
+      <button type="button" class="menu-item" data-go="shop"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>Ma liste de courses<span class="count" id="drawer-shop-count">0</span></button>
+      <button type="button" class="menu-item" data-go="favs"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z"/></svg>Mes favoris<span class="count" id="drawer-fav-count">0</span></button>
+      <button type="button" class="menu-item" data-go="keep"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M5 10h14M9 6v1M9 14v3"/></svg>Bien conserver ses aliments</button>
+    </nav>
+    <section class="drawer-section" aria-labelledby="set-theme">
+      <h3 id="set-theme">Affichage</h3>
+      <div class="segmented" role="radiogroup" aria-labelledby="set-theme">
+        <input type="radio" name="theme" id="theme-auto" value="auto"><label for="theme-auto">Auto</label>
+        <input type="radio" name="theme" id="theme-light" value="light"><label for="theme-light">Clair</label>
+        <input type="radio" name="theme" id="theme-dark" value="dark"><label for="theme-dark">Sombre</label>
+      </div>
+    </section>
+    <section class="drawer-section" aria-labelledby="set-regime">
+      <h3 id="set-regime">Mon régime</h3>
+      <div class="chips" id="drawer-regimes"></div>
+    </section>
+    <section class="drawer-section" aria-labelledby="set-equip">
+      <h3 id="set-equip">Mon équipement</h3>
+      <div class="chips" id="drawer-equip"></div>
+    </section>
+    <nav class="drawer-section" aria-label="À propos">
+      <h3>À propos</h3>
+      <a class="menu-item" href="asso.html"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0M16 4.5a3.5 3.5 0 0 1 0 7M18.5 20a6.5 6.5 0 0 0-2.5-5.1"/></svg>Pour les associations</a>
+      <a class="menu-item" href="#" target="_blank" rel="noopener" data-avis><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/></svg>Donner mon avis</a>
+      <button type="button" class="menu-item" data-go="privacy"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Confidentialité</button>
+      <button type="button" class="menu-item" id="reset-app"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>Tout remettre à zéro</button>
+    </nav>
+    <p class="drawer-foot" id="drawer-version">Version 6</p>
+  </div>
+</dialog>
+
+<!-- Liste de courses -->
+<dialog class="sheet" id="shop" aria-labelledby="shop-title">
+  <div class="sheet-inner">
+    <div class="sheet-head">
+      <h2 id="shop-title">Ma liste de courses</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Fermer la liste de courses"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <form class="shop-add" id="shop-form">
+      <label class="sr-only" for="shop-input">Ajouter un article</label>
+      <input class="field" id="shop-input" type="text" placeholder="Ajouter un article" autocomplete="off" maxlength="60">
+      <button type="submit" class="btn btn-pri">Ajouter</button>
+    </form>
+    <p class="note" id="shop-empty">Ta liste est vide. Dans une recette où il manque un ingrédient, touche « Ajouter à ma liste ».</p>
+    <ul class="shop-list" id="shop-list"></ul>
+    <div class="sheet-actions" id="shop-actions">
+      <button type="button" class="btn btn-pri" id="shop-store">Ranger mes achats</button>
+      <button type="button" class="btn btn-sec" id="shop-share"><span data-label>Partager la liste</span></button>
+      <button type="button" class="btn btn-sec" id="shop-clear">Vider la liste</button>
+    </div>
+    <p class="note">« Ranger mes achats » coche ce que tu as acheté dans tes ingrédients et le retire de la liste.</p>
+  </div>
+</dialog>
+
+<!-- Conservation -->
+<dialog class="sheet" id="keep" aria-labelledby="keep-title">
+  <div class="sheet-inner">
+    <div class="sheet-head">
+      <h2 id="keep-title">Bien conserver ses aliments</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Fermer les conseils"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <p class="note">Pour moins gaspiller et ne pas tomber malade. Les conseils qui concernent ce que tu as coché sont en premier.</p>
+    <div class="tips" id="tips"></div>
+  </div>
+</dialog>
+
+<!-- Scanner -->
+<dialog class="sheet" id="scan" aria-labelledby="scan-title">
+  <div class="sheet-inner">
+    <div class="sheet-head">
+      <h2 id="scan-title">Scanner mes produits</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Fermer le scanner"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <p class="note">Vise le code-barres d'un produit : il est coché tout seul dans tes ingrédients. Tu peux en scanner plusieurs à la suite.</p>
+    <div class="scan-video" id="scan-video-box"><video id="scan-video" playsinline muted></video></div>
+    <p class="scan-status" id="scan-status" role="status"></p>
+    <form class="shop-add" id="scan-form">
+      <label class="sr-only" for="scan-input">Taper le code-barres</label>
+      <input class="field" id="scan-input" type="text" inputmode="numeric" pattern="[0-9]*" placeholder="Ou tape le code-barres (chiffres)" autocomplete="off" maxlength="14">
+      <button type="submit" class="btn btn-pri">Chercher</button>
+    </form>
+    <ul class="scan-found" id="scan-found"></ul>
+    <p class="note">Produits reconnus grâce à <a href="https://world.openfoodfacts.org" target="_blank" rel="noopener">Open Food Facts</a>, une base de données libre.</p>
+  </div>
+</dialog>
+
+<!-- Mode cuisine -->
 <dialog class="cook" id="cook" aria-labelledby="cook-title">
   <div class="cook-inner">
     <div class="cook-top">
@@ -108,7 +232,9 @@
   </div>
 </dialog>
 
-<script src="config.js?v=5"></script>
-<script src="app.js?v=5"></script>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script src="config.js?v=6"></script>
+<script src="app.js?v=6"></script>
 </body>
 </html>

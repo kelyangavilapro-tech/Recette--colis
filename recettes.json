@@ -1,228 +1,718 @@
 {
-  "version": 1,
+  "version": 2,
   "groupes": [
     { "titre": "Équipement", "type": "equip", "items": [
-      ["plaque", "Plaque de cuisson"], ["micro", "Micro-ondes"] ] },
+      ["plaque", "Plaque de cuisson"], ["micro", "Micro-ondes"], ["four", "Four"], ["airfryer", "Air fryer"],
+      ["bouilloire", "Bouilloire"] ] },
     { "titre": "Féculents", "items": [
-      ["pates", "Pâtes"], ["riz", "Riz"], ["semoule", "Semoule"], ["pain", "Pain"], ["pdt", "Pommes de terre"] ] },
+      ["pates", "Pâtes"], ["riz", "Riz"], ["semoule", "Semoule"], ["pain", "Pain"],
+      ["pdt", "Pommes de terre"], ["nouilles", "Nouilles"], ["avoine", "Flocons d'avoine"], ["farine", "Farine"] ] },
     { "titre": "Conserves", "items": [
       ["tomates", "Tomates en boîte"], ["thon", "Thon"], ["sardines", "Sardines"], ["lentilles", "Lentilles"],
-      ["poischiches", "Pois chiches"], ["haricots", "Haricots"], ["legboite", "Légumes en boîte"], ["mais", "Maïs"] ] },
+      ["poischiches", "Pois chiches"], ["haricots", "Haricots"], ["legboite", "Légumes en boîte"], ["mais", "Maïs"],
+      ["compote", "Compote"] ] },
     { "titre": "Frais", "items": [
       ["oeufs", "Œufs"], ["lait", "Lait"], ["yaourt", "Yaourt nature"], ["fromage", "Fromage"],
-      ["oignon", "Oignon ou ail"], ["legfrais", "Légumes frais"] ] },
+      ["beurre", "Beurre"], ["creme", "Crème fraîche"], ["jambon", "Jambon"], ["poulet", "Poulet ou dinde"],
+      ["oignon", "Oignon ou ail"], ["legfrais", "Légumes frais"], ["fruits", "Fruits frais"] ] },
     { "titre": "Placard", "items": [
-      ["huile", "Huile"], ["sel", "Sel et poivre"], ["curry", "Curry ou épices"], ["sucre", "Sucre"], ["soja", "Sauce soja"] ] }
+      ["huile", "Huile"], ["sel", "Sel et poivre"], ["curry", "Curry ou épices"], ["sucre", "Sucre"],
+      ["soja", "Sauce soja"], ["bouillon", "Bouillon cube"], ["chocolat", "Chocolat"] ] }
   ],
   "regimes": [
-    { "id": "vege", "nom": "Végétarien", "exclut": ["thon", "sardines"] },
-    { "id": "sanslactose", "nom": "Sans lactose", "exclut": ["lait", "yaourt", "fromage"] },
-    { "id": "sansgluten", "nom": "Sans gluten", "exclut": ["pates", "pain", "semoule", "soja"] }
+    {"id": "vege", "nom": "Végétarien", "exclut": ["thon", "sardines", "jambon", "poulet"]},
+    {"id": "halal", "nom": "Halal / sans porc", "exclut": ["jambon"]},
+    {"id": "sanslactose", "nom": "Sans lactose", "exclut": ["lait", "yaourt", "fromage", "beurre", "creme"]},
+    {"id": "sansgluten", "nom": "Sans gluten", "exclut": ["pates", "pain", "semoule", "soja", "nouilles", "farine", "avoine"]}
   ],
-  "noteRegimes": "Aucune recette ne contient de viande : elles sont toutes compatibles halal.",
+  "noteRegimes": "Halal : pense à prendre du poulet halal. Vérifie toujours les étiquettes.",
   "colisExemple": ["plaque", "pates", "riz", "tomates", "thon", "lentilles", "legboite", "oeufs", "huile", "sel", "curry"],
   "recettes": [
-    { "title": "Pâtes tout-en-une tomate-thon", "color": "tomate", "time": 15, "equip": ["plaque"], "tool": "1 casserole",
+    {
+      "title": "Pâtes tout-en-une tomate-thon",
+      "color": "tomate",
+      "time": 15,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
       "need": [["pates"], ["tomates"], ["thon", "sardines", "poischiches", "haricots", "mais"]],
       "extra": ["huile", "sel", "oignon", "fromage"],
-      "steps": ["Facultatif : fais revenir l'oignon émincé dans l'huile 2 minutes.",
+      "steps": [
+        "Facultatif : fais revenir l'oignon émincé dans l'huile 2 minutes.",
         "Ajoute la boîte de tomates, 400 ml d'eau et une pincée de sel. Porte à ébullition.",
         "Verse 200 g de pâtes. Cuis 10 à 12 minutes en remuant souvent, jusqu'à ce que le liquide soit presque absorbé.",
-        "Hors du feu, ajoute le thon émietté (ou ce que tu as à la place), du poivre et le fromage."],
-      "swap": "Pas de thon : sardines, pois chiches, haricots ou maïs font l'affaire." },
-    { "title": "Riz sauté vide-frigo", "color": "herbe", "time": 15, "equip": ["plaque"], "tool": "1 poêle",
-      "need": [["riz", "pates", "semoule"], ["oeufs", "thon", "poischiches"], ["legboite", "legfrais", "mais"]],
+        "Hors du feu, ajoute le thon émietté (ou ce que tu as à la place), du poivre et le fromage."
+      ],
+      "swap": "Pas de thon : sardines, pois chiches, haricots ou maïs font l'affaire."
+    },
+    {
+      "title": "Riz sauté vide-frigo",
+      "color": "herbe",
+      "time": 15,
+      "equip": ["plaque"],
+      "tool": "1 poêle",
+      "need": [["riz", "pates", "semoule"], ["oeufs", "thon", "poischiches", "jambon"], ["legboite", "legfrais", "mais"]],
       "extra": ["huile", "soja", "sel"],
-      "steps": ["Cuis le riz si besoin (environ 120 g cru), égoutte-le et laisse-le tiédir.",
+      "steps": [
+        "Cuis le riz si besoin (environ 120 g cru), égoutte-le et laisse-le tiédir.",
         "Fais revenir les légumes 3 minutes dans un peu d'huile.",
         "Pousse-les sur le côté, casse 2 œufs dans l'espace libre et brouille-les 1 minute.",
-        "Ajoute le riz, mélange à feu vif 3 à 4 minutes, puis assaisonne."],
-      "swap": "Pas d'œufs : thon ou pois chiches. Pas de riz : pâtes courtes ou semoule cuites." },
-    { "title": "Curry express de légumineuses", "color": "curry", "time": 20, "equip": ["plaque"], "tool": "1 casserole",
+        "Ajoute le riz, mélange à feu vif 3 à 4 minutes, puis assaisonne."
+      ],
+      "swap": "Pas d'œufs : thon ou pois chiches. Pas de riz : pâtes courtes ou semoule cuites."
+    },
+    {
+      "title": "Curry express de légumineuses",
+      "color": "curry",
+      "time": 20,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
       "need": [["lentilles", "poischiches", "haricots"], ["tomates"], ["curry"]],
       "extra": ["huile", "oignon", "lait", "yaourt", "riz", "pain", "semoule"],
-      "steps": ["Facultatif : fais revenir l'oignon dans l'huile 3 minutes.",
+      "steps": [
+        "Facultatif : fais revenir l'oignon dans l'huile 3 minutes.",
         "Ajoute 1 cuillère à café de curry et remue 30 secondes.",
         "Ajoute une demi-boîte de tomates et les légumineuses rincées. Laisse mijoter 10 minutes.",
-        "Hors du feu, ajoute un peu de lait ou un yaourt. Sers avec du riz, du pain ou de la semoule."],
-      "swap": "Pas de lentilles ni de pois chiches : n'importe quels haricots en boîte." },
-    { "title": "Pain perdu anti-gaspi", "color": "nuit", "time": 10, "equip": ["plaque"], "tool": "1 poêle",
+        "Hors du feu, ajoute un peu de lait ou un yaourt. Sers avec du riz, du pain ou de la semoule."
+      ],
+      "swap": "Pas de lentilles ni de pois chiches : n'importe quels haricots en boîte."
+    },
+    {
+      "title": "Pain perdu anti-gaspi",
+      "color": "nuit",
+      "time": 10,
+      "equip": ["plaque"],
+      "tool": "1 poêle",
       "need": [["pain"], ["oeufs"], ["lait"]],
-      "extra": ["sucre", "fromage", "huile"],
-      "steps": ["Bats 2 œufs avec 150 ml de lait, puis du sucre (version sucrée) ou du sel et du poivre (version salée).",
+      "extra": ["sucre", "fromage", "huile", "beurre", "fruits", "compote"],
+      "steps": [
+        "Bats 2 œufs avec 150 ml de lait, puis du sucre (version sucrée) ou du sel et du poivre (version salée).",
         "Trempe chaque tranche de pain rassis quelques secondes de chaque côté.",
-        "Fais dorer à la poêle, 2 à 3 minutes par face."],
-      "swap": "Pas de lait : de l'eau marche aussi, le pain perdu sera un peu moins moelleux." },
-    { "title": "Omelette vide-frigo", "color": "curry", "time": 10, "equip": ["plaque"], "tool": "1 poêle",
-      "need": [["oeufs"], ["legfrais", "legboite", "pdt", "fromage", "oignon", "mais"]],
+        "Fais dorer à la poêle, 2 à 3 minutes par face."
+      ],
+      "swap": "Pas de lait : de l'eau marche aussi, le pain perdu sera un peu moins moelleux.",
+      "qte": {"pain": 70, "oeufs": 50, "lait": 75}
+    },
+    {
+      "title": "Omelette vide-frigo",
+      "color": "curry",
+      "time": 10,
+      "equip": ["plaque"],
+      "tool": "1 poêle",
+      "need": [["oeufs"], ["legfrais", "legboite", "pdt", "fromage", "oignon", "mais", "jambon"]],
       "extra": ["huile", "sel"],
-      "steps": ["Coupe en petits morceaux ce que tu as : légumes, oignon, reste de pommes de terre cuites.",
+      "steps": [
+        "Coupe en petits morceaux ce que tu as : légumes, oignon, reste de pommes de terre cuites.",
         "Fais-les revenir 3 à 5 minutes dans un peu d'huile.",
         "Bats 3 ou 4 œufs avec du sel et du poivre, verse-les dans la poêle.",
-        "Laisse cuire à feu doux 4 à 5 minutes, sans remuer, jusqu'à ce que le dessus soit pris."],
-      "swap": "Avec du fromage, parsème-le juste avant la fin de la cuisson." },
-    { "title": "Salade de semoule façon taboulé", "color": "herbe", "time": 10, "equip": ["plaque", "micro"], "tool": "1 bol + eau chaude",
+        "Laisse cuire à feu doux 4 à 5 minutes, sans remuer, jusqu'à ce que le dessus soit pris."
+      ],
+      "swap": "Avec du fromage, parsème-le juste avant la fin de la cuisson."
+    },
+    {
+      "title": "Salade de semoule façon taboulé",
+      "color": "herbe",
+      "time": 10,
+      "equip": ["plaque", "micro", "bouilloire"],
+      "tool": "1 bol + eau chaude",
       "need": [["semoule"], ["legboite", "mais", "legfrais", "tomates"]],
       "extra": ["thon", "poischiches", "huile", "sel", "oignon"],
-      "steps": ["Verse 150 g de semoule dans un bol avec une pincée de sel et un filet d'huile.",
-        "Recouvre du même volume d'eau bouillante (chauffée sur la plaque ou au micro-ondes). Couvre 5 minutes.",
-        "Égrène à la fourchette, ajoute les légumes égouttés et, si tu en as, du thon ou des pois chiches."],
-      "swap": "Se garde 2 jours au frigo dans une boîte fermée : parfait pour le lendemain midi." },
-    { "title": "Salade express sans cuisson", "color": "nuit", "time": 5, "equip": [], "tool": "1 bol",
+      "steps": [
+        "Verse 150 g de semoule dans un bol avec une pincée de sel et un filet d'huile.",
+        "Recouvre du même volume d'eau bouillante (bouilloire, plaque ou micro-ondes). Couvre 5 minutes.",
+        "Égrène à la fourchette, ajoute les légumes égouttés et, si tu en as, du thon ou des pois chiches."
+      ],
+      "swap": "Se garde 2 jours au frigo dans une boîte fermée : parfait pour le lendemain midi."
+    },
+    {
+      "title": "Salade express sans cuisson",
+      "color": "nuit",
+      "time": 5,
+      "equip": [],
+      "tool": "1 bol",
       "need": [["poischiches", "haricots", "lentilles"], ["thon", "sardines", "mais", "tomates"]],
       "extra": ["oignon", "huile", "sel", "legfrais"],
-      "steps": ["Rince et égoutte les légumineuses.",
+      "steps": [
+        "Rince et égoutte les légumineuses.",
         "Mélange-les avec le thon, le maïs ou ce que tu as.",
-        "Assaisonne avec un filet d'huile, du sel, du poivre et un peu d'oignon émincé si tu en as."],
-      "swap": "Aucune cuisson : idéal si tu n'as ni plaque ni micro-ondes." },
-    { "title": "Soupe de légumes express", "color": "tomate", "time": 25, "equip": ["plaque"], "tool": "1 casserole",
+        "Assaisonne avec un filet d'huile, du sel, du poivre et un peu d'oignon émincé si tu en as."
+      ],
+      "swap": "Aucune cuisson : idéal si tu n'as ni plaque ni micro-ondes."
+    },
+    {
+      "title": "Soupe de légumes express",
+      "color": "tomate",
+      "time": 25,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
       "need": [["legfrais", "legboite"], ["pdt", "lentilles", "pates"]],
       "extra": ["oignon", "huile", "sel", "tomates"],
-      "steps": ["Coupe les légumes et les pommes de terre en petits morceaux.",
+      "steps": [
+        "Coupe les légumes et les pommes de terre en petits morceaux.",
         "Fais revenir l'oignon dans l'huile, ajoute les légumes et couvre d'eau à hauteur. Sale.",
         "Laisse cuire 15 à 20 minutes. Si tu as des pâtes ou des lentilles en boîte, ajoute-les les 10 dernières minutes.",
-        "Écrase à la fourchette pour une soupe plus épaisse."],
-      "swap": "Une demi-boîte de tomates donne une soupe plus parfumée." },
-    { "title": "Riz au lait", "color": "nuit", "time": 35, "equip": ["plaque"], "tool": "1 casserole",
+        "Écrase à la fourchette pour une soupe plus épaisse."
+      ],
+      "swap": "Une demi-boîte de tomates donne une soupe plus parfumée."
+    },
+    {
+      "title": "Riz au lait",
+      "color": "nuit",
+      "time": 35,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
       "need": [["riz"], ["lait"], ["sucre"]],
-      "extra": [],
-      "steps": ["Porte à frémissement 500 ml de lait avec 2 cuillères à soupe de sucre.",
+      "extra": ["chocolat"],
+      "steps": [
+        "Porte à frémissement 500 ml de lait avec 2 cuillères à soupe de sucre.",
         "Verse 70 g de riz et laisse cuire à feu très doux 30 minutes en remuant souvent.",
-        "Le riz est prêt quand il est fondant et que le lait a épaissi. Se mange tiède ou froid."],
-      "swap": "Le riz rond est idéal, mais le riz long marche aussi." },
-    { "title": "Omelette en tasse au micro-ondes", "color": "tomate", "time": 3, "equip": ["micro"], "tool": "1 grande tasse",
+        "Le riz est prêt quand il est fondant et que le lait a épaissi. Se mange tiède ou froid."
+      ],
+      "swap": "Le riz rond est idéal, mais le riz long marche aussi.",
+      "qte": {"riz": 35, "lait": 250, "sucre": 15}
+    },
+    {
+      "title": "Omelette en tasse au micro-ondes",
+      "color": "tomate",
+      "time": 3,
+      "equip": ["micro"],
+      "tool": "1 grande tasse",
       "need": [["oeufs"]],
-      "extra": ["fromage", "legboite", "mais", "sel", "lait"],
-      "steps": ["Bats 2 œufs dans une grande tasse avec un peu de lait, du sel et du poivre.",
+      "extra": ["fromage", "legboite", "mais", "sel", "lait", "jambon"],
+      "steps": [
+        "Bats 2 œufs dans une grande tasse avec un peu de lait, du sel et du poivre.",
         "Ajoute si tu veux du fromage ou quelques légumes égouttés.",
-        "Chauffe 1 minute, mélange, puis 30 à 60 secondes de plus jusqu'à ce que ce soit bien pris."],
-      "swap": "Pour ceux qui n'ont qu'un micro-ondes : un repas chaud en 3 minutes." },
-    { "title": "Œufs pochés à la tomate", "color": "tomate", "time": 15, "equip": ["plaque"], "tool": "1 poêle",
+        "Chauffe 1 minute, mélange, puis 30 à 60 secondes de plus jusqu'à ce que ce soit bien pris."
+      ],
+      "swap": "Pour ceux qui n'ont qu'un micro-ondes : un repas chaud en 3 minutes.",
+      "qte": {"oeufs": 50}
+    },
+    {
+      "title": "Œufs pochés à la tomate",
+      "color": "tomate",
+      "time": 15,
+      "equip": ["plaque"],
+      "tool": "1 poêle",
       "need": [["oeufs"], ["tomates"]],
       "extra": ["oignon", "huile", "sel", "curry", "pain", "fromage"],
-      "steps": ["Facultatif : fais revenir l'oignon émincé dans l'huile 2 minutes.",
+      "steps": [
+        "Facultatif : fais revenir l'oignon émincé dans l'huile 2 minutes.",
         "Verse la boîte de tomates, une pincée de sel et d'épices. Laisse mijoter 5 minutes.",
         "Creuse 4 petits trous dans la sauce et casse un œuf dans chacun.",
-        "Couvre et laisse cuire 5 à 6 minutes à feu doux, jusqu'à ce que le blanc soit pris. Sers avec du pain."],
-      "swap": "Sans couvercle, une assiette posée sur la poêle fait l'affaire." },
-    { "title": "Pâtes au fromage express", "color": "curry", "time": 12, "equip": ["plaque"], "tool": "1 casserole",
+        "Couvre et laisse cuire 5 à 6 minutes à feu doux, jusqu'à ce que le blanc soit pris. Sers avec du pain."
+      ],
+      "swap": "Sans couvercle, une assiette posée sur la poêle fait l'affaire."
+    },
+    {
+      "title": "Pâtes au fromage express",
+      "color": "curry",
+      "time": 12,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
       "need": [["pates"], ["fromage"]],
-      "extra": ["lait", "sel", "oignon", "thon", "legboite"],
-      "steps": ["Fais cuire 200 g de pâtes dans de l'eau salée, en suivant le temps indiqué sur le paquet.",
+      "extra": ["lait", "sel", "oignon", "thon", "legboite", "jambon", "creme"],
+      "steps": [
+        "Fais cuire 200 g de pâtes dans de l'eau salée, en suivant le temps indiqué sur le paquet.",
         "Garde un petit verre d'eau de cuisson, puis égoutte les pâtes et remets-les dans la casserole, hors du feu.",
         "Ajoute le fromage râpé ou coupé en petits morceaux, un filet de lait ou d'eau de cuisson, et du poivre.",
-        "Mélange jusqu'à ce que ce soit crémeux."],
-      "swap": "Pas de fromage : un yaourt nature, un filet d'huile et beaucoup de poivre font une sauce crémeuse." },
-    { "title": "Purée maison à la fourchette", "color": "nuit", "time": 25, "equip": ["plaque"], "tool": "1 casserole",
-      "need": [["pdt"], ["lait", "huile", "fromage", "yaourt"]],
+        "Mélange jusqu'à ce que ce soit crémeux."
+      ],
+      "swap": "Pas de fromage : un yaourt nature, un filet d'huile et beaucoup de poivre font une sauce crémeuse."
+    },
+    {
+      "title": "Purée maison à la fourchette",
+      "color": "nuit",
+      "time": 25,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
+      "need": [["pdt"], ["lait", "huile", "fromage", "yaourt", "beurre", "creme"]],
       "extra": ["sel", "fromage", "oignon"],
-      "steps": ["Épluche 4 ou 5 pommes de terre et coupe-les en gros cubes.",
+      "steps": [
+        "Épluche 4 ou 5 pommes de terre et coupe-les en gros cubes.",
         "Couvre-les d'eau froide salée et fais cuire 15 à 20 minutes : la pointe d'un couteau doit s'enfoncer sans résister.",
         "Égoutte, remets dans la casserole et écrase à la fourchette.",
-        "Ajoute un peu de lait chaud ou un filet d'huile, du sel et du poivre, puis mélange."],
-      "swap": "Avec du fromage râpé dedans, c'est encore meilleur. Les restes font une omelette le lendemain." },
-    { "title": "Pommes de terre sautées", "color": "curry", "time": 25, "equip": ["plaque"], "tool": "1 poêle",
+        "Ajoute un peu de lait chaud ou un filet d'huile, du sel et du poivre, puis mélange."
+      ],
+      "swap": "Avec du fromage râpé dedans, c'est encore meilleur. Les restes font une omelette le lendemain.",
+      "qte": {"lait": 75, "beurre": 10, "huile": 10, "creme": 20}
+    },
+    {
+      "title": "Pommes de terre sautées",
+      "color": "curry",
+      "time": 25,
+      "equip": ["plaque"],
+      "tool": "1 poêle",
       "need": [["pdt"], ["huile"]],
       "extra": ["oignon", "sel", "oeufs", "curry"],
-      "steps": ["Coupe 4 pommes de terre en petits cubes (pas besoin de les éplucher si tu les laves bien).",
+      "steps": [
+        "Coupe 4 pommes de terre en petits cubes (pas besoin de les éplucher si tu les laves bien).",
         "Fais chauffer 2 cuillères d'huile dans la poêle, ajoute les cubes en une seule couche.",
         "Couvre et cuis 10 minutes à feu moyen, puis découvre et laisse dorer 10 minutes en remuant de temps en temps.",
-        "Sale, poivre. Ajoute l'oignon les 5 dernières minutes si tu en as."],
-      "swap": "Fais cuire un œuf au plat dans un coin de la poêle à la fin : c'est un repas complet." },
-    { "title": "Pomme de terre garnie au micro-ondes", "color": "herbe", "time": 10, "equip": ["micro"], "tool": "1 assiette",
-      "need": [["pdt"], ["fromage", "thon", "sardines", "yaourt", "haricots", "mais"]],
+        "Sale, poivre. Ajoute l'oignon les 5 dernières minutes si tu en as."
+      ],
+      "swap": "Fais cuire un œuf au plat dans un coin de la poêle à la fin : c'est un repas complet."
+    },
+    {
+      "title": "Pomme de terre garnie au micro-ondes",
+      "color": "herbe",
+      "time": 10,
+      "equip": ["micro"],
+      "tool": "1 assiette",
+      "need": [["pdt"], ["fromage", "thon", "sardines", "yaourt", "haricots", "mais", "jambon", "creme"]],
       "extra": ["sel", "huile", "oignon"],
-      "steps": ["Lave 1 grosse pomme de terre par personne et pique-la 6 ou 7 fois avec une fourchette.",
+      "steps": [
+        "Lave 1 grosse pomme de terre par personne et pique-la 6 ou 7 fois avec une fourchette.",
         "Pose-la sur une assiette et chauffe 5 minutes, retourne-la, puis 3 à 4 minutes de plus. Elle est cuite si un couteau s'y enfonce facilement.",
         "Coupe-la en deux, écrase un peu la chair, sale et poivre.",
-        "Garnis avec ce que tu as : fromage, thon, yaourt, haricots ou maïs."],
-      "swap": "Attention, elle est très chaude à la sortie : laisse-la reposer 1 minute avant de la couper." },
-    { "title": "Semoule au lait", "color": "nuit", "time": 10, "equip": ["plaque"], "tool": "1 casserole",
+        "Garnis avec ce que tu as : fromage, thon, yaourt, haricots ou maïs."
+      ],
+      "swap": "Attention, elle est très chaude à la sortie : laisse-la reposer 1 minute avant de la couper."
+    },
+    {
+      "title": "Semoule au lait",
+      "color": "nuit",
+      "time": 10,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
       "need": [["semoule"], ["lait"], ["sucre"]],
-      "extra": [],
-      "steps": ["Fais chauffer 500 ml de lait avec 3 cuillères à soupe de sucre.",
+      "extra": ["chocolat", "fruits"],
+      "steps": [
+        "Fais chauffer 500 ml de lait avec 3 cuillères à soupe de sucre.",
         "Quand le lait frémit, verse 60 g de semoule en pluie en remuant.",
         "Laisse cuire 5 minutes à feu doux en remuant sans arrêt, jusqu'à ce que ça épaississe.",
-        "Verse dans des bols. Se mange tiède ou froid."],
-      "swap": "Le dessert le plus rapide avec un colis : la semoule cuit 4 fois plus vite que le riz." },
-    { "title": "Riz à la tomate tout-en-un", "color": "tomate", "time": 20, "equip": ["plaque"], "tool": "1 casserole",
+        "Verse dans des bols. Se mange tiède ou froid."
+      ],
+      "swap": "Le dessert le plus rapide avec un colis : la semoule cuit 4 fois plus vite que le riz.",
+      "qte": {"semoule": 30, "lait": 250, "sucre": 20}
+    },
+    {
+      "title": "Riz à la tomate tout-en-un",
+      "color": "tomate",
+      "time": 20,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
       "need": [["riz"], ["tomates"]],
       "extra": ["oignon", "huile", "sel", "curry", "thon", "haricots", "fromage"],
-      "steps": ["Facultatif : fais revenir l'oignon dans l'huile 2 minutes.",
+      "steps": [
+        "Facultatif : fais revenir l'oignon dans l'huile 2 minutes.",
         "Ajoute 150 g de riz et remue 1 minute.",
         "Verse la boîte de tomates, 300 ml d'eau, du sel et des épices. Couvre.",
-        "Laisse cuire 15 à 18 minutes à feu doux, jusqu'à ce que le riz soit tendre. Ajoute le thon ou les haricots à la fin."],
-      "swap": "Remue de temps en temps et rajoute un peu d'eau si ça accroche au fond." },
-    { "title": "Chili sans viande", "color": "tomate", "time": 20, "equip": ["plaque"], "tool": "1 casserole",
+        "Laisse cuire 15 à 18 minutes à feu doux, jusqu'à ce que le riz soit tendre. Ajoute le thon ou les haricots à la fin."
+      ],
+      "swap": "Remue de temps en temps et rajoute un peu d'eau si ça accroche au fond."
+    },
+    {
+      "title": "Chili sans viande",
+      "color": "tomate",
+      "time": 20,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
       "need": [["haricots", "lentilles", "poischiches"], ["tomates"]],
       "extra": ["mais", "oignon", "curry", "huile", "sel", "riz", "pain", "yaourt"],
-      "steps": ["Fais revenir l'oignon dans l'huile 3 minutes si tu en as.",
+      "steps": [
+        "Fais revenir l'oignon dans l'huile 3 minutes si tu en as.",
         "Ajoute 1 cuillère à café d'épices, la boîte de tomates et les haricots rincés.",
         "Ajoute le maïs égoutté si tu en as. Laisse mijoter 10 à 15 minutes.",
-        "Sers avec du riz ou du pain, et une cuillère de yaourt par-dessus."],
-      "swap": "Pas d'épices mexicaines ? Le curry, le paprika ou simplement du poivre marchent très bien." },
-    { "title": "Rillettes de thon ou de sardines", "color": "nuit", "time": 5, "equip": [], "tool": "1 bol",
+        "Sers avec du riz ou du pain, et une cuillère de yaourt par-dessus."
+      ],
+      "swap": "Pas d'épices mexicaines ? Le curry, le paprika ou simplement du poivre marchent très bien."
+    },
+    {
+      "title": "Rillettes de thon ou de sardines",
+      "color": "nuit",
+      "time": 5,
+      "equip": [],
+      "tool": "1 bol",
       "need": [["thon", "sardines"], ["yaourt", "fromage"]],
       "extra": ["pain", "oignon", "sel", "curry", "legfrais"],
-      "steps": ["Égoutte le thon ou les sardines et écrase-les à la fourchette dans un bol.",
+      "steps": [
+        "Égoutte le thon ou les sardines et écrase-les à la fourchette dans un bol.",
         "Ajoute 2 cuillères de yaourt (ou du fromage frais), du poivre, et un peu d'oignon très finement coupé si tu en as.",
-        "Mélange bien et tartine sur du pain."],
-      "swap": "Aucune cuisson. Se garde 1 jour au frigo dans une boîte fermée." },
-    { "title": "Houmous à la fourchette", "color": "herbe", "time": 10, "equip": [], "tool": "1 bol",
+        "Mélange bien et tartine sur du pain."
+      ],
+      "swap": "Aucune cuisson. Se garde 1 jour au frigo dans une boîte fermée.",
+      "qte": {"yaourt": 30, "fromage": 20}
+    },
+    {
+      "title": "Houmous à la fourchette",
+      "color": "herbe",
+      "time": 10,
+      "equip": [],
+      "tool": "1 bol",
       "need": [["poischiches", "haricots"], ["huile"]],
       "extra": ["sel", "oignon", "yaourt", "curry", "pain", "legfrais"],
-      "steps": ["Rince et égoutte les pois chiches, garde 3 cuillères de leur jus.",
+      "steps": [
+        "Rince et égoutte les pois chiches, garde 3 cuillères de leur jus.",
         "Écrase-les longuement à la fourchette avec 3 cuillères d'huile et un peu de jus, jusqu'à obtenir une pâte.",
         "Ajoute du sel, du poivre, et un peu d'ail écrasé ou d'épices si tu en as.",
-        "Mange-le avec du pain ou des légumes crus coupés en bâtonnets."],
-      "swap": "Pas de pois chiches : des haricots blancs donnent une tartinade très douce." },
-    { "title": "Soupe de lentilles à la tomate", "color": "curry", "time": 20, "equip": ["plaque"], "tool": "1 casserole",
+        "Mange-le avec du pain ou des légumes crus coupés en bâtonnets."
+      ],
+      "swap": "Pas de pois chiches : des haricots blancs donnent une tartinade très douce.",
+      "qte": {"huile": 15}
+    },
+    {
+      "title": "Soupe de lentilles à la tomate",
+      "color": "curry",
+      "time": 20,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
       "need": [["lentilles"], ["tomates"]],
       "extra": ["oignon", "curry", "huile", "sel", "pain", "yaourt"],
-      "steps": ["Fais revenir l'oignon dans l'huile 3 minutes si tu en as, avec 1 cuillère à café d'épices.",
+      "steps": [
+        "Fais revenir l'oignon dans l'huile 3 minutes si tu en as, avec 1 cuillère à café d'épices.",
         "Ajoute les lentilles égouttées, la boîte de tomates et 400 ml d'eau. Sale.",
         "Laisse cuire 15 minutes à feu doux.",
-        "Écrase à la fourchette pour épaissir. Sers avec du pain et une cuillère de yaourt."],
-      "swap": "Encore meilleure le lendemain : fais-en le double et garde-la au frigo 3 jours." },
-    { "title": "Pâtes au micro-ondes", "color": "curry", "time": 15, "equip": ["micro"], "tool": "1 grand bol",
+        "Écrase à la fourchette pour épaissir. Sers avec du pain et une cuillère de yaourt."
+      ],
+      "swap": "Encore meilleure le lendemain : fais-en le double et garde-la au frigo 3 jours."
+    },
+    {
+      "title": "Pâtes au micro-ondes",
+      "color": "curry",
+      "time": 15,
+      "equip": ["micro"],
+      "tool": "1 grand bol",
       "need": [["pates"], ["fromage", "tomates", "thon", "sardines"]],
       "extra": ["sel", "huile", "mais", "legboite"],
-      "steps": ["Mets 100 g de pâtes courtes par personne dans un grand bol, couvre largement d'eau et ajoute du sel.",
+      "steps": [
+        "Mets 100 g de pâtes courtes par personne dans un grand bol, couvre largement d'eau et ajoute du sel.",
         "Chauffe à pleine puissance 4 minutes de plus que le temps indiqué sur le paquet, en remuant toutes les 4 minutes.",
         "Égoutte avec précaution : le bol est très chaud, prends un torchon.",
-        "Ajoute le fromage, la sauce tomate ou le thon, mélange et chauffe encore 1 minute."],
-      "swap": "Prends un bol bien plus grand que nécessaire : l'eau mousse et peut déborder." },
-    { "title": "Bol de riz au micro-ondes", "color": "herbe", "time": 15, "equip": ["micro"], "tool": "1 grand bol",
+        "Ajoute le fromage, la sauce tomate ou le thon, mélange et chauffe encore 1 minute."
+      ],
+      "swap": "Prends un bol bien plus grand que nécessaire : l'eau mousse et peut déborder."
+    },
+    {
+      "title": "Bol de riz au micro-ondes",
+      "color": "herbe",
+      "time": 15,
+      "equip": ["micro"],
+      "tool": "1 grand bol",
       "need": [["riz"], ["thon", "sardines", "oeufs", "haricots", "poischiches"], ["mais", "legboite", "legfrais"]],
       "extra": ["soja", "huile", "sel"],
-      "steps": ["Mets 75 g de riz par personne dans un grand bol avec deux fois son volume d'eau et du sel.",
+      "steps": [
+        "Mets 75 g de riz par personne dans un grand bol avec deux fois son volume d'eau et du sel.",
         "Chauffe 10 à 12 minutes à pleine puissance, en remuant à mi-cuisson. Laisse reposer 2 minutes couvert.",
         "Ajoute le thon émietté (ou les haricots) et les légumes égouttés.",
-        "Assaisonne avec un peu de sauce soja ou d'huile. Avec un œuf : bats-le, mélange au riz et réchauffe 1 minute."],
-      "swap": "Le même bol marche avec de la semoule : versé dans l'eau bouillante, prêt en 5 minutes." },
-    { "title": "Croque au fromage à la poêle", "color": "nuit", "time": 8, "equip": ["plaque"], "tool": "1 poêle",
+        "Assaisonne avec un peu de sauce soja ou d'huile. Avec un œuf : bats-le, mélange au riz et réchauffe 1 minute."
+      ],
+      "swap": "Le même bol marche avec de la semoule : versé dans l'eau bouillante, prêt en 5 minutes."
+    },
+    {
+      "title": "Croque au fromage à la poêle",
+      "color": "nuit",
+      "time": 8,
+      "equip": ["plaque"],
+      "tool": "1 poêle",
       "need": [["pain"], ["fromage"]],
-      "extra": ["thon", "tomates", "oeufs", "huile"],
-      "steps": ["Mets du fromage entre deux tranches de pain, et un peu de thon si tu en as.",
+      "extra": ["thon", "tomates", "oeufs", "huile", "jambon", "beurre"],
+      "steps": [
+        "Mets du fromage entre deux tranches de pain, et un peu de thon si tu en as.",
         "Fais chauffer la poêle avec quelques gouttes d'huile.",
         "Pose le croque, appuie avec une spatule et laisse dorer 2 à 3 minutes.",
-        "Retourne-le et laisse dorer encore 2 minutes, jusqu'à ce que le fromage fonde."],
-      "swap": "Version complète : trempe le croque dans un œuf battu avant de le cuire." },
-    { "title": "Riz au lait au micro-ondes", "color": "nuit", "time": 20, "equip": ["micro"], "tool": "1 grand bol",
+        "Retourne-le et laisse dorer encore 2 minutes, jusqu'à ce que le fromage fonde."
+      ],
+      "swap": "Version complète : trempe le croque dans un œuf battu avant de le cuire."
+    },
+    {
+      "title": "Riz au lait au micro-ondes",
+      "color": "nuit",
+      "time": 20,
+      "equip": ["micro"],
+      "tool": "1 grand bol",
       "need": [["riz"], ["lait"], ["sucre"]],
       "extra": [],
-      "steps": ["Mets 50 g de riz et 350 ml de lait dans un très grand bol.",
+      "steps": [
+        "Mets 50 g de riz et 350 ml de lait dans un très grand bol.",
         "Chauffe 4 minutes à pleine puissance, puis remue.",
         "Continue 12 à 14 minutes à puissance moyenne, en remuant toutes les 3 minutes pour éviter que ça déborde.",
-        "Ajoute 2 cuillères de sucre, mélange et laisse reposer : il épaissit en refroidissant."],
-      "swap": "Surveille bien : le lait monte vite. Si ça déborde, baisse la puissance." },
-    { "title": "Salade de pâtes", "color": "herbe", "time": 15, "equip": ["plaque"], "tool": "1 casserole",
-      "need": [["pates"], ["thon", "sardines", "poischiches", "haricots", "oeufs"], ["mais", "legboite", "legfrais", "tomates"]],
+        "Ajoute 2 cuillères de sucre, mélange et laisse reposer : il épaissit en refroidissant."
+      ],
+      "swap": "Surveille bien : le lait monte vite. Si ça déborde, baisse la puissance.",
+      "qte": {"riz": 25, "lait": 175, "sucre": 12}
+    },
+    {
+      "title": "Salade de pâtes",
+      "color": "herbe",
+      "time": 15,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
+      "need": [["pates"], ["thon", "sardines", "poischiches", "haricots", "oeufs", "jambon"], ["mais", "legboite", "legfrais", "tomates"]],
       "extra": ["huile", "sel", "oignon", "yaourt", "fromage"],
-      "steps": ["Fais cuire 200 g de pâtes courtes dans de l'eau salée, égoutte-les et passe-les sous l'eau froide.",
+      "steps": [
+        "Fais cuire 200 g de pâtes courtes dans de l'eau salée, égoutte-les et passe-les sous l'eau froide.",
         "Si tu as des œufs, fais-les cuire 9 minutes dans l'eau des pâtes : ils seront durs.",
         "Mélange les pâtes avec le thon (ou les pois chiches) et les légumes égouttés.",
-        "Assaisonne avec de l'huile, du sel et du poivre, ou une sauce yaourt-poivre."],
-      "swap": "Se garde 2 jours au frigo : parfait à emporter pour le midi à la fac." }
+        "Assaisonne avec de l'huile, du sel et du poivre, ou une sauce yaourt-poivre."
+      ],
+      "swap": "Se garde 2 jours au frigo : parfait à emporter pour le midi à la fac."
+    },
+    {
+      "title": "Porridge express",
+      "color": "nuit",
+      "time": 5,
+      "equip": ["micro", "plaque"],
+      "tool": "1 grand bol",
+      "need": [["avoine"]],
+      "extra": ["lait", "sucre", "fruits", "compote", "chocolat", "yaourt"],
+      "steps": [
+        "Mets 50 g de flocons d'avoine et 200 ml de lait (ou d'eau) dans un grand bol.",
+        "Chauffe 1 minute au micro-ondes, remue, puis 1 minute de plus. Sur la plaque : 3 minutes à feu doux en remuant.",
+        "Ajoute un fruit écrasé, de la compote, un peu de sucre ou un carré de chocolat."
+      ],
+      "swap": "Un petit-déjeuner qui tient jusqu'à midi pour quelques centimes.",
+      "qte": {"avoine": 50, "lait": 200}
+    },
+    {
+      "title": "Crêpes",
+      "color": "curry",
+      "time": 25,
+      "equip": ["plaque"],
+      "tool": "1 poêle + 1 bol",
+      "need": [["farine"], ["oeufs"], ["lait"]],
+      "extra": ["sucre", "beurre", "huile", "chocolat", "compote", "fromage", "jambon"],
+      "steps": [
+        "Dans un bol, mélange 125 g de farine et 2 œufs, puis ajoute petit à petit 300 ml de lait en fouettant à la fourchette.",
+        "Laisse reposer 10 minutes si tu as le temps.",
+        "Graisse légèrement la poêle chaude avec un peu d'huile ou de beurre, verse une petite louche de pâte et tourne la poêle pour l'étaler.",
+        "Cuis environ 1 minute, retourne et laisse 30 secondes. Garnis en sucré ou en salé."
+      ],
+      "swap": "Pas assez de lait : moitié lait, moitié eau. Version salée avec fromage et jambon.",
+      "qte": {"farine": 65, "oeufs": 50, "lait": 150}
+    },
+    {
+      "title": "Mug cake au chocolat",
+      "color": "tomate",
+      "time": 5,
+      "equip": ["micro"],
+      "tool": "1 grande tasse",
+      "need": [["farine"], ["oeufs"], ["sucre"]],
+      "extra": ["chocolat", "beurre", "huile", "lait", "compote"],
+      "steps": [
+        "Dans une grande tasse, mélange 1 œuf, 2 cuillères à soupe de sucre et 2 cuillères à soupe de lait ou d'huile.",
+        "Ajoute 4 cuillères à soupe de farine et du chocolat en morceaux. Mélange bien.",
+        "Chauffe 1 minute au micro-ondes, puis par 15 secondes si besoin : le gâteau doit gonfler et rester moelleux au centre."
+      ],
+      "swap": "Sans chocolat : une cuillère de compote au milieu de la pâte.",
+      "qte": {"farine": 30, "oeufs": 50, "sucre": 20}
+    },
+    {
+      "title": "Nouilles sautées",
+      "color": "herbe",
+      "time": 15,
+      "equip": ["plaque"],
+      "tool": "1 poêle",
+      "need": [["nouilles"], ["oeufs", "poulet", "thon", "jambon", "poischiches"], ["legfrais", "legboite", "mais"]],
+      "extra": ["soja", "huile", "oignon", "curry"],
+      "steps": [
+        "Fais cuire les nouilles 3 minutes dans un fond d'eau bouillante dans la poêle, puis égoutte-les.",
+        "Avec du poulet : coupe-le en petits morceaux et fais-le cuire 6 à 8 minutes dans un peu d'huile, jusqu'à ce qu'il ne soit plus rose à l'intérieur.",
+        "Ajoute les légumes et fais-les revenir 3 minutes.",
+        "Ajoute les nouilles et 2 œufs battus (ou le thon), mélange 2 minutes à feu vif, puis assaisonne avec la sauce soja."
+      ],
+      "swap": "Les nouilles instantanées marchent : n'utilise que la moitié du sachet d'assaisonnement, il est très salé."
+    },
+    {
+      "title": "Pâtes crème et jambon",
+      "color": "curry",
+      "time": 15,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
+      "need": [["pates"], ["jambon", "thon", "mais"], ["creme", "fromage", "lait"]],
+      "extra": ["oignon", "sel", "fromage", "legboite"],
+      "steps": [
+        "Fais cuire 200 g de pâtes dans de l'eau salée, puis égoutte-les.",
+        "Remets-les dans la casserole à feu doux avec 3 cuillères de crème fraîche (ou un peu de lait et du fromage).",
+        "Ajoute le jambon coupé en morceaux, du poivre, et mélange 1 minute."
+      ],
+      "swap": "Sans jambon : du thon ou du maïs. Version halal : remplace le jambon par du thon.",
+      "qte": {"creme": 40, "jambon": 50}
+    },
+    {
+      "title": "Poulet au curry",
+      "color": "curry",
+      "time": 20,
+      "equip": ["plaque"],
+      "tool": "1 poêle",
+      "need": [["poulet"], ["curry"], ["creme", "lait", "yaourt", "tomates"]],
+      "extra": ["oignon", "huile", "riz", "pain", "semoule", "legfrais"],
+      "steps": [
+        "Coupe 250 g de poulet en morceaux. Lave-toi les mains après avoir touché la viande crue.",
+        "Fais-le dorer dans un peu d'huile 8 minutes, avec l'oignon si tu en as. Il ne doit plus être rose à l'intérieur.",
+        "Ajoute 1 cuillère à café de curry, remue 30 secondes.",
+        "Verse 3 cuillères de crème (ou un yaourt hors du feu, ou une demi-boîte de tomates) et laisse mijoter 5 minutes. Sers avec du riz ou du pain."
+      ],
+      "swap": "Pas de poulet : des pois chiches donnent un curry tout aussi bon (voir le curry de légumineuses).",
+      "qte": {"poulet": 125, "creme": 30}
+    },
+    {
+      "title": "Potatoes au four ou à l'air fryer",
+      "color": "tomate",
+      "time": 25,
+      "equip": ["airfryer", "four"],
+      "tool": "four ou air fryer",
+      "need": [["pdt"], ["huile"]],
+      "extra": ["sel", "curry", "fromage", "yaourt"],
+      "steps": [
+        "Lave 3 ou 4 pommes de terre et coupe-les en quartiers, sans les éplucher.",
+        "Mélange-les avec 1 cuillère d'huile, du sel et des épices.",
+        "Air fryer : 18 à 20 minutes à 200 °C, en secouant le panier à mi-cuisson. Four : 30 minutes à 220 °C, en les retournant une fois.",
+        "Sers avec une sauce yaourt, sel et poivre."
+      ],
+      "swap": "Les patates douces ou les carottes se cuisent de la même façon.",
+      "qte": {"huile": 7}
+    },
+    {
+      "title": "Pois chiches croustillants",
+      "color": "curry",
+      "time": 20,
+      "equip": ["airfryer", "four"],
+      "tool": "four ou air fryer",
+      "need": [["poischiches"], ["huile"]],
+      "extra": ["curry", "sel"],
+      "steps": [
+        "Rince les pois chiches et sèche-les bien avec un torchon propre.",
+        "Mélange-les avec 1 cuillère d'huile, du sel et des épices.",
+        "Air fryer : 12 à 15 minutes à 200 °C en secouant 2 fois. Four : 25 minutes à 200 °C."
+      ],
+      "swap": "À grignoter, ou sur une salade et une soupe. Se gardent 2 jours dans une boîte, un peu moins croustillants.",
+      "qte": {"huile": 7}
+    },
+    {
+      "title": "Œufs cocotte",
+      "color": "nuit",
+      "time": 12,
+      "equip": ["four", "airfryer", "micro"],
+      "tool": "1 ramequin ou 1 tasse",
+      "need": [["oeufs"], ["creme", "fromage", "lait"]],
+      "extra": ["jambon", "legboite", "sel", "pain"],
+      "steps": [
+        "Mets 1 cuillère de crème au fond d'un ramequin, ajoute un peu de jambon ou de légumes si tu en as.",
+        "Casse 1 ou 2 œufs par-dessus, sale, poivre, ajoute un peu de fromage.",
+        "Four : 10 à 12 minutes à 180 °C. Air fryer : 8 minutes à 160 °C. Micro-ondes : pique le jaune avec une fourchette (sinon il peut éclater), puis chauffe 45 secondes et ajoute 15 secondes si besoin.",
+        "Sers avec du pain à tremper."
+      ],
+      "swap": "Au micro-ondes, couvre le ramequin d'une assiette pour éviter les projections.",
+      "qte": {"creme": 20}
+    },
+    {
+      "title": "Soupe de nouilles express",
+      "color": "herbe",
+      "time": 5,
+      "equip": ["bouilloire", "micro", "plaque"],
+      "tool": "1 grand bol",
+      "need": [["nouilles"], ["bouillon"]],
+      "extra": ["legboite", "mais", "soja", "oignon", "curry"],
+      "steps": [
+        "Mets les nouilles, un demi-cube de bouillon émietté et quelques légumes égouttés dans un grand bol.",
+        "Verse 400 ml d'eau bouillante (bouilloire, plaque ou micro-ondes).",
+        "Couvre 3 à 4 minutes, puis mélange."
+      ],
+      "swap": "Ajoute une cuillère de sauce soja ou un peu de curry pour varier."
+    },
+    {
+      "title": "Salade de fruits au yaourt",
+      "color": "herbe",
+      "time": 5,
+      "equip": [],
+      "tool": "1 bol",
+      "need": [["fruits"], ["yaourt", "compote"]],
+      "extra": ["sucre", "avoine", "chocolat"],
+      "steps": [
+        "Coupe les fruits en morceaux.",
+        "Mélange-les avec un yaourt ou de la compote.",
+        "Ajoute quelques flocons d'avoine pour le croquant."
+      ],
+      "swap": "Les fruits un peu abîmés sont parfaits ici : c'est la recette anti-gaspi par excellence."
+    }
+  ],
+  "nutrition": {
+    "pates": [355, 12, 71, 1.5, 100],
+    "riz": [355, 7, 78, 0.6, 75],
+    "semoule": [360, 12, 72, 1.5, 75],
+    "pain": [270, 9, 55, 1.5, 80],
+    "pdt": [80, 2, 17, 0.1, 250],
+    "nouilles": [400, 10, 62, 12, 70],
+    "avoine": [370, 13, 60, 7, 50],
+    "farine": [350, 10, 73, 1, 60],
+    "tomates": [25, 1.2, 4, 0.2, 200],
+    "thon": [115, 26, 0, 1, 70],
+    "sardines": [210, 24, 0, 12, 60],
+    "lentilles": [115, 9, 17, 0.5, 125],
+    "poischiches": [130, 7, 17, 2.5, 125],
+    "haricots": [100, 7, 13, 0.5, 125],
+    "legboite": [40, 2, 6, 0.3, 125],
+    "mais": [90, 3, 16, 1.5, 70],
+    "compote": [75, 0.3, 17, 0.1, 100],
+    "oeufs": [140, 12.5, 0.5, 10, 100],
+    "lait": [46, 3.3, 4.8, 1.6, 150],
+    "yaourt": [50, 4, 5, 1.5, 125],
+    "fromage": [380, 28, 0, 29, 30],
+    "beurre": [745, 0.6, 0.5, 82, 10],
+    "creme": [290, 2.4, 3, 30, 30],
+    "jambon": [115, 20, 0.5, 3.5, 50],
+    "poulet": [110, 23, 0, 1.5, 120],
+    "oignon": [40, 1.2, 8, 0.2, 40],
+    "legfrais": [30, 1.5, 5, 0.3, 150],
+    "fruits": [55, 0.7, 13, 0.2, 150],
+    "huile": [900, 0, 0, 100, 10],
+    "sucre": [400, 0, 100, 0, 15],
+    "chocolat": [550, 6, 45, 35, 20],
+    "soja": [60, 6, 6, 0, 10],
+    "sel": [0, 0, 0, 0, 0],
+    "curry": [0, 0, 0, 0, 0],
+    "bouillon": [0, 0, 0, 0, 0]
+  },
+  "conservation": [
+    {"titre": "Les dates sur les emballages", "ids": [], "texte": "« À consommer jusqu'au » (DLC) : ne dépasse pas la date, c'est une question de sécurité (viande, poisson frais, laitages frais). « À consommer de préférence avant » (DDM) : le produit reste bon après la date s'il a été bien conservé (pâtes, riz, conserves, biscuits)."},
+    {"titre": "Une conserve ouverte", "ids": ["tomates", "thon", "sardines", "lentilles", "poischiches", "haricots", "legboite", "mais", "compote"], "texte": "Ne garde pas les restes dans la boîte en métal : verse-les dans un bol ou une boîte fermée, au frigo, et mange-les sous 2 à 3 jours."},
+    {"titre": "Une conserve abîmée", "ids": ["tomates", "thon", "sardines", "lentilles", "poischiches", "haricots", "legboite", "mais"], "texte": "Une boîte gonflée, qui fuit, ou qui sent bizarre à l'ouverture : jette-la sans goûter. Une boîte un peu cabossée mais intacte reste bonne."},
+    {"titre": "Le riz cuit", "ids": ["riz"], "texte": "Mets-le au frigo dans l'heure qui suit la cuisson et mange-le sous 24 heures. Réchauffe-le bien chaud, une seule fois."},
+    {"titre": "Les restes de plats cuisinés", "ids": [], "texte": "Au frigo dans les 2 heures après la cuisson, dans une boîte fermée, et à manger sous 2 à 3 jours. Pour plus longtemps, congèle-les en portions."},
+    {"titre": "Le pain", "ids": ["pain"], "texte": "Coupe-le en tranches et congèle-le : il se grille directement en sortant du congélateur. Rassis, il fait un excellent pain perdu."},
+    {"titre": "Le lait ouvert", "ids": ["lait"], "texte": "Au frigo, bouché, et à finir dans les quelques jours indiqués sur la brique (souvent 3 jours)."},
+    {"titre": "Les œufs", "ids": ["oeufs"], "texte": "Garde-les à l'abri des changements de température, idéalement au frigo. Un œuf fêlé se cuisine tout de suite, bien cuit."},
+    {"titre": "Le fromage", "ids": ["fromage"], "texte": "Bien emballé au frigo. Le fromage râpé se congèle et s'utilise sans décongeler."},
+    {"titre": "La viande crue", "ids": ["poulet", "jambon"], "texte": "Dans la partie la plus froide du frigo, et à cuisiner avant la date limite. Ne recongèle jamais une viande crue décongelée. Lave-toi les mains après l'avoir touchée."},
+    {"titre": "Les fruits et légumes", "ids": ["legfrais", "fruits", "pdt", "oignon"], "texte": "Une tache de moisissure sur un légume ferme (carotte, chou, pomme de terre) : coupe largement autour. Sur un fruit ou un légume mou (tomate, pêche, fraise) : jette-le. Les pommes de terre et les oignons se gardent au sec et à l'abri de la lumière, pas au frigo."},
+    {"titre": "Les fruits trop mûrs", "ids": ["fruits"], "texte": "Parfaits pour le porridge, une salade de fruits ou le pain perdu. Tu peux aussi les congeler en morceaux."},
+    {"titre": "Bien congeler", "ids": [], "texte": "Congèle en petites portions et écris la date dessus. Décongèle au frigo, pas sur la table."},
+    {"titre": "Le frigo", "ids": [], "texte": "Règle-le autour de 4 °C et ne le remplis pas trop : l'air doit circuler. Range ce qui périme en premier devant."}
+  ],
+  "openFoodFacts": [
+    ["tomates", ["en:canned-tomatoes", "en:crushed-tomatoes", "en:tomato-sauces", "en:tomato-purees", "en:peeled-tomatoes"], ["tomates", "sauce tomate", "coulis"]],
+    ["thon", ["en:tunas", "en:canned-tunas"], ["thon"]],
+    ["sardines", ["en:sardines", "en:canned-sardines"], ["sardine"]],
+    ["lentilles", ["en:lentils"], ["lentille"]],
+    ["poischiches", ["en:chickpeas"], ["pois chiche", "houmous"]],
+    ["haricots", ["en:beans", "en:kidney-beans", "en:white-beans", "en:canned-common-beans"], ["haricots rouges", "haricots blancs", "flageolet"]],
+    ["mais", ["en:sweet-corn", "en:canned-corn"], ["maïs", "mais doux"]],
+    ["compote", ["en:compotes", "en:applesauces"], ["compote"]],
+    ["legboite", ["en:canned-vegetables"], ["petits pois", "haricots verts", "jardinière", "macédoine", "ratatouille"]],
+    ["nouilles", ["en:noodles", "en:instant-noodles", "en:asian-noodles"], ["nouilles", "ramen"]],
+    ["pates", ["en:pastas", "en:dry-pastas"], ["pâtes", "spaghetti", "coquillettes", "penne", "fusilli", "macaroni", "tagliatelle"]],
+    ["riz", ["en:rices"], ["riz"]],
+    ["semoule", ["en:semolinas", "en:couscous"], ["semoule", "couscous"]],
+    ["avoine", ["en:rolled-oats", "en:oat-flakes", "en:oatmeals"], ["flocons d'avoine", "avoine"]],
+    ["farine", ["en:flours", "en:wheat-flours"], ["farine"]],
+    ["pain", ["en:breads", "en:sandwich-breads", "en:sliced-breads", "en:baguettes"], ["pain", "baguette"]],
+    ["pdt", ["en:potatoes"], ["pommes de terre"]],
+    ["oeufs", ["en:eggs", "en:chicken-eggs"], ["œufs", "oeufs"]],
+    ["yaourt", ["en:yogurts", "en:plain-yogurts"], ["yaourt", "yogourt", "fromage blanc"]],
+    ["lait", ["en:milks", "en:semi-skimmed-milks", "en:uht-milks"], ["lait"]],
+    ["beurre", ["en:butters"], ["beurre"]],
+    ["creme", ["en:creams", "en:fresh-creams", "en:cooking-creams"], ["crème fraîche", "creme fraiche", "crème liquide"]],
+    ["fromage", ["en:cheeses", "en:grated-cheese"], ["fromage", "emmental", "râpé", "mozzarella", "comté"]],
+    ["jambon", ["en:hams", "en:cooked-hams"], ["jambon"]],
+    ["poulet", ["en:chicken-meats", "en:chicken-breasts", "en:poultries", "en:turkey-meats"], ["poulet", "dinde"]],
+    ["fruits", ["en:fresh-fruits", "en:apples", "en:bananas", "en:oranges"], ["pomme", "banane", "orange", "poire"]],
+    ["legfrais", ["en:fresh-vegetables", "en:carrots"], ["carotte", "courgette", "salade"]],
+    ["oignon", ["en:onions", "en:garlic"], ["oignon", "ail", "échalote"]],
+    ["huile", ["en:vegetable-oils", "en:olive-oils", "en:sunflower-oils", "en:rapeseed-oils"], ["huile"]],
+    ["sucre", ["en:sugars", "en:white-sugars"], ["sucre"]],
+    ["soja", ["en:soy-sauces"], ["sauce soja"]],
+    ["bouillon", ["en:broths", "en:bouillon-cubes", "en:stock-cubes"], ["bouillon"]],
+    ["chocolat", ["en:chocolates", "en:dark-chocolates", "en:milk-chocolates"], ["chocolat"]],
+    ["curry", ["en:spices", "en:curry"], ["curry", "épices", "paprika", "cumin"]],
+    ["sel", ["en:salts"], ["sel"]]
   ]
 }

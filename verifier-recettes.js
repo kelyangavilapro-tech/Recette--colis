@@ -35,5 +35,21 @@ data.recettes.forEach(r => {
   if (!Array.isArray(r.steps) || !r.steps.length) errors.push(`${t} : aucune étape`);
 });
 
+// Nutrition : chaque ingrédient doit avoir ses valeurs [kcal, protéines, glucides, lipides, portion]
+const equipIds = new Set(data.groupes.filter(g => g.type === "equip").flatMap(g => g.items.map(([id]) => id)));
+const ingredientIds = [...ids].filter(id => !equipIds.has(id));
+if (data.nutrition) {
+  ingredientIds.forEach(id => {
+    const n = data.nutrition[id];
+    if (!Array.isArray(n) || n.length !== 5 || n.some(x => typeof x !== "number")) errors.push(`Nutrition : valeurs manquantes ou invalides pour "${id}"`);
+  });
+}
+data.recettes.forEach(r => Object.keys(r.qte || {}).forEach(id => check(`${r.title} / qte`, id)));
+(data.conservation || []).forEach(c => {
+  if (!c.titre || !c.texte) errors.push("Conseil de conservation sans titre ou sans texte");
+  (c.ids || []).forEach(id => check(`Conservation « ${c.titre} »`, id));
+});
+(data.openFoodFacts || []).forEach(([id]) => check("openFoodFacts", id));
+
 if (errors.length) { console.error("❌ " + errors.length + " problème(s) :\n- " + errors.join("\n- ")); process.exit(1); }
 console.log(`✅ recettes.json est valide : ${data.recettes.length} recettes, ${ids.size} ingrédients.`);

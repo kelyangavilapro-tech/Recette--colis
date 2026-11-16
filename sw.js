@@ -1,8 +1,8 @@
 /* Service worker : l'appli marche hors connexion une fois ouverte une première fois.
    Avant chaque mise en ligne, lance : node nouvelle-version.js (il change le numéro partout). */
-const VERSION = "v5";
+const VERSION = "v6";
 const CACHE = "colis-" + VERSION;
-const FILES = ["./", "index.html", "asso.html", "style.css?v=5", "app.js?v=5", "config.js?v=5", "asso.js?v=5", "lib/qrcode.js?v=5", "recettes.json", "manifest.webmanifest",
+const FILES = ["./", "index.html", "asso.html", "style.css?v=6", "app.js?v=6", "config.js?v=6", "asso.js?v=6", "lib/qrcode.js?v=6", "lib/zxing.min.js?v=6", "recettes.json", "manifest.webmanifest",
   "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", e => {

@@ -1,0 +1,2 @@
+/* qrcode-generator 1.4.4 — Copyright (c) 2009 Kazuhiko Arase — licence MIT (voir l'en-tête de qrcode.js) */
+lib/zxing.min.js : @zxing/library 0.21.3, licence MIT (voir zxing-LICENSE.txt). Chargée seulement quand le téléphone n'a pas de lecteur de code-barres intégré.

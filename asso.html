@@ -6,11 +6,12 @@
 <title>Lien colis du jour</title>
 <meta name="description" content="Pour les associations : crée un lien et un QR code qui pré-cochent le contenu de ton colis dans l'appli.">
 <meta name="theme-color" content="#F4F5F0">
+<script>try { var t = localStorage.getItem("colis-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=5">
+<link rel="stylesheet" href="style.css?v=6">
 </head>
 <body class="asso-page">
 <header class="top">
@@ -53,6 +54,28 @@
     <p class="empty" id="out-empty">Coche au moins un produit pour obtenir ton lien.</p>
 
     <div id="asso-recipes"></div>
+
+    <section class="propose" aria-labelledby="prop-title">
+      <h2 id="prop-title">Proposer une recette <span class="tag">Bientôt</span></h2>
+      <p class="note">Tu as une recette qui marche bien avec tes colis ? Remplis-la ici : elle est mise au bon format, tu n'as plus qu'à la copier ou la partager avec l'équipe du projet. Rien n'est envoyé automatiquement. Les recettes seront relues avant d'être ajoutées à l'appli.</p>
+      <form id="prop-form" class="stack-12">
+        <div><label class="field-label" for="prop-titre">Nom de la recette</label>
+          <input class="field" id="prop-titre" type="text" maxlength="60" required placeholder="Par exemple : Lentilles à la crème"></div>
+        <div><label class="field-label" for="prop-temps">Temps total (en minutes)</label>
+          <input class="field" id="prop-temps" type="number" min="1" max="120" required inputmode="numeric" placeholder="20"></div>
+        <fieldset><legend>Équipement nécessaire (un seul suffit)</legend><div class="chips" id="prop-equip"></div></fieldset>
+        <fieldset><legend>Ingrédients indispensables</legend><div class="chips" id="prop-ings"></div></fieldset>
+        <div><label class="field-label" for="prop-etapes">Étapes (une par ligne)</label>
+          <textarea class="field" id="prop-etapes" rows="5" required placeholder="Fais revenir l'oignon 3 minutes.&#10;Ajoute les lentilles…"></textarea></div>
+        <div><label class="field-label" for="prop-astuce">Astuce ou remplacement (facultatif)</label>
+          <input class="field" id="prop-astuce" type="text" maxlength="160" placeholder="Pas de crème : un yaourt marche aussi."></div>
+        <div class="actions">
+          <button type="submit" class="btn btn-pri"><span data-label>Copier la recette</span></button>
+          <button type="button" class="btn btn-sec" id="prop-share"><span data-label>Partager</span></button>
+        </div>
+        <p class="note" id="prop-msg" role="status"></p>
+      </form>
+    </section>
   </section>
 </main>
 
@@ -71,7 +94,7 @@
   <p class="footer-links"><a href="./">Retour à l'appli</a></p>
 </footer>
 
-<script src="lib/qrcode.js?v=5"></script>
-<script src="asso.js?v=5"></script>
+<script src="lib/qrcode.js?v=6"></script>
+<script src="asso.js?v=6"></script>
 </body>
 </html>

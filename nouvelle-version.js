@@ -9,11 +9,11 @@ const current = Number((sw.match(/const VERSION = "v(\d+)";/) || [])[1]);
 if (!current) { console.error("❌ Numéro de version introuvable dans sw.js"); process.exit(1); }
 const next = current + 1;
 
-for (const f of ["sw.js", "index.html", "asso.html"]) {
+for (const f of ["sw.js", "index.html", "asso.html", "app.js"]) {
   let s = fs.readFileSync(path(f), "utf8");
   s = s.split(`?v=${current}"`).join(`?v=${next}"`)
        .replace(`const VERSION = "v${current}";`, `const VERSION = "v${next}";`)
-       .replace(`>Version ${current}<`, `>Version ${next}<`);
+       .split(`>Version ${current}<`).join(`>Version ${next}<`);
   fs.writeFileSync(path(f), s);
 }
 console.log(`✅ Version ${current} → ${next}. Tu peux mettre en ligne.`);
