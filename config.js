@@ -6,5 +6,5 @@ window.CONFIG = {
   /* Statistiques de visite anonymes, sans cookies (https://www.goatcounter.com).
      Laisse vide pour les désactiver. Sinon, mets le code choisi à l'inscription :
      pour https://moncolis.goatcounter.com, écris "moncolis". */
-  goatcounter: ""
+  goatcounter: "recettecolis"
 };
