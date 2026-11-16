@@ -5,7 +5,7 @@
 
 const KEYS = {
   have: "colis-have", groups: "colis-groupes-ouverts", favs: "colis-favoris",
-  shop: "colis-courses", theme: "colis-theme", portions: "colis-portions", welcome: "colis-bienvenue-vue"
+  shop: "colis-courses", theme: "colis-theme", portions: "colis-portions", welcome: "colis-bienvenue-vue", lang: "colis-langue"
 };
 const MOBILE = window.matchMedia("(max-width: 880px)");
 const DARK = window.matchMedia("(prefers-color-scheme: dark)");
@@ -31,6 +31,7 @@ let portions = 2; // nombre de personnes choisi
 const filters = new Set();
 let recipeQuery = "";
 const NAMES = {};
+const NUTRI_NOTE = "Estimations par portion, sur les ingrédients indispensables : ordres de grandeur, pas des valeurs exactes. Le coût est calculé aux prix moyens en supermarché ; avec un colis, c'est gratuit.";
 const INGREDIENTS = new Set(); // ingrédients seulement (ni équipement, ni régime)
 let have = new Set();
 let favs = new Set();
@@ -40,6 +41,18 @@ let openGroups = null; // null = état par défaut (ouverts sur ordinateur, repl
 let searching = false;
 
 const $ = id => document.getElementById(id);
+
+/* ---------- Langue ---------- */
+/* Les textes sont écrits en français ; en anglais, t() cherche la traduction dans i18n-en.json.
+   Les {mots} entre accolades sont remplacés par les valeurs données. */
+let LANG = "fr";
+let EN = {};
+function t(fr, vars) {
+  let out = (LANG === "en" && EN[fr]) || fr;
+  if (vars) out = out.replace(/\{(\w+)\}/g, (m, k) => (vars[k] != null ? vars[k] : m));
+  return out;
+}
+const plural = (n, one, many, vars) => t(n === 1 ? one : many, Object.assign({ n }, vars || {}));
 const esc = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 const norm = s => String(s).toLowerCase().replace(/œ/g, "oe").replace(/æ/g, "ae").normalize("NFD").replace(/[̀-ͯ]/g, "");
 const slug = s => norm(s).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
@@ -76,11 +89,11 @@ function track(path, title) {
 
 let toastTimer = null;
 function toast(text) {
-  const t = $("toast");
-  t.textContent = text;
-  t.hidden = false;
+  const el = $("toast");
+  el.textContent = text;
+  el.hidden = false;
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
+  toastTimer = setTimeout(() => { el.hidden = true; }, 2600);
 }
 
 function flash(btn, text) {
@@ -107,8 +120,8 @@ async function shareText(title, text, btn) {
     catch (err) { if (err.name === "AbortError") return; }
   }
   const ok = await copyText(text);
-  if (btn) flash(btn, ok ? "Copié !" : "Copie impossible");
-  else toast(ok ? "Copié !" : "Copie impossible");
+  if (btn) flash(btn, ok ? t("Copié !") : t("Copie impossible"));
+  else toast(ok ? t("Copié !") : t("Copie impossible"));
 }
 
 function loadScript(src) {
@@ -212,7 +225,7 @@ function setupTheme() {
 
 function groupState(g) {
   const got = g.items.filter(([id]) => have.has(id)).map(([, n]) => n);
-  const none = g.type === "regime" ? "Aucun" : "Rien de coché";
+  const none = g.type === "regime" ? t("Aucun") : t("Rien de coché");
   return { count: got.length, names: got.length ? got.join(", ") : none };
 }
 
@@ -222,8 +235,8 @@ function isGroupOpen(gi) {
 }
 
 function groupNote(g) {
-  if (g.type === "equip") return '<p class="note">Rien coché : on te montre les recettes sans cuisson.</p>';
-  if (g.type === "regime") return `<p class="note">On cache les recettes qui ne te conviennent pas. ${esc(g.note || "")}</p>`;
+  if (g.type === "equip") return `<p class="note">${t("Rien coché : on te montre les recettes sans cuisson.")}</p>`;
+  if (g.type === "regime") return `<p class="note">${t("On cache les recettes qui ne te conviennent pas.")} ${esc(g.note || "")}</p>`;
   return "";
 }
 
@@ -338,7 +351,7 @@ function setupDrawer() {
     if (go === "privacy") { $("privacy").open = true; $("privacy").scrollIntoView(); }
   }));
   $("reset-app").addEventListener("click", () => {
-    if (!window.confirm("Tout remettre à zéro ? Tes ingrédients cochés, tes favoris, ta liste de courses et tes réglages seront effacés de ce téléphone.")) return;
+    if (!window.confirm(t("Tout remettre à zéro ? Tes ingrédients cochés, tes favoris, ta liste de courses et tes réglages seront effacés de ce téléphone."))) return;
     Object.values(KEYS).forEach(k => { try { localStorage.removeItem(k); } catch (err) {} });
     window.location.reload();
   });
@@ -380,16 +393,16 @@ const needLabel = opts => {
 
 /* Valeurs nutritionnelles estimées par portion, pour les ingrédients indispensables. */
 function nutrition(r) {
-  const t = { kcal: 0, prot: 0, gluc: 0, lip: 0 };
+  const sum = { kcal: 0, prot: 0, gluc: 0, lip: 0 };
   r.need.forEach(opts => {
     const id = pick(opts);
     const n = NUTRI[id];
     if (!n) return;
     const grams = r.qte && r.qte[id] != null ? r.qte[id] : n[4];
     const f = grams / 100;
-    t.kcal += n[0] * f; t.prot += n[1] * f; t.gluc += n[2] * f; t.lip += n[3] * f;
+    sum.kcal += n[0] * f; sum.prot += n[1] * f; sum.gluc += n[2] * f; sum.lip += n[3] * f;
   });
-  return { kcal: Math.round(t.kcal / 10) * 10, prot: Math.round(t.prot), gluc: Math.round(t.gluc), lip: Math.round(t.lip) };
+  return { kcal: Math.round(sum.kcal / 10) * 10, prot: Math.round(sum.prot), gluc: Math.round(sum.gluc), lip: Math.round(sum.lip) };
 }
 
 /* ---------- Quantités : portions et repères sans balance ---------- */
@@ -399,43 +412,68 @@ const fmtNum = x => {
   const whole = Math.floor(x), half = x - whole >= 0.5;
   return whole === 0 ? (half ? "½" : "0") : `${whole}${half ? " ½" : ""}`;
 };
+/* Ce qui change d'une langue à l'autre pour lire et ajuster les quantités des étapes. */
+const QTY = {
+  fr: {
+    count: /(\d+)(\s+(?:ou|à)\s+)?(\d+)?\s+(œufs?|pommes? de terre|cuillères?)/g,
+    sing: { "œufs": "œuf", "cuillères": "cuillère", "pommes de terre": "pomme de terre" },
+    plur: { "œuf": "œufs", "cuillère": "cuillères", "pomme de terre": "pommes de terre" },
+    spoon: /^cuill/, perPerson: /par personne/,
+    kw: { pates: /pates/, poulet: /poulet/, riz: /riz/, semoule: /semoule/, farine: /farine/, avoine: /avoine/ },
+    glass: { 0: "quelques cuillères", 0.25: "un quart de verre", 0.5: "un demi-verre", 0.75: "trois quarts de verre", 1: "un verre",
+      1.25: "un peu plus d'un verre", 1.5: "un verre et demi", 1.75: "presque 2 verres", 2: "2 verres", 2.25: "un peu plus de 2 verres", 2.5: "2 verres et demi" },
+    glasses: n => `${fmtNum(n)} verres`,
+    handful: n => n === 0.5 ? "une petite poignée" : `${fmtNum(n)} grosse${n > 1 ? "s" : ""} poignée${n > 1 ? "s" : ""}`,
+    breast: n => `${fmtNum(n)} blanc${n > 1 ? "s" : ""} de poulet`
+  },
+  en: {
+    count: /(\d+)(\s+(?:or|to)\s+)?(\d+)?\s+(eggs?|potato(?:es)?|tablespoons?|teaspoons?|spoons?)/g,
+    sing: { eggs: "egg", potatoes: "potato", tablespoons: "tablespoon", teaspoons: "teaspoon", spoons: "spoon" },
+    plur: { egg: "eggs", potato: "potatoes", tablespoon: "tablespoons", teaspoon: "teaspoons", spoon: "spoons" },
+    spoon: /spoon/, perPerson: /per person/,
+    kw: { pates: /pasta/, poulet: /chicken/, riz: /rice/, semoule: /semolina|couscous/, farine: /flour/, avoine: /oat/ },
+    glass: { 0: "a few spoonfuls", 0.25: "a quarter of a glass", 0.5: "half a glass", 0.75: "three quarters of a glass", 1: "1 glass",
+      1.25: "just over a glass", 1.5: "1 ½ glasses", 1.75: "almost 2 glasses", 2: "2 glasses", 2.25: "just over 2 glasses", 2.5: "2 ½ glasses" },
+    glasses: n => `${fmtNum(n)} glasses`,
+    handful: n => n === 0.5 ? "a small handful" : `${fmtNum(n)} big handful${n > 1 ? "s" : ""}`,
+    breast: n => `${fmtNum(n)} chicken breast${n > 1 ? "s" : ""}`
+  }
+};
+const Q = () => QTY[LANG] || QTY.fr;
 function verres(ml) {
   const q = Math.round(ml / 200 * 4) / 4;
-  const words = { 0: "quelques cuillères", 0.25: "un quart de verre", 0.5: "un demi-verre", 0.75: "trois quarts de verre", 1: "un verre",
-    1.25: "un peu plus d'un verre", 1.5: "un verre et demi", 1.75: "presque 2 verres", 2: "2 verres", 2.25: "un peu plus de 2 verres", 2.5: "2 verres et demi" };
-  return words[q] || `${fmtNum(Math.round(q * 2) / 2)} verres`;
+  return Q().glass[q] || Q().glasses(Math.round(q * 2) / 2);
 }
 /* Repère sans balance pour une quantité en grammes ou en millilitres, d'après l'ingrédient cité autour. */
 function repere(qty, unit, around) {
   if (unit === "ml") return verres(qty);
-  const t = norm(around);
-  if (/pates/.test(t)) { const n = Math.max(0.5, Math.round(qty / 100 * 2) / 2); return n === 0.5 ? "une petite poignée" : `${fmtNum(n)} grosse${n > 1 ? "s" : ""} poignée${n > 1 ? "s" : ""}`; }
-  if (/poulet/.test(t)) { const n = Math.max(0.5, Math.round(qty / 125 * 2) / 2); return `${fmtNum(n)} blanc${n > 1 ? "s" : ""} de poulet`; }
-  for (const [k, g] of Object.entries(PAR_VERRE)) if (t.includes(k === "avoine" ? "avoine" : k)) return verres(qty / g * 200);
+  const t = norm(around), kw = Q().kw;
+  if (kw.pates.test(t)) return Q().handful(Math.max(0.5, Math.round(qty / 100 * 2) / 2));
+  if (kw.poulet.test(t)) return Q().breast(Math.max(0.5, Math.round(qty / 125 * 2) / 2));
+  for (const [k, g] of Object.entries(PAR_VERRE)) if (kw[k].test(t)) return verres(qty / g * 200);
   return "";
 }
 /* Facteur de multiplication d'une recette selon le nombre de personnes choisi. */
 const recipeFactor = r => (r.portions === 1 || r.portions === "par personne") ? 1 : portions / 2;
-const portionLabel = r => r.portions === 1 ? "1 portion" : `${portions} portion${portions > 1 ? "s" : ""}`;
+const portionLabel = r => r.portions === 1 ? t("1 portion") : plural(portions, "1 portion", "{n} portions");
 
 /* Texte d'une étape avec les quantités ajustées et un repère sans balance entre parenthèses. */
 function stepText(text, factor) {
-  const SING = { "œufs": "œuf", "cuillères": "cuillère", "pommes de terre": "pomme de terre" };
-  const PLUR = { "œuf": "œufs", "cuillère": "cuillères", "pomme de terre": "pommes de terre" };
-  let out = text.replace(/(\d+)(\s+(?:ou|à)\s+)?(\d+)?\s+(œufs?|pommes? de terre|cuillères?)/g, (m, a, sep, b, word, offset, whole) => {
-    if (factor === 1 || /par personne/.test(whole.slice(offset, offset + m.length + 30))) return m;
-    const min = word.startsWith("cuill") ? 0.5 : 1;
+  const L = Q();
+  let out = text.replace(new RegExp(L.count.source, "g"), (m, a, sep, b, word, offset, whole) => {
+    if (factor === 1 || L.perPerson.test(whole.slice(offset, offset + m.length + 30))) return m;
+    const min = L.spoon.test(word) ? 0.5 : 1;
     const sc = v => { const x = Math.max(min, Math.round(Number(v) * factor * 2) / 2); return min === 1 ? Math.max(1, Math.round(x)) : x; };
     const A = sc(a), B = b ? sc(b) : null;
     const top = B != null ? B : A;
-    let w = word.replace(/^pomme de terre$/, "pomme de terre");
-    if (top > 1 && PLUR[w]) w = PLUR[w];
-    if (top <= 1 && SING[w]) w = SING[w];
+    let w = word;
+    if (top > 1 && L.plur[w]) w = L.plur[w];
+    if (top <= 1 && L.sing[w]) w = L.sing[w];
     if (B != null && B === A) return `${fmtNum(A)} ${w}`;
     return `${fmtNum(A)}${B != null ? sep + fmtNum(B) : ""} ${w}`;
   });
   out = out.replace(/(\d+)\s*(g|ml)\b/g, (m, v, unit, offset, whole) => {
-    const perPerson = /par personne/.test(whole.slice(offset, offset + 40));
+    const perPerson = L.perPerson.test(whole.slice(offset, offset + 40));
     let q = Number(v) * (perPerson ? 1 : factor);
     q = unit === "g" ? (q < 50 ? Math.round(q / 5) * 5 : Math.round(q / 10) * 10) : Math.round(q / 10) * 10;
     const rp = repere(q, unit, whole.slice(Math.max(0, offset - 30), offset + m.length + 30));
@@ -457,7 +495,11 @@ function costOf(r) {
   });
   return euros;
 }
-const fmtEuros = e => e < 0.1 ? "moins de 0,10 €" : `${(Math.round(e * 20) / 20).toFixed(2).replace(".", ",")} €`;
+const fmtEuros = e => {
+  const v = (Math.round(Math.max(e, 0.1) * 20) / 20).toFixed(2);
+  if (LANG === "en") return e < 0.1 ? "under €0.10" : `€${v}`;
+  return e < 0.1 ? "moins de 0,10 €" : `${v.replace(".", ",")} €`;
+};
 
 /* ---------- Filtres et recherche de recettes ---------- */
 
@@ -467,6 +509,7 @@ const FILTERS = [
   ["micro", "Au micro-ondes", r => r.equip.includes("micro")],
   ["sucre", "Sucré", r => !!r.sucree],
   ["prot", "Riche en protéines", r => nutrition(r).prot >= 20]
+  /* les libellés sont traduits à l'affichage */
 ];
 function matchesFilters(r) {
   for (const [id, , test] of FILTERS) if (filters.has(id) && !test(r)) return false;
@@ -478,39 +521,40 @@ function matchesFilters(r) {
 }
 function renderFilters() {
   $("filters").innerHTML = FILTERS.map(([id, label]) =>
-    `<button type="button" class="tab tab-sm" data-filter="${id}" aria-pressed="${filters.has(id)}">${esc(label)}</button>`).join("");
+    `<button type="button" class="tab tab-sm" data-filter="${id}" aria-pressed="${filters.has(id)}">${esc(t(label))}</button>`).join("");
 }
 
 /* ---------- Cartes recettes ---------- */
 
 function card(r, a, state, i) {
   const c = COLORS[r.color] || COLORS.nuit;
-  const fav = favs.has(r.title);
+  const fav = favs.has(r.id);
   const nut = nutrition(r);
-  const photo = photoOf("recettes", slug(r.title));
+  const photo = photoOf("recettes", slug(r.id));
   let pill;
   if (!a.equipOk) {
-    pill = `<span class="pill eq">Il faut : ${esc(r.equip.map(lower).join(" ou "))}</span>`;
+    pill = `<span class="pill eq">${t("Il faut :")} ${esc(r.equip.map(lower).join(t(" ou ")))}</span>`;
   } else if (a.missing.length === 0) {
-    pill = '<span class="pill ok">Tu as tout ce qu\'il faut</span>';
+    pill = `<span class="pill ok">${t("Tu as tout ce qu'il faut")}</span>`;
   } else {
-    const names = a.missing.map(opts => opts.map(lower).slice(0, 3).join(" ou "));
-    pill = `<span class="pill miss">Il te manque : ${esc(names.join(", "))}</span>`;
+    const names = a.missing.map(opts => opts.map(lower).slice(0, 3).join(t(" ou ")));
+    pill = `<span class="pill miss">${t("Il te manque :")} ${esc(names.join(", "))}</span>`;
   }
-  const protPill = nut.prot >= 20 ? '<span class="pill prot">Riche en protéines</span>' : "";
+  const protPill = nut.prot >= 20 ? `<span class="pill prot">${t("Riche en protéines")}</span>` : "";
   const ings = r.need.map(opts => {
     const ok = opts.some(o => have.has(o));
-    return `<li class="ing ${ok ? "have" : "missing"}"><span class="mark" aria-hidden="true">${ok ? "✓" : "!"}</span><span>${esc(needLabel(opts))}${ok ? "" : " (à trouver)"}</span></li>`;
+    return `<li class="ing ${ok ? "have" : "missing"}"><span class="mark" aria-hidden="true">${ok ? "✓" : "!"}</span><span>${esc(needLabel(opts))}${ok ? "" : t(" (à trouver)")}</span></li>`;
   }).join("");
   const extras = r.extra.filter(x => have.has(x)).map(lower);
   const scaled = stepsOf(r);
   const steps = scaled.map((s, n) => `<li class="step"><b style="background: ${c.bar}">${n + 1}</b><span>${esc(s)}</span></li>`).join("");
   const factor = recipeFactor(r);
   const notes = [];
-  if (r.portions === 1 && portions > 1) notes.push(`Recette pour 1 personne : prépare-la ${portions} fois.`);
-  if (r.steps.some(s => /boîte/.test(s)) && factor < 1) notes.push("Pour 1 personne, utilise une demi-boîte et garde le reste au frigo dans un bol fermé, 2 à 3 jours.");
-  if (r.steps.some(s => /boîte/.test(s)) && factor > 1) notes.push(`Pour ${portions} personnes, prends 2 boîtes.`);
-  if (scaled.some(s => s.includes("(≈"))) notes.push("Repères : un verre = un verre à eau (20 cl), une poignée = ce que tient ta main.");
+  if (r.portions === 1 && portions > 1) notes.push(t("Recette pour 1 personne : prépare-la {n} fois.", { n: portions }));
+  const usesCan = r.steps.some(s => /boîte|\bcan\b/.test(s));
+  if (usesCan && factor < 1) notes.push(t("Pour 1 personne, utilise une demi-boîte et garde le reste au frigo dans un bol fermé, 2 à 3 jours."));
+  if (usesCan && factor > 1) notes.push(t("Pour {n} personnes, prends 2 boîtes.", { n: portions }));
+  if (scaled.some(s => s.includes("(≈"))) notes.push(t("Repères : un verre = un verre à eau (20 cl), une poignée = ce que tient ta main."));
   const cost = costOf(r);
   return `
   <details class="recipe" data-state="${state}" data-i="${i}">
@@ -520,41 +564,41 @@ function card(r, a, state, i) {
         ? `<img class="thumb thumb-photo" src="${esc(photo.src)}" alt="" width="64" height="64" loading="lazy">`
         : `<span class="thumb" style="background: ${c.tint}; color: ${c.txt}" aria-hidden="true">${svg(toolArt(r.tool), 40).replace('stroke-width="2.2"', 'stroke-width="1.8"')}</span>`}
       <span class="recipe-main">
-        <h3>${fav ? `<span class="fav-mark" title="Dans tes favoris">${svg(ICON.star, 18)}<span class="sr-only">Favori : </span></span>` : ""}${esc(r.title)}</h3>
-        <span class="meta"><span>${svg(ICON.clock, 15)} ${r.time} min</span><span>· ${esc(r.tool)}</span><span>· ${portionLabel(r)}</span><span>· ≈ ${fmtEuros(cost)} la portion</span></span>
+        <h3>${fav ? `<span class="fav-mark" title="${t("Dans tes favoris")}">${svg(ICON.star, 18)}<span class="sr-only">${t("Favori :")} </span></span>` : ""}${esc(r.title)}</h3>
+        <span class="meta"><span>${svg(ICON.clock, 15)} ${r.time} min</span><span>· ${esc(r.tool)}</span><span>· ${portionLabel(r)}</span><span>· ≈ ${fmtEuros(cost)} ${t("la portion")}</span></span>
         <span class="pills">${pill}${protPill}</span>
       </span>
       <span class="chev">${svg(ICON.chevron)}</span>
     </summary>
     <div class="recipe-body">
-      ${photo ? `<figure class="recipe-photo"><img src="${esc(photo.src)}" alt="${esc(r.title)}" loading="lazy">${photo.credit ? `<figcaption>Photo : ${esc(photo.credit)}</figcaption>` : ""}</figure>` : ""}
+      ${photo ? `<figure class="recipe-photo"><img src="${esc(photo.src)}" alt="${esc(r.title)}" loading="lazy">${photo.credit ? `<figcaption>${t("Photo :")} ${esc(photo.credit)}</figcaption>` : ""}</figure>` : ""}
       <div class="actions">
-        <button type="button" class="btn btn-pri btn-color" data-action="cook" data-i="${i}" style="background: ${c.bar}">${svg(ICON.cook)} Mode cuisine</button>
-        ${a.missing.length ? `<button type="button" class="btn btn-sec" data-action="shop" data-i="${i}">${svg(ICON.cart)} <span data-label>Ajouter à ma liste</span></button>` : ""}
-        <button type="button" class="btn btn-sec" data-action="share" data-i="${i}">${svg(ICON.share)} <span data-label>Partager</span></button>
-        <button type="button" class="btn btn-sec btn-fav" data-action="fav" data-i="${i}" aria-pressed="${fav}">${svg(ICON.star)} <span data-label>${fav ? "Dans mes favoris" : "Favori"}</span></button>
-        <button type="button" class="btn btn-sec" data-action="print" data-i="${i}">${svg(ICON.print)} <span data-label>Imprimer</span></button>
+        <button type="button" class="btn btn-pri btn-color" data-action="cook" data-i="${i}" style="background: ${c.bar}">${svg(ICON.cook)} ${t("Mode cuisine")}</button>
+        ${a.missing.length ? `<button type="button" class="btn btn-sec" data-action="shop" data-i="${i}">${svg(ICON.cart)} <span data-label>${t("Ajouter à ma liste")}</span></button>` : ""}
+        <button type="button" class="btn btn-sec" data-action="share" data-i="${i}">${svg(ICON.share)} <span data-label>${t("Partager")}</span></button>
+        <button type="button" class="btn btn-sec btn-fav" data-action="fav" data-i="${i}" aria-pressed="${fav}">${svg(ICON.star)} <span data-label>${fav ? t("Dans mes favoris") : t("Favori")}</span></button>
+        <button type="button" class="btn btn-sec" data-action="print" data-i="${i}">${svg(ICON.print)} <span data-label>${t("Imprimer")}</span></button>
       </div>
       <div>
-        <h4 style="color: ${c.txt}">Indispensable</h4>
+        <h4 style="color: ${c.txt}">${t("Indispensable")}</h4>
         <ul>${ings}</ul>
-        ${extras.length ? `<p class="note" style="margin-top: 10px">Tu peux aussi ajouter : ${esc(extras.join(", "))}.</p>` : ""}
+        ${extras.length ? `<p class="note" style="margin-top: 10px">${t("Tu peux aussi ajouter :")} ${esc(extras.join(", "))}.</p>` : ""}
       </div>
       <div>
-        <h4 style="color: ${c.txt}">Étapes</h4>
+        <h4 style="color: ${c.txt}">${t("Étapes")}</h4>
         <ol>${steps}</ol>
         ${notes.map(n => `<p class="note step-note">${esc(n)}</p>`).join("")}
       </div>
-      <p class="swap" style="background: ${c.tint}"><strong style="color: ${c.txt}">Selon ton colis :</strong> ${esc(r.swap)}</p>
+      <p class="swap" style="background: ${c.tint}"><strong style="color: ${c.txt}">${t("Selon ton colis :")}</strong> ${esc(r.swap)}</p>
       <div class="nutri">
         <span class="nutri-item"><b>${nut.kcal}</b> kcal</span>
-        <span class="nutri-item"><b>${nut.prot} g</b> protéines</span>
-        <span class="nutri-item"><b>${nut.gluc} g</b> glucides</span>
-        <span class="nutri-item"><b>${nut.lip} g</b> lipides</span>
-        <span class="nutri-item"><b>≈ ${fmtEuros(cost)}</b> la portion</span>
-        <p class="nutri-note">Estimations par portion, sur les ingrédients indispensables : ordres de grandeur, pas des valeurs exactes. Le coût est calculé aux prix moyens en supermarché ; avec un colis, c'est gratuit.</p>
+        <span class="nutri-item"><b>${nut.prot} g</b> ${t("protéines")}</span>
+        <span class="nutri-item"><b>${nut.gluc} g</b> ${t("glucides")}</span>
+        <span class="nutri-item"><b>${nut.lip} g</b> ${t("lipides")}</span>
+        <span class="nutri-item"><b>≈ ${fmtEuros(cost)}</b> ${t("la portion")}</span>
+        <p class="nutri-note">${t(NUTRI_NOTE)}</p>
       </div>
-      <p class="print-only print-foot">Recette trouvée avec « Qu'est-ce que je cuisine avec mon colis ? » : ${esc(appUrl())}</p>
+      <p class="print-only print-foot">${t("Recette trouvée avec « Qu'est-ce que je cuisine avec mon colis ? » :")} ${esc(appUrl())}</p>
     </div>
   </details>`;
 }
@@ -576,24 +620,24 @@ function renderResults() {
 
   $("count").textContent = readyAll.length;
   $("count-text").textContent = readyAll.length === 1
-    ? "recette possible tout de suite avec ce que tu as."
-    : "recettes possibles tout de suite avec ce que tu as.";
+    ? t("recette possible tout de suite avec ce que tu as.")
+    : t("recettes possibles tout de suite avec ce que tu as.");
   updateJumpBar(readyAll.length);
 
-  const favCount = rows.filter(x => favs.has(x.r.title)).length;
+  const favCount = rows.filter(x => favs.has(x.r.id)).length;
   $("view-favs-count").textContent = favCount;
   $("view-all").setAttribute("aria-pressed", view === "all");
   $("view-favs").setAttribute("aria-pressed", view === "favs");
   $("regime-note").hidden = hiddenByRegime === 0;
   $("regime-note").textContent = hiddenByRegime === 1
-    ? "1 recette est cachée parce qu'elle ne correspond pas à ton régime."
-    : `${hiddenByRegime} recettes sont cachées parce qu'elles ne correspondent pas à ton régime.`;
+    ? t("1 recette est cachée parce qu'elle ne correspond pas à ton régime.")
+    : t("{n} recettes sont cachées parce qu'elles ne correspondent pas à ton régime.", { n: hiddenByRegime });
 
-  const viewRows = view === "favs" ? rows.filter(x => favs.has(x.r.title)) : rows;
+  const viewRows = view === "favs" ? rows.filter(x => favs.has(x.r.id)) : rows;
   const shown = viewRows.filter(x => matchesFilters(x.r));
   const filtering = filters.size > 0 || !!recipeQuery;
   $("filter-note").hidden = !filtering;
-  if (filtering) $("filter-text").textContent = shown.length === 1 ? "1 recette correspond." : `${shown.length} recettes correspondent.`;
+  if (filtering) $("filter-text").textContent = plural(shown.length, "1 recette correspond.", "{n} recettes correspondent.");
   const ready = shown.filter(isReady).sort(byTime);
   const almost = shown.filter(x => x.a.equipOk && x.a.missing.length === 1).sort(byTime);
   const later = shown.filter(x => !(x.a.equipOk && x.a.missing.length <= 1))
@@ -601,15 +645,15 @@ function renderResults() {
 
   let html;
   if (filtering && !shown.length) {
-    html = '<p class="empty">Aucune recette ne correspond à ces filtres. Enlève un filtre ou change ta recherche.</p>';
+    html = `<p class="empty">${t("Aucune recette ne correspond à ces filtres. Enlève un filtre ou change ta recherche.")}</p>`;
   } else if (view === "favs" && !shown.length) {
-    html = '<p class="empty">Tu n\'as pas encore de favoris. Ouvre une recette et touche « Favori » pour la retrouver ici.</p>';
+    html = `<p class="empty">${t("Tu n'as pas encore de favoris. Ouvre une recette et touche « Favori » pour la retrouver ici.")}</p>`;
   } else {
     html = ready.length
       ? ready.map(x => card(x.r, x.a, "ready", x.i)).join("")
-      : '<p class="empty">Aucune recette complète pour l\'instant. Regarde juste en dessous celles où il ne manque qu\'un ingrédient.</p>';
-    if (almost.length) html += '<p class="later-title">Il ne te manque qu\'un ingrédient</p>' + almost.map(x => card(x.r, x.a, "almost", x.i)).join("");
-    if (later.length) html += '<p class="later-title">Pour plus tard</p>' + later.map(x => card(x.r, x.a, "later", x.i)).join("");
+      : `<p class="empty">${t("Aucune recette complète pour l'instant. Regarde juste en dessous celles où il ne manque qu'un ingrédient.")}</p>`;
+    if (almost.length) html += `<p class="later-title">${t("Il ne te manque qu'un ingrédient")}</p>` + almost.map(x => card(x.r, x.a, "almost", x.i)).join("");
+    if (later.length) html += `<p class="later-title">${t("Pour plus tard")}</p>` + later.map(x => card(x.r, x.a, "later", x.i)).join("");
   }
 
   const list = $("list");
@@ -649,32 +693,32 @@ function randomRecipe() {
 function recipeText(r) {
   const extras = r.extra.filter(x => have.has(x)).map(lower);
   return [
-    `🍳 ${r.title}`,
+    `${r.title}`,
     `${r.time} min · ${r.tool} · ${portionLabel(r)}`,
     "",
-    "Il faut :",
+    t("Il faut :"),
     ...r.need.map(opts => `- ${needLabel(opts)}`),
-    ...(extras.length ? [`En plus si tu as : ${extras.join(", ")}`] : []),
+    ...(extras.length ? [`${t("En plus si tu as :")} ${extras.join(", ")}`] : []),
     "",
-    "Étapes :",
+    t("Étapes :"),
     ...stepsOf(r).map((s, n) => `${n + 1}. ${s}`),
     "",
-    `Selon ton colis : ${r.swap}`,
+    `${t("Selon ton colis :")} ${r.swap}`,
     "",
-    `Trouvé avec « Qu'est-ce que je cuisine avec mon colis ? » : ${appUrl()}`
+    `${t("Trouvé avec « Qu'est-ce que je cuisine avec mon colis ? » :")} ${appUrl()}`
   ].join("\n");
 }
 
 function shareRecipe(r, btn) {
-  track("partage/" + slug(r.title), "Partage : " + r.title);
+  track("partage/" + slug(r.id), "Partage : " + r.id);
   shareText(r.title, recipeText(r), btn);
 }
 
 /* ---------- Favoris ---------- */
 
 function toggleFav(r) {
-  if (favs.has(r.title)) favs.delete(r.title);
-  else { favs.add(r.title); track("favori/" + slug(r.title), "Favori : " + r.title); }
+  if (favs.has(r.id)) favs.delete(r.id);
+  else { favs.add(r.id); track("favori/" + slug(r.id), "Favori : " + r.id); }
   saveFavs();
   renderResults();
 }
@@ -699,12 +743,12 @@ function addMissingToShop(r, a) {
     const id = opts[0];
     if (shop.some(x => x.id === id && !x.done)) return;
     const others = opts.slice(1, 3).map(lower);
-    shop.push({ id, label: NAMES[id] + (others.length ? ` (ou ${others.join(", ")})` : ""), from: r.title, done: false });
+    shop.push({ id, label: NAMES[id] + (others.length ? ` (${t("ou")} ${others.join(", ")})` : ""), from: r.title, done: false });
     added++;
   });
   saveShop(); updateShopBadge();
   track("courses/ajout", "Ajout à la liste de courses");
-  toast(added ? `${added} ingrédient${added > 1 ? "s" : ""} ajouté${added > 1 ? "s" : ""} à ta liste de courses` : "C'est déjà dans ta liste de courses");
+  toast(added ? plural(added, "1 ingrédient ajouté à ta liste de courses", "{n} ingrédients ajoutés à ta liste de courses") : t("C'est déjà dans ta liste de courses"));
 }
 
 function renderShop() {
@@ -712,8 +756,8 @@ function renderShop() {
   list.innerHTML = shop.map((x, k) => `
     <li class="shop-item ${x.done ? "done" : ""}">
       <label><input type="checkbox" data-k="${k}" ${x.done ? "checked" : ""}>
-        <span>${esc(x.label)}${x.from ? `<small class="from">Pour : ${esc(x.from)}</small>` : ""}</span></label>
-      <button type="button" class="icon-btn" data-del="${k}" aria-label="Retirer ${esc(x.label)} de la liste">${svg(ICON.trash)}</button>
+        <span>${esc(x.label)}${x.from ? `<small class="from">${t("Pour :")} ${esc(x.from)}</small>` : ""}</span></label>
+      <button type="button" class="icon-btn" data-del="${k}" aria-label="${esc(t("Retirer {x} de la liste", { x: x.label }))}">${svg(ICON.trash)}</button>
     </li>`).join("");
   $("shop-empty").hidden = shop.length > 0;
   $("shop-actions").hidden = shop.length === 0;
@@ -754,14 +798,14 @@ function setupShop() {
     bought.forEach(x => { if (x.id) have.add(x.id); });
     shop = shop.filter(x => !x.done);
     saveShop(); renderShop(); haveChanged();
-    toast(`${bought.length} achat${bought.length > 1 ? "s" : ""} rangé${bought.length > 1 ? "s" : ""} dans tes ingrédients`);
+    toast(plural(bought.length, "1 achat rangé dans tes ingrédients", "{n} achats rangés dans tes ingrédients"));
   });
   $("shop-share").addEventListener("click", e => {
     const items = shop.filter(x => !x.done).map(x => `- ${x.label}`);
     shareText("Ma liste de courses", ["Ma liste de courses :", ...items].join("\n"), e.currentTarget);
   });
   $("shop-clear").addEventListener("click", () => {
-    if (!window.confirm("Vider toute la liste de courses ?")) return;
+    if (!window.confirm(t("Vider toute la liste de courses ?"))) return;
     shop = []; saveShop(); renderShop();
   });
 }
@@ -771,10 +815,10 @@ function setupShop() {
 function openTips() {
   const mine = t => (t.ids || []).some(id => have.has(id));
   const sorted = TIPS.slice().sort((a, b) => Number(mine(b)) - Number(mine(a)));
-  $("tips").innerHTML = sorted.map(t => `
+  $("tips").innerHTML = sorted.map(tip => `
     <article class="tip">
-      <h3>${esc(t.titre)}${mine(t) ? '<span class="tag">Tu en as</span>' : ""}</h3>
-      <p>${esc(t.texte)}</p>
+      <h3>${esc(tip.titre)}${mine(tip) ? `<span class="tag">${t("Tu en as")}</span>` : ""}</h3>
+      <p>${esc(tip.texte)}</p>
     </article>`).join("");
   openDialog($("keep"));
   track("conservation", "Conseils de conservation");
@@ -832,34 +876,34 @@ function addFound(ok, title, detail, img) {
 
 async function lookupCode(code) {
   code = String(code).replace(/\D/g, "");
-  if (!/^\d{8,14}$/.test(code)) { scanStatus("Ce code ne ressemble pas à un code-barres (8 à 14 chiffres)."); return; }
-  scanStatus("Recherche du produit…");
+  if (!/^\d{8,14}$/.test(code)) { scanStatus(t("Ce code ne ressemble pas à un code-barres (8 à 14 chiffres).")); return; }
+  scanStatus(t("Recherche du produit…"));
   let product = null;
   try {
     const res = await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json?fields=product_name,product_name_fr,generic_name_fr,brands,categories_tags,image_front_small_url,image_small_url`);
     const j = await res.json();
     if (j && j.status === 1 && j.product) product = j.product;
   } catch (err) {
-    scanStatus("Pas de connexion : impossible de reconnaître le produit pour l'instant.");
+    scanStatus(t("Pas de connexion : impossible de reconnaître le produit pour l'instant."));
     return;
   }
-  const name = product ? (product.product_name_fr || product.product_name || "Produit sans nom") : "";
+  const name = product ? (product.product_name_fr || product.product_name || t("Produit sans nom")) : "";
   const brand = product && product.brands ? product.brands.split(",")[0].trim() : "";
   const id = product ? matchProduct(product) : null;
   if (id) {
     const already = have.has(id);
     have.add(id);
     haveChanged();
-    addFound(true, `${NAMES[id]} ${already ? "(déjà coché)" : "coché"}`, [name, brand].filter(Boolean).join(" · "), productImage(product));
-    scanStatus(`${NAMES[id]} : ${already ? "déjà dans tes ingrédients" : "ajouté à tes ingrédients"}. Scanne le suivant !`);
+    addFound(true, `${NAMES[id]} ${already ? t("(déjà coché)") : t("coché")}`, [name, brand].filter(Boolean).join(" · "), productImage(product));
+    scanStatus(t(already ? "{name} : déjà dans tes ingrédients. Scanne le suivant !" : "{name} : ajouté à tes ingrédients. Scanne le suivant !", { name: NAMES[id] }));
     track("scan/reconnu", "Scan reconnu");
   } else if (product) {
-    addFound(false, name, "On ne sait pas encore à quel ingrédient il correspond : coche-le à la main.", productImage(product));
-    scanStatus("Produit trouvé, mais pas reconnu.");
+    addFound(false, name, t("On ne sait pas encore à quel ingrédient il correspond : coche-le à la main."), productImage(product));
+    scanStatus(t("Produit trouvé, mais pas reconnu."));
     track("scan/non-reconnu", "Scan non reconnu");
   } else {
-    addFound(false, `Code ${code}`, "Produit inconnu d'Open Food Facts : coche-le à la main.");
-    scanStatus("Produit inconnu.");
+    addFound(false, `${t("Code")} ${code}`, t("Produit inconnu d'Open Food Facts : coche-le à la main."));
+    scanStatus(t("Produit inconnu."));
     track("scan/inconnu", "Scan inconnu");
   }
 }
@@ -891,7 +935,7 @@ async function makeDecoder() {
       return codes.length ? codes[0].rawValue : null;
     };
   }
-  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=11");
+  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=12");
   const Z = window.ZXing;
   const reader = new Z.MultiFormatReader();
   const hints = new Map();
@@ -986,7 +1030,7 @@ function setupCameraControls() {
     if (caps.zoom.max > 3 && caps.zoom.max < 4) levels.push(Math.floor(caps.zoom.max * 10) / 10);
     html += `<div class="zoom" role="group" aria-label="Zoom">${levels.map(z => `<button type="button" class="tab" data-zoom="${z}" aria-pressed="false">${z}×</button>`).join("")}</div>`;
   }
-  if (caps.torch) html += '<button type="button" class="tab" id="scan-torch" aria-pressed="false">Lampe</button>';
+  if (caps.torch) html += `<button type="button" class="tab" id="scan-torch" aria-pressed="false">${t("Lampe")}</button>`;
   box.innerHTML = html;
   box.hidden = !html;
   const setZoom = z => {
@@ -1001,7 +1045,7 @@ function setupCameraControls() {
     const on = torch.getAttribute("aria-pressed") !== "true";
     track.applyConstraints({ advanced: [{ torch: on }] }).catch(() => {});
     torch.setAttribute("aria-pressed", String(on));
-    torch.textContent = on ? "Lampe allumée" : "Lampe";
+    torch.textContent = on ? t("Lampe allumée") : t("Lampe");
   });
 }
 
@@ -1011,10 +1055,10 @@ async function startCamera() {
   $("scan-controls").hidden = true;
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     $("scan-video-box").hidden = true;
-    scanStatus("La caméra n'est pas disponible ici : tape le code-barres à la main.");
+    scanStatus(t("La caméra n'est pas disponible ici : tape le code-barres à la main."));
     return;
   }
-  scanStatus("Ouverture de la caméra…");
+  scanStatus(t("Ouverture de la caméra…"));
   try {
     scan.decode = await makeDecoder();
     if (!$("scan").hasAttribute("open")) return; // fermé pendant le chargement
@@ -1030,14 +1074,14 @@ async function startCamera() {
     await video.play();
     scan.canvas = scan.canvas || document.createElement("canvas");
     setupCameraControls();
-    scanStatus("Vise un code-barres…");
+    scanStatus(t("Vise un code-barres…"));
     scanFrame();
   } catch (err) {
     stopCamera();
     $("scan-video-box").hidden = true;
     scanStatus(err && err.name === "NotAllowedError"
-      ? "Tu as refusé l'accès à la caméra. Autorise-le dans les réglages du navigateur, ou tape le code-barres."
-      : "Impossible d'ouvrir la caméra : tape le code-barres à la main.");
+      ? t("Tu as refusé l'accès à la caméra. Autorise-le dans les réglages du navigateur, ou tape le code-barres.")
+      : t("Impossible d'ouvrir la caméra : tape le code-barres à la main."));
   }
 }
 
@@ -1084,14 +1128,14 @@ function releaseAwake() {
 
 /* Durée trouvée dans le texte d'une étape : « 10 à 12 minutes » -> 10 min, « 30 secondes » -> 30 s. */
 function stepDuration(text) {
-  const m = text.match(/(\d+)\s*(?:à\s*\d+\s*)?(minutes?|min\b|secondes?)/i);
+  const m = text.match(/(\d+)\s*(?:(?:à|to)\s*\d+\s*)?(minutes?|min\b|secondes?|seconds?)/i);
   if (!m) return null;
   const n = Number(m[1]);
   const secs = /^s/i.test(m[2]) ? n : n * 60;
   return secs > 0 && secs <= 3600 ? secs : null;
 }
 const fmt = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-const durLabel = s => s < 60 ? `${s} s` : `${Math.round(s / 60)} min`;
+const durLabel = s => s < 60 ? `${s} s` : `${Math.round(s / 60)} min`; // pareil en anglais
 
 let audioCtx = null;
 function beep() {
@@ -1126,18 +1170,18 @@ function stopTimer() {
   $("cook-timer").classList.remove("done");
 }
 function tickTimer() {
-  const t = cook.timer;
-  if (!t) return;
-  const left = Math.max(0, Math.round((t.end - Date.now()) / 1000));
+  const timer = cook.timer;
+  if (!timer) return;
+  const left = Math.max(0, Math.round((timer.end - Date.now()) / 1000));
   $("cook-timer").hidden = false;
   if (left > 0) {
     $("cook-timer-text").textContent = fmt(left);
-    $("cook-timer-stop").textContent = "Arrêter";
-  } else if (!t.done) {
-    t.done = true;
-    clearInterval(t.id);
+    $("cook-timer-stop").textContent = t("Arrêter");
+  } else if (!timer.done) {
+    timer.done = true;
+    clearInterval(timer.id);
     $("cook-timer").classList.add("done");
-    $("cook-timer-text").textContent = "C'est l'heure !";
+    $("cook-timer-text").textContent = t("C'est l'heure !");
     $("cook-timer-stop").textContent = "OK";
     beep();
     if (navigator.vibrate) navigator.vibrate([300, 150, 300, 150, 300]);
@@ -1150,30 +1194,30 @@ function renderCook() {
   dlg.style.setProperty("--accent", c.bar);
   dlg.style.setProperty("--accent-tint", c.tint);
   $("cook-title").textContent = r.title;
-  $("cook-progress").textContent = cook.step === 0 ? "Avant de commencer" : `Étape ${cook.step} sur ${total}`;
+  $("cook-progress").textContent = cook.step === 0 ? t("Avant de commencer") : t("Étape {a} sur {b}", { a: cook.step, b: total });
   $("cook-bar").innerHTML = Array.from({ length: total + 1 }, (_, n) => `<span class="${n <= cook.step ? "on" : ""}"></span>`).join("");
   if (cook.step === 0) {
     const extras = r.extra.filter(x => have.has(x)).map(lower);
     $("cook-step").innerHTML = `
-      ${photoOf("recettes", slug(r.title)) ? `<img class="cook-photo" src="${esc(photoOf("recettes", slug(r.title)).src)}" alt="" loading="lazy">` : ""}
-      <p class="cook-lead">Sors tout ça :</p>
+      ${photoOf("recettes", slug(r.id)) ? `<img class="cook-photo" src="${esc(photoOf("recettes", slug(r.id)).src)}" alt="" loading="lazy">` : ""}
+      <p class="cook-lead">${t("Sors tout ça :")}</p>
       <ul class="cook-ings">
         ${r.need.map(opts => `<li>${svg(ICON.check, 22)}<span>${esc(needLabel(opts))}</span></li>`).join("")}
         <li>${svg(ICON.check, 22)}<span>${esc(r.tool)}</span></li>
       </ul>
-      ${extras.length ? `<p class="cook-extra">Si tu veux : ${esc(extras.join(", "))}.</p>` : ""}`;
+      ${extras.length ? `<p class="cook-extra">${t("Si tu veux :")} ${esc(extras.join(", "))}.</p>` : ""}`;
   } else {
     const text = stepsOf(r)[cook.step - 1];
     const secs = stepDuration(text);
     $("cook-step").innerHTML = `<p class="cook-text">${esc(text)}</p>
-      ${secs ? `<button type="button" class="btn btn-sec cook-timer-btn" data-secs="${secs}">${svg(ICON.timer)} Lancer un minuteur de ${durLabel(secs)}</button>` : ""}`;
+      ${secs ? `<button type="button" class="btn btn-sec cook-timer-btn" data-secs="${secs}">${svg(ICON.timer)} ${t("Lancer un minuteur de {d}", { d: durLabel(secs) })}</button>` : ""}`;
   }
   $("cook-prev").disabled = cook.step === 0;
-  $("cook-next").textContent = cook.step === 0 ? "C'est parti" : cook.step === total ? "Terminé, bon appétit !" : "Étape suivante";
+  $("cook-next").textContent = cook.step === 0 ? t("C'est parti") : cook.step === total ? t("Terminé, bon appétit !") : t("Étape suivante");
 }
 
 async function openCook(r) {
-  track("cuisine/" + slug(r.title), "Mode cuisine : " + r.title);
+  track("cuisine/" + slug(r.id), "Mode cuisine : " + r.id);
   cook.r = r; cook.step = 0;
   stopTimer();
   renderCook();
@@ -1181,8 +1225,8 @@ async function openCook(r) {
   $("cook-next").focus();
   const ok = await keepAwake();
   $("cook-wake").textContent = ok
-    ? "L'écran reste allumé pendant que tu cuisines."
-    : "Ton téléphone peut se mettre en veille : touche l'écran de temps en temps.";
+    ? t("L'écran reste allumé pendant que tu cuisines.")
+    : t("Ton téléphone peut se mettre en veille : touche l'écran de temps en temps.");
 }
 
 function moveCook(delta) {
@@ -1231,8 +1275,8 @@ function applyColisLink(firstVisit) {
   save();
   track("colis/" + (slug(asso) || "sans-nom"), "Lien colis : " + (asso || "sans nom"));
 
-  const who = asso ? `Colis « <strong>${esc(asso)}</strong> »` : "Colis du jour";
-  $("colis-banner-text").innerHTML = `${who} coché : ${ids.length} produit${ids.length > 1 ? "s" : ""}. Ajoute ce que tu as déjà chez toi${firstVisit ? " et vérifie ton équipement" : ""}.`;
+  const who = asso ? `${t("Colis")} « <strong>${esc(asso)}</strong> »` : t("Colis du jour");
+  $("colis-banner-text").innerHTML = `${who} ${plural(ids.length, "coché : 1 produit.", "coché : {n} produits.")} ${firstVisit ? t("Ajoute ce que tu as déjà chez toi et vérifie ton équipement.") : t("Ajoute ce que tu as déjà chez toi.")}`;
   $("colis-banner").hidden = false;
   $("colis-undo").onclick = () => {
     have = before;
@@ -1246,7 +1290,7 @@ function applyColisLink(firstVisit) {
 
 function renderCredits() {
   const items = [];
-  RECIPES.forEach(r => { const ph = photoOf("recettes", slug(r.title)); if (ph && ph.credit) items.push([r.title, ph]); });
+  RECIPES.forEach(r => { const ph = photoOf("recettes", slug(r.id)); if (ph && ph.credit) items.push([r.title, ph]); });
   Object.keys(PHOTOS.ingredients || {}).forEach(id => { const ph = photoOf("ingredients", id); if (ph && ph.credit && NAMES[id]) items.push([NAMES[id], ph]); });
   $("credits").hidden = items.length === 0;
   const link = ph => /^https:\/\//.test(ph.source || "") ? ` (<a href="${esc(ph.source)}" target="_blank" rel="noopener">source</a>)` : "";
@@ -1268,8 +1312,8 @@ function setupFeedback() {
 
 let lastJumpCount = null;
 function updateJumpBar(n) {
-  $("jump-text").innerHTML = n === 0 ? "Voir les recettes"
-    : `Voir ${n === 1 ? "ma" : "mes"} <span class="n">${n}</span> recette${n === 1 ? "" : "s"}`;
+  $("jump-text").innerHTML = n === 0 ? t("Voir les recettes")
+    : (n === 1 ? t("Voir ma <span class=\"n\">1</span> recette") : t("Voir mes <span class=\"n\">{n}</span> recettes", { n }));
   if (lastJumpCount !== null && n !== lastJumpCount) {
     const btn = $("jump-btn");
     btn.classList.remove("bump"); void btn.offsetWidth; btn.classList.add("bump");
@@ -1293,9 +1337,79 @@ function focusOnJump(linkSel, targetId) {
   }));
 }
 
+/* ---------- Langue : choix et traduction de la page ---------- */
+
+function pickLang() {
+  const saved = readJSON(KEYS.lang);
+  if (saved === "fr" || saved === "en") return saved;
+  /* Quelqu'un qui utilisait déjà l'appli (en français) le reste : pas de changement surprise. */
+  if (readJSON(KEYS.have) !== null) return "fr";
+  const nav = (navigator.languages && navigator.languages[0]) || navigator.language || "fr";
+  return /^fr\b/i.test(nav) ? "fr" : "en";
+}
+/* Traduit les textes fixes de la page (titres, boutons, aides) d'après le dictionnaire. */
+function translateStatic() {
+  const key = v => v.replace(/\s+/g, " ").trim();
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(n => {
+    const k = key(n.nodeValue);
+    if (k && EN[k]) n.nodeValue = n.nodeValue.replace(n.nodeValue.trim(), EN[k]);
+  });
+  document.querySelectorAll("[placeholder],[aria-label],[title],[alt]").forEach(el => {
+    ["placeholder", "aria-label", "title", "alt"].forEach(a => {
+      const v = el.getAttribute(a);
+      if (v && EN[key(v)]) el.setAttribute(a, EN[key(v)]);
+    });
+  });
+  if (EN[document.title]) document.title = EN[document.title];
+  const desc = document.querySelector('meta[name="description"]');
+  if (desc && EN[desc.content]) desc.content = EN[desc.content];
+}
+/* Applique la traduction anglaise du contenu (ingrédients, recettes, conseils). */
+function applyContent(en, data) {
+  data.groupes.forEach(g => {
+    if (en.groupes && en.groupes[g.titre]) g.titre = en.groupes[g.titre];
+    g.items.forEach(item => { if (en.noms && en.noms[item[0]]) item[1] = en.noms[item[0]]; });
+  });
+  (data.regimes || []).forEach(rg => { if (en.regimes && en.regimes[rg.id]) rg.nom = en.regimes[rg.id]; });
+  if (en.noteRegimes) data.noteRegimes = en.noteRegimes;
+  data.recettes.forEach(r => {
+    const tr = en.recettes && en.recettes[r.id];
+    if (!tr) return;
+    ["title", "tool", "swap"].forEach(k => { if (tr[k]) r[k] = tr[k]; });
+    if (Array.isArray(tr.steps) && tr.steps.length === r.steps.length) r.steps = tr.steps;
+  });
+  (data.conservation || []).forEach(c => {
+    const tr = en.conservation && en.conservation[c.titre];
+    if (tr) { c.titre = tr.titre; c.texte = tr.texte; }
+  });
+}
+function setupLang() {
+  document.querySelectorAll('input[name="lang"]').forEach(r => {
+    r.checked = r.value === LANG;
+    r.addEventListener("change", () => { writeJSON(KEYS.lang, r.value); window.location.reload(); });
+  });
+}
+
 /* ---------- Démarrage ---------- */
 
 async function init() {
+  LANG = pickLang();
+  document.documentElement.lang = LANG;
+  let enContent = null;
+  if (LANG === "en") {
+    try {
+      const [ui, content] = await Promise.all([
+        fetch("i18n-en.json?v=12", { cache: "no-cache" }).then(r => r.json()),
+        fetch("recettes.en.json?v=12", { cache: "no-cache" }).then(r => r.json())
+      ]);
+      EN = ui; enContent = content;
+      translateStatic();
+    } catch (err) { LANG = "fr"; document.documentElement.lang = "fr"; }
+  }
+  setupLang();
   setupTheme();
   setupStats();
   setupFeedback();
@@ -1310,9 +1424,11 @@ async function init() {
     const res = await fetch("recettes.json", { cache: "no-cache" });
     data = await res.json();
   } catch (err) {
-    $("count-text").textContent = "Impossible de charger les recettes. Vérifie ta connexion et recharge la page.";
+    $("count-text").textContent = t("Impossible de charger les recettes. Vérifie ta connexion et recharge la page.");
     return;
   }
+  data.recettes.forEach(r => { r.id = r.title; }); // identifiant stable : le titre français
+  if (enContent) applyContent(enContent, data);
   REGIMES = data.regimes || [];
   RECIPES = data.recettes;
   NUTRI = data.nutrition || {};
@@ -1327,7 +1443,7 @@ async function init() {
   GROUPS.forEach(g => g.items.forEach(([id, n]) => { NAMES[id] = n; if (!g.type) INGREDIENTS.add(id); }));
   if (REGIMES.length) {
     const equipAt = GROUPS.findIndex(g => g.type === "equip");
-    GROUPS.splice(equipAt + 1, 0, { titre: "Mon régime", type: "regime", note: data.noteRegimes, items: REGIMES.map(rg => [rg.id, rg.nom]) });
+    GROUPS.splice(equipAt + 1, 0, { titre: t("Mon régime"), type: "regime", note: data.noteRegimes, items: REGIMES.map(rg => [rg.id, rg.nom]) });
   }
 
   const saved = readJSON(KEYS.have);
@@ -1406,20 +1522,20 @@ async function init() {
 let welcomeStep = 1;
 function renderWelcome() {
   const equip = GROUPS.find(g => g.type === "equip"), regime = GROUPS.find(g => g.type === "regime");
-  $("welcome-progress").textContent = `Étape ${welcomeStep} sur 3`;
+  $("welcome-progress").textContent = t("Étape {a} sur {b}", { a: welcomeStep, b: 3 });
   $("welcome-bar").innerHTML = [1, 2, 3].map(n => `<span class="${n <= welcomeStep ? "on" : ""}"></span>`).join("");
   let body = "";
-  if (welcomeStep === 1) body = `<h2 id="welcome-title" tabindex="-1">Avec quoi peux-tu cuisiner ?</h2>
-    <p class="note">Coche tout ce que tu as. Rien du tout ? Pas de souci, il y a des recettes sans cuisson.</p>
+  if (welcomeStep === 1) body = `<h2 id="welcome-title" tabindex="-1">${t("Avec quoi peux-tu cuisiner ?")}</h2>
+    <p class="note">${t("Coche tout ce que tu as. Rien du tout ? Pas de souci, il y a des recettes sans cuisson.")}</p>
     <div class="chips">${equip.items.map(([id, n]) => chipHtml("w", id, n)).join("")}</div>`;
-  if (welcomeStep === 2) body = `<h2 id="welcome-title" tabindex="-1">Tu suis un régime ?</h2>
-    <p class="note">On cachera les recettes qui ne te conviennent pas. Tu pourras changer ça plus tard dans le menu.</p>
+  if (welcomeStep === 2) body = `<h2 id="welcome-title" tabindex="-1">${t("Tu suis un régime ?")}</h2>
+    <p class="note">${t("On cachera les recettes qui ne te conviennent pas. Tu pourras changer ça plus tard dans le menu.")}</p>
     <div class="chips">${regime ? regime.items.map(([id, n]) => chipHtml("w", id, n)).join("") : ""}</div>`;
-  if (welcomeStep === 3) body = `<h2 id="welcome-title" tabindex="-1">Comment veux-tu commencer ?</h2>
+  if (welcomeStep === 3) body = `<h2 id="welcome-title" tabindex="-1">${t("Comment veux-tu commencer ?")}</h2>
     <div class="welcome-choices">
-      <button type="button" class="btn btn-pri" data-start="check">Je coche mes ingrédients</button>
-      <button type="button" class="btn btn-sec" data-start="scan">Je scanne mes produits</button>
-      <button type="button" class="btn btn-sec" data-start="example">Montre-moi un exemple de colis</button>
+      <button type="button" class="btn btn-pri" data-start="check">${t("Je coche mes ingrédients")}</button>
+      <button type="button" class="btn btn-sec" data-start="scan">${t("Je scanne mes produits")}</button>
+      <button type="button" class="btn btn-sec" data-start="example">${t("Montre-moi un exemple de colis")}</button>
     </div>`;
   $("welcome-body").innerHTML = body;
   $("welcome-body").querySelectorAll("input[data-id]").forEach(inp => inp.addEventListener("change", () => {

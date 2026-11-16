@@ -63,6 +63,18 @@ Pour ajouter ou remplacer une photo, par exemple une vraie photo d'un plat cuisi
 
 Une recette ou un ingrédient sans photo garde son illustration.
 
+## Langues
+
+L'appli existe en français et en anglais. Elle choisit la langue du téléphone à la première ouverture : français pour un téléphone en français, anglais sinon. Les personnes qui l'utilisaient déjà restent en français. On change de langue dans Menu › « Langue · Language ».
+
+- `i18n-en.json` : les textes de l'interface. La clé est le texte français, la valeur sa traduction.
+- `recettes.en.json` : les noms des ingrédients, les recettes (titre, ustensile, étapes, astuce) et les conseils de conservation, rangés d'après leur nom français.
+- `node verifier-recettes.js` signale toute recette, tout ingrédient ou tout texte d'interface sans traduction anglaise.
+
+Dans les étapes en anglais, écris les quantités comme en français (« 200 g », « 400 ml », « 2 eggs », « 1 teaspoon », « per person ») : l'appli les ajuste au nombre de personnes et ajoute les repères.
+
+La page pour les associations reste en français.
+
 ## Mettre en ligne une modification
 
 ```bash

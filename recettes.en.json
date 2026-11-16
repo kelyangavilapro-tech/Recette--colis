@@ -1,0 +1,514 @@
+{
+ "groupes": {
+  "Équipement": "Equipment",
+  "Féculents": "Starches",
+  "Conserves": "Tins and jars",
+  "Frais": "Fresh",
+  "Placard": "Cupboard",
+  "Mon régime": "My diet"
+ },
+ "noms": {
+  "plaque": "Hob",
+  "micro": "Microwave",
+  "four": "Oven",
+  "airfryer": "Air fryer",
+  "bouilloire": "Kettle",
+  "pates": "Pasta",
+  "riz": "Rice",
+  "semoule": "Couscous / semolina",
+  "pain": "Bread",
+  "pdt": "Potatoes",
+  "nouilles": "Noodles",
+  "avoine": "Rolled oats",
+  "farine": "Flour",
+  "tomates": "Tinned tomatoes",
+  "thon": "Tuna",
+  "sardines": "Sardines",
+  "lentilles": "Lentils",
+  "poischiches": "Chickpeas",
+  "haricots": "Beans",
+  "legboite": "Tinned vegetables",
+  "mais": "Sweetcorn",
+  "compote": "Apple sauce",
+  "oeufs": "Eggs",
+  "lait": "Milk",
+  "yaourt": "Plain yoghurt",
+  "fromage": "Cheese",
+  "beurre": "Butter",
+  "creme": "Crème fraîche",
+  "jambon": "Ham",
+  "poulet": "Chicken or turkey",
+  "oignon": "Onion or garlic",
+  "legfrais": "Fresh vegetables",
+  "fruits": "Fresh fruit",
+  "huile": "Oil",
+  "sel": "Salt and pepper",
+  "curry": "Curry or spices",
+  "sucre": "Sugar",
+  "soja": "Soy sauce",
+  "bouillon": "Stock cube",
+  "chocolat": "Chocolate"
+ },
+ "regimes": {
+  "vege": "Vegetarian",
+  "halal": "Halal / no pork",
+  "sanslactose": "Lactose-free",
+  "sansgluten": "Gluten-free"
+ },
+ "noteRegimes": "Halal: remember to buy halal chicken. Always check labels.",
+ "recettes": {
+  "Pâtes tout-en-une tomate-thon": {
+   "title": "One-pot tomato and tuna pasta",
+   "tool": "1 saucepan",
+   "steps": [
+    "Optional: fry the sliced onion in oil for 2 minutes.",
+    "Add the tin of tomatoes, 400 ml of water and a pinch of salt. Bring to the boil.",
+    "Add 200 g of pasta. Cook for 10 to 12 minutes, stirring often, until the liquid is almost absorbed.",
+    "Off the heat, add the flaked tuna (or whatever you have instead), pepper and the cheese."
+   ],
+   "swap": "No tuna: sardines, chickpeas, beans or sweetcorn work too."
+  },
+  "Riz sauté vide-frigo": {
+   "title": "Fridge-raid fried rice",
+   "tool": "1 frying pan",
+   "steps": [
+    "Cook the rice if needed (about 120 g uncooked), drain it and let it cool a little.",
+    "Fry the vegetables for 3 minutes in a little oil.",
+    "Push them to the side, crack 2 eggs into the space and scramble them for 1 minute.",
+    "Add the rice, stir over high heat for 3 to 4 minutes, then season."
+   ],
+   "swap": "No eggs: tuna or chickpeas. No rice: cooked short pasta or couscous."
+  },
+  "Curry express de légumineuses": {
+   "title": "Quick bean curry",
+   "tool": "1 saucepan",
+   "steps": [
+    "Optional: fry the onion in oil for 3 minutes.",
+    "Add 1 teaspoon of curry powder and stir for 30 seconds.",
+    "Add half a tin of tomatoes and the rinsed beans or lentils. Simmer for 10 minutes.",
+    "Off the heat, add a little milk or a yoghurt. Serve with rice, bread or couscous."
+   ],
+   "swap": "No lentils or chickpeas: any tinned beans will do."
+  },
+  "Pain perdu anti-gaspi": {
+   "title": "No-waste French toast",
+   "tool": "1 frying pan",
+   "steps": [
+    "Beat 2 eggs with 150 ml of milk, then add sugar (sweet version) or salt and pepper (savoury version).",
+    "Dip each slice of stale bread for a few seconds on each side.",
+    "Fry until golden, 2 to 3 minutes on each side."
+   ],
+   "swap": "No milk: water works too, the French toast will just be a bit less soft."
+  },
+  "Omelette vide-frigo": {
+   "title": "Fridge-raid omelette",
+   "tool": "1 frying pan",
+   "steps": [
+    "Chop whatever you have into small pieces: vegetables, onion, leftover cooked potatoes.",
+    "Fry them for 3 to 5 minutes in a little oil.",
+    "Beat 3 or 4 eggs with salt and pepper, and pour them into the pan.",
+    "Cook over low heat for 4 to 5 minutes, without stirring, until the top is set."
+   ],
+   "swap": "If you have cheese, sprinkle it on just before the end."
+  },
+  "Salade de semoule façon taboulé": {
+   "title": "Couscous salad, tabbouleh style",
+   "tool": "1 bowl + hot water",
+   "steps": [
+    "Put 150 g of couscous in a bowl with a pinch of salt and a drizzle of oil.",
+    "Cover with the same volume of boiling water (kettle, hob or microwave). Cover for 5 minutes.",
+    "Fluff it up with a fork, add the drained vegetables and, if you have them, tuna or chickpeas."
+   ],
+   "swap": "Keeps for 2 days in the fridge in a closed box: perfect for the next day's lunch."
+  },
+  "Salade express sans cuisson": {
+   "title": "Quick no-cook salad",
+   "tool": "1 bowl",
+   "steps": [
+    "Rinse and drain the beans or lentils.",
+    "Mix them with the tuna, sweetcorn or whatever you have.",
+    "Season with a drizzle of oil, salt, pepper and a little chopped onion if you have some."
+   ],
+   "swap": "No cooking at all: ideal if you have no hob and no microwave."
+  },
+  "Soupe de légumes express": {
+   "title": "Quick vegetable soup",
+   "tool": "1 saucepan",
+   "steps": [
+    "Cut the vegetables and potatoes into small pieces.",
+    "Fry the onion in oil, add the vegetables and just cover with water. Add salt.",
+    "Cook for 15 to 20 minutes. If you have pasta or tinned lentils, add them for the last 10 minutes.",
+    "Mash with a fork for a thicker soup."
+   ],
+   "swap": "Half a tin of tomatoes makes the soup tastier."
+  },
+  "Riz au lait": {
+   "title": "Rice pudding",
+   "tool": "1 saucepan",
+   "steps": [
+    "Bring 500 ml of milk to a simmer with 2 tablespoons of sugar.",
+    "Add 70 g of rice and cook over very low heat for 30 minutes, stirring often.",
+    "The rice is ready when it is soft and the milk has thickened. Eat it warm or cold."
+   ],
+   "swap": "Short-grain rice is ideal, but long-grain works too."
+  },
+  "Omelette en tasse au micro-ondes": {
+   "title": "Microwave mug omelette",
+   "tool": "1 large mug",
+   "steps": [
+    "Beat 2 eggs in a large mug with a little milk, salt and pepper.",
+    "Add some cheese or a few drained vegetables if you like.",
+    "Heat for 1 minute, stir, then 30 to 60 seconds more until it is fully set."
+   ],
+   "swap": "For anyone with just a microwave: a hot meal in 3 minutes."
+  },
+  "Œufs pochés à la tomate": {
+   "title": "Eggs poached in tomato sauce",
+   "tool": "1 frying pan",
+   "steps": [
+    "Optional: fry the sliced onion in oil for 2 minutes.",
+    "Pour in the tin of tomatoes, a pinch of salt and spices. Simmer for 5 minutes.",
+    "Make 4 small hollows in the sauce and crack an egg into each one.",
+    "Cover and cook over low heat for 5 to 6 minutes, until the whites are set. Serve with bread."
+   ],
+   "swap": "No lid: a plate on top of the pan does the job."
+  },
+  "Pâtes au fromage express": {
+   "title": "Quick cheesy pasta",
+   "tool": "1 saucepan",
+   "steps": [
+    "Cook 200 g of pasta in salted water, following the time on the packet.",
+    "Keep a small glass of the cooking water, then drain the pasta and put it back in the pan, off the heat.",
+    "Add grated or diced cheese, a splash of milk or cooking water, and pepper.",
+    "Stir until creamy."
+   ],
+   "swap": "No cheese: plain yoghurt, a drizzle of oil and lots of pepper make a creamy sauce."
+  },
+  "Purée maison à la fourchette": {
+   "title": "Homemade fork-mashed potatoes",
+   "tool": "1 saucepan",
+   "steps": [
+    "Peel 4 or 5 potatoes and cut them into large chunks.",
+    "Cover with cold salted water and cook for 15 to 20 minutes: a knife should slide in easily.",
+    "Drain, put back in the pan and mash with a fork.",
+    "Add a little hot milk or a drizzle of oil, salt and pepper, then mix."
+   ],
+   "swap": "Even better with grated cheese stirred in. Leftovers make an omelette the next day."
+  },
+  "Pommes de terre sautées": {
+   "title": "Pan-fried potatoes",
+   "tool": "1 frying pan",
+   "steps": [
+    "Cut 4 potatoes into small cubes (no need to peel them if you wash them well).",
+    "Heat 2 tablespoons of oil in the pan and add the cubes in a single layer.",
+    "Cover and cook for 10 minutes over medium heat, then uncover and let them brown for 10 minutes, stirring now and then.",
+    "Add salt and pepper. Add the onion for the last 5 minutes if you have some."
+   ],
+   "swap": "Fry an egg in a corner of the pan at the end: it's a complete meal."
+  },
+  "Pomme de terre garnie au micro-ondes": {
+   "title": "Microwave jacket potato",
+   "tool": "1 plate",
+   "steps": [
+    "Wash 1 large potato per person and prick it 6 or 7 times with a fork.",
+    "Put it on a plate and heat for 5 minutes, turn it over, then 3 to 4 minutes more. It's cooked when a knife goes in easily.",
+    "Cut it in half, mash the inside a little, and add salt and pepper.",
+    "Top with what you have: cheese, tuna, yoghurt, beans or sweetcorn."
+   ],
+   "swap": "Careful, it's very hot when it comes out: let it rest for 1 minute before cutting."
+  },
+  "Semoule au lait": {
+   "title": "Semolina pudding",
+   "tool": "1 saucepan",
+   "steps": [
+    "Heat 500 ml of milk with 3 tablespoons of sugar.",
+    "When the milk simmers, sprinkle in 60 g of semolina while stirring.",
+    "Cook for 5 minutes over low heat, stirring all the time, until it thickens.",
+    "Pour into bowls. Eat it warm or cold."
+   ],
+   "swap": "The quickest dessert from a food parcel: semolina cooks 4 times faster than rice."
+  },
+  "Riz à la tomate tout-en-un": {
+   "title": "One-pot tomato rice",
+   "tool": "1 saucepan",
+   "steps": [
+    "Optional: fry the onion in oil for 2 minutes.",
+    "Add 150 g of rice and stir for 1 minute.",
+    "Pour in the tin of tomatoes, 300 ml of water, salt and spices. Cover.",
+    "Cook over low heat for 15 to 18 minutes, until the rice is tender. Add the tuna or beans at the end."
+   ],
+   "swap": "Stir now and then and add a little water if it sticks to the bottom."
+  },
+  "Chili sans viande": {
+   "title": "Meat-free chilli",
+   "tool": "1 saucepan",
+   "steps": [
+    "Fry the onion in oil for 3 minutes if you have some.",
+    "Add 1 teaspoon of spices, the tin of tomatoes and the rinsed beans.",
+    "Add the drained sweetcorn if you have some. Simmer for 10 to 15 minutes.",
+    "Serve with rice or bread, and a spoonful of yoghurt on top."
+   ],
+   "swap": "No Mexican spices? Curry powder, paprika or just pepper work very well."
+  },
+  "Rillettes de thon ou de sardines": {
+   "title": "Tuna or sardine spread",
+   "tool": "1 bowl",
+   "steps": [
+    "Drain the tuna or sardines and mash them with a fork in a bowl.",
+    "Add 2 tablespoons of yoghurt (or soft cheese), pepper, and a little very finely chopped onion if you have some.",
+    "Mix well and spread on bread."
+   ],
+   "swap": "No cooking. Keeps for 1 day in the fridge in a closed box."
+  },
+  "Houmous à la fourchette": {
+   "title": "Fork-mashed hummus",
+   "tool": "1 bowl",
+   "steps": [
+    "Rinse and drain the chickpeas, keeping 3 tablespoons of their liquid.",
+    "Mash them well with a fork with 3 tablespoons of oil and a little of the liquid, until you get a paste.",
+    "Add salt, pepper, and a little crushed garlic or spices if you have some.",
+    "Eat it with bread or raw vegetables cut into sticks."
+   ],
+   "swap": "No chickpeas: white beans make a very smooth spread."
+  },
+  "Soupe de lentilles à la tomate": {
+   "title": "Tomato and lentil soup",
+   "tool": "1 saucepan",
+   "steps": [
+    "Fry the onion in oil for 3 minutes if you have some, with 1 teaspoon of spices.",
+    "Add the drained lentils, the tin of tomatoes and 400 ml of water. Add salt.",
+    "Cook for 15 minutes over low heat.",
+    "Mash with a fork to thicken. Serve with bread and a spoonful of yoghurt."
+   ],
+   "swap": "Even better the next day: make double and keep it in the fridge for 3 days."
+  },
+  "Pâtes au micro-ondes": {
+   "title": "Microwave pasta",
+   "tool": "1 large bowl",
+   "steps": [
+    "Put 100 g of short pasta per person in a large bowl, cover well with water and add salt.",
+    "Heat on full power for 4 minutes longer than the time on the packet, stirring every 4 minutes.",
+    "Drain carefully: the bowl is very hot, use a tea towel.",
+    "Add cheese, tomato sauce or tuna, stir and heat for 1 more minute."
+   ],
+   "swap": "Use a bowl much bigger than you need: the water foams and can overflow."
+  },
+  "Bol de riz au micro-ondes": {
+   "title": "Microwave rice bowl",
+   "tool": "1 large bowl",
+   "steps": [
+    "Put 75 g of rice per person in a large bowl with twice its volume of water and some salt.",
+    "Heat for 10 to 12 minutes on full power, stirring halfway. Leave to rest, covered, for 2 minutes.",
+    "Add the flaked tuna (or beans) and the drained vegetables.",
+    "Season with a little soy sauce or oil. With an egg: beat it, mix it into the rice and heat for 1 more minute."
+   ],
+   "swap": "The same bowl works with couscous: poured into boiling water, ready in 5 minutes."
+  },
+  "Croque au fromage à la poêle": {
+   "title": "Pan-fried cheese toastie",
+   "tool": "1 frying pan",
+   "steps": [
+    "Put cheese between two slices of bread, and a little tuna if you have some.",
+    "Heat the pan with a few drops of oil.",
+    "Put the toastie in, press down with a spatula and let it brown for 2 to 3 minutes.",
+    "Turn it over and brown for 2 more minutes, until the cheese melts."
+   ],
+   "swap": "Deluxe version: dip the toastie in beaten egg before cooking it."
+  },
+  "Riz au lait au micro-ondes": {
+   "title": "Microwave rice pudding",
+   "tool": "1 large bowl",
+   "steps": [
+    "Put 50 g of rice and 350 ml of milk in a very large bowl.",
+    "Heat for 4 minutes on full power, then stir.",
+    "Continue for 12 to 14 minutes on medium power, stirring every 3 minutes so it doesn't overflow.",
+    "Add 2 tablespoons of sugar, stir and leave to rest: it thickens as it cools."
+   ],
+   "swap": "Keep an eye on it: milk rises fast. If it overflows, lower the power."
+  },
+  "Salade de pâtes": {
+   "title": "Pasta salad",
+   "tool": "1 saucepan",
+   "steps": [
+    "Cook 200 g of short pasta in salted water, drain and rinse under cold water.",
+    "If you have eggs, cook them for 9 minutes in the pasta water: they'll be hard-boiled.",
+    "Mix the pasta with the tuna (or chickpeas) and the drained vegetables.",
+    "Season with oil, salt and pepper, or a yoghurt and pepper sauce."
+   ],
+   "swap": "Keeps for 2 days in the fridge: perfect for lunch at uni."
+  },
+  "Porridge express": {
+   "title": "Quick porridge",
+   "tool": "1 large bowl",
+   "steps": [
+    "Put 50 g of rolled oats and 200 ml of milk (or water) in a large bowl.",
+    "Microwave for 1 minute, stir, then 1 minute more. On the hob: 3 minutes over low heat, stirring.",
+    "Add a mashed fruit, some apple sauce, a little sugar or a square of chocolate."
+   ],
+   "swap": "A breakfast that keeps you going until lunch, for a few cents."
+  },
+  "Crêpes": {
+   "title": "Crêpes",
+   "tool": "1 frying pan + 1 bowl",
+   "steps": [
+    "In a bowl, mix 125 g of flour and 2 eggs, then gradually add 300 ml of milk, whisking with a fork.",
+    "Leave to rest for 10 minutes if you have time.",
+    "Lightly grease the hot pan with a little oil or butter, pour in a small ladle of batter and tilt the pan to spread it.",
+    "Cook for about 1 minute, flip and leave for 30 seconds. Fill with something sweet or savoury."
+   ],
+   "swap": "Not enough milk: half milk, half water. Savoury version with cheese and ham."
+  },
+  "Mug cake au chocolat": {
+   "title": "Chocolate mug cake",
+   "tool": "1 large mug",
+   "steps": [
+    "In a large mug, mix 1 egg, 2 tablespoons of sugar and 2 tablespoons of milk or oil.",
+    "Add 4 tablespoons of flour and some chocolate pieces. Mix well.",
+    "Microwave for 1 minute, then 15 seconds at a time if needed: the cake should rise and stay soft in the middle."
+   ],
+   "swap": "No chocolate: a spoonful of apple sauce in the middle of the batter."
+  },
+  "Nouilles sautées": {
+   "title": "Stir-fried noodles",
+   "tool": "1 frying pan",
+   "steps": [
+    "Cook the noodles for 3 minutes in a little boiling water in the pan, then drain them.",
+    "With chicken: cut it into small pieces and cook for 6 to 8 minutes in a little oil, until it's no longer pink inside.",
+    "Add the vegetables and fry them for 3 minutes.",
+    "Add the noodles and 2 beaten eggs (or the tuna), stir for 2 minutes over high heat, then season with soy sauce."
+   ],
+   "swap": "Instant noodles work: only use half the seasoning sachet, it's very salty."
+  },
+  "Pâtes crème et jambon": {
+   "title": "Creamy ham pasta",
+   "tool": "1 saucepan",
+   "steps": [
+    "Cook 200 g of pasta in salted water, then drain.",
+    "Put it back in the pan over low heat with 3 tablespoons of crème fraîche (or a little milk and cheese).",
+    "Add the diced ham and pepper, and stir for 1 minute."
+   ],
+   "swap": "No ham: tuna or sweetcorn. Halal version: replace the ham with tuna."
+  },
+  "Poulet au curry": {
+   "title": "Chicken curry",
+   "tool": "1 frying pan",
+   "steps": [
+    "Cut 250 g of chicken into pieces. Wash your hands after touching raw meat.",
+    "Brown it in a little oil for 8 minutes, with the onion if you have some. It must no longer be pink inside.",
+    "Add 1 teaspoon of curry powder and stir for 30 seconds.",
+    "Pour in 3 tablespoons of cream (or a yoghurt off the heat, or half a tin of tomatoes) and simmer for 5 minutes. Serve with rice or bread."
+   ],
+   "swap": "No chicken: chickpeas make an equally good curry (see the quick bean curry)."
+  },
+  "Potatoes au four ou à l'air fryer": {
+   "title": "Oven or air-fryer potato wedges",
+   "tool": "oven or air fryer",
+   "steps": [
+    "Wash 3 or 4 potatoes and cut them into wedges, skin on.",
+    "Mix them with 1 tablespoon of oil, salt and spices.",
+    "Air fryer: 18 to 20 minutes at 200 °C, shaking the basket halfway. Oven: 30 minutes at 220 °C, turning them once.",
+    "Serve with a yoghurt, salt and pepper dip."
+   ],
+   "swap": "Sweet potatoes or carrots can be cooked the same way."
+  },
+  "Pois chiches croustillants": {
+   "title": "Crispy chickpeas",
+   "tool": "oven or air fryer",
+   "steps": [
+    "Rinse the chickpeas and dry them well with a clean tea towel.",
+    "Mix them with 1 tablespoon of oil, salt and spices.",
+    "Air fryer: 12 to 15 minutes at 200 °C, shaking twice. Oven: 25 minutes at 200 °C."
+   ],
+   "swap": "Great as a snack, or on a salad or soup. They keep for 2 days in a box, a little less crispy."
+  },
+  "Œufs cocotte": {
+   "title": "Baked eggs in a ramekin",
+   "tool": "1 ramekin or 1 mug",
+   "steps": [
+    "Put 1 tablespoon of cream in the bottom of a ramekin, and add a little ham or vegetables if you have some.",
+    "Crack 1 or 2 eggs on top, add salt, pepper and a little cheese.",
+    "Oven: 10 to 12 minutes at 180 °C. Air fryer: 8 minutes at 160 °C. Microwave: prick the yolk with a fork (otherwise it can burst), then heat for 45 seconds and add 15 seconds if needed.",
+    "Serve with bread for dipping."
+   ],
+   "swap": "In the microwave, cover the ramekin with a plate to avoid splatters."
+  },
+  "Soupe de nouilles express": {
+   "title": "Quick noodle soup",
+   "tool": "1 large bowl",
+   "steps": [
+    "Put the noodles, half a crumbled stock cube and a few drained vegetables in a large bowl.",
+    "Pour in 400 ml of boiling water (kettle, hob or microwave).",
+    "Cover for 3 to 4 minutes, then stir."
+   ],
+   "swap": "Add a spoonful of soy sauce or a little curry powder for a change."
+  },
+  "Salade de fruits au yaourt": {
+   "title": "Fruit salad with yoghurt",
+   "tool": "1 bowl",
+   "steps": [
+    "Cut the fruit into pieces.",
+    "Mix it with a yoghurt or some apple sauce.",
+    "Add a few rolled oats for crunch."
+   ],
+   "swap": "Slightly bruised fruit is perfect here: the ultimate no-waste recipe."
+  }
+ },
+ "conservation": {
+  "Les dates sur les emballages": {
+   "titre": "Dates on packaging",
+   "texte": "\"Use by\": don't go past the date, it's a safety matter (meat, fresh fish, fresh dairy). \"Best before\": the product is still fine after the date if it has been stored properly (pasta, rice, tins, biscuits)."
+  },
+  "Une conserve ouverte": {
+   "titre": "An opened tin",
+   "texte": "Don't keep leftovers in the metal tin: put them in a bowl or a closed box in the fridge, and eat them within 2 to 3 days."
+  },
+  "Une conserve abîmée": {
+   "titre": "A damaged tin",
+   "texte": "A swollen, leaking or strange-smelling tin when opened: throw it away without tasting. A slightly dented but intact tin is still fine."
+  },
+  "Le riz cuit": {
+   "titre": "Cooked rice",
+   "texte": "Put it in the fridge within an hour of cooking and eat it within 24 hours. Reheat it until piping hot, only once."
+  },
+  "Les restes de plats cuisinés": {
+   "titre": "Leftover cooked dishes",
+   "texte": "Into the fridge within 2 hours of cooking, in a closed box, and eat within 2 to 3 days. To keep them longer, freeze them in portions."
+  },
+  "Le pain": {
+   "titre": "Bread",
+   "texte": "Slice it and freeze it: it can be toasted straight from the freezer. When stale, it makes great French toast."
+  },
+  "Le lait ouvert": {
+   "titre": "Opened milk",
+   "texte": "In the fridge, closed, and finish it within the few days shown on the carton (often 3 days)."
+  },
+  "Les œufs": {
+   "titre": "Eggs",
+   "texte": "Keep them away from temperature changes, ideally in the fridge. A cracked egg should be cooked straight away, and well cooked."
+  },
+  "Le fromage": {
+   "titre": "Cheese",
+   "texte": "Well wrapped in the fridge. Grated cheese can be frozen and used without thawing."
+  },
+  "La viande crue": {
+   "titre": "Raw meat",
+   "texte": "In the coldest part of the fridge, and cook it before the use-by date. Never refreeze thawed raw meat. Wash your hands after touching it."
+  },
+  "Les fruits et légumes": {
+   "titre": "Fruit and vegetables",
+   "texte": "A spot of mould on a firm vegetable (carrot, cabbage, potato): cut well around it. On a soft fruit or vegetable (tomato, peach, strawberry): throw it away. Potatoes and onions keep in a dry, dark place, not in the fridge."
+  },
+  "Les fruits trop mûrs": {
+   "titre": "Overripe fruit",
+   "texte": "Perfect for porridge, fruit salad or French toast. You can also freeze them in pieces."
+  },
+  "Bien congeler": {
+   "titre": "Freezing well",
+   "texte": "Freeze in small portions and write the date on them. Thaw in the fridge, not on the table."
+  },
+  "Le frigo": {
+   "titre": "The fridge",
+   "texte": "Set it to around 4 °C and don't overfill it: air needs to circulate. Put what goes off first at the front."
+  }
+ }
+}

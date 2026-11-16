@@ -69,5 +69,26 @@ for (const [kind, keys] of [["recettes", recipeSlugs], ["ingredients", ids]]) {
   });
 }
 
+// Traduction anglaise (facultative mais conseillée) : chaque recette, ingrédient et conseil doit y être
+const fs = require("fs");
+if (fs.existsSync(__dirname + "/recettes.en.json")) {
+  const en = JSON.parse(fs.readFileSync(__dirname + "/recettes.en.json", "utf8"));
+  data.recettes.forEach(r => {
+    const tr = (en.recettes || {})[r.title];
+    if (!tr) errors.push(`Anglais : la recette « ${r.title} » n'est pas traduite (recettes.en.json)`);
+    else if (!Array.isArray(tr.steps) || tr.steps.length !== r.steps.length) errors.push(`Anglais : « ${r.title} » n'a pas le même nombre d'étapes qu'en français`);
+  });
+  [...ids].forEach(id => { if (!(en.noms || {})[id]) errors.push(`Anglais : le nom de "${id}" n'est pas traduit`); });
+  (data.conservation || []).forEach(c => { if (!(en.conservation || {})[c.titre]) errors.push(`Anglais : le conseil « ${c.titre} » n'est pas traduit`); });
+}
+if (fs.existsSync(__dirname + "/i18n-en.json") && fs.existsSync(__dirname + "/app.js")) {
+  const ui = JSON.parse(fs.readFileSync(__dirname + "/i18n-en.json", "utf8"));
+  const js = fs.readFileSync(__dirname + "/app.js", "utf8");
+  const keys = new Set();
+  for (const m of js.matchAll(/\bt\(\s*"((?:[^"\\]|\\.)*)"/g)) keys.add(JSON.parse(`"${m[1]}"`));
+  for (const m of js.matchAll(/plural\([^,]+,\s*"((?:[^"\\]|\\.)*)",\s*"((?:[^"\\]|\\.)*)"/g)) { keys.add(JSON.parse(`"${m[1]}"`)); keys.add(JSON.parse(`"${m[2]}"`)); }
+  [...keys].filter(k => !ui[k] && k !== "Code").forEach(k => errors.push(`Anglais : texte d'interface non traduit dans i18n-en.json : « ${k} »`));
+}
+
 if (errors.length) { console.error("❌ " + errors.length + " problème(s) :\n- " + errors.join("\n- ")); process.exit(1); }
 console.log(`✅ recettes.json est valide : ${data.recettes.length} recettes, ${ids.size} ingrédients.`);

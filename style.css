@@ -496,3 +496,4 @@ textarea.field { resize: vertical; line-height: 1.5; }
 .welcome .cook-nav .btn-pri { background: var(--ink); color: var(--on-ink); }
 .welcome h2:focus { outline: none; }
 .btn[hidden] { display: none; }
+.segmented-2 { grid-template-columns: 1fr 1fr; }
