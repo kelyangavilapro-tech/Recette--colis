@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=7">
+<link rel="stylesheet" href="style.css?v=8">
 </head>
 <body>
 <div class="appbar">
@@ -102,10 +102,14 @@
   <details class="privacy" id="privacy">
     <summary>Confidentialité</summary>
     <p>Pas de compte, pas de cookies. Ce que tu coches, tes favoris, ta liste de courses et tes réglages restent sur ton appareil : ils ne sont envoyés nulle part.</p>
-    <p>Quand tu scannes un produit, seul son code-barres est envoyé à Open Food Facts, une base de données publique et gratuite, pour savoir de quel produit il s'agit. Les images de la caméra ne quittent pas ton téléphone.</p>
+    <p>Quand tu scannes un produit, seul son code-barres est envoyé à Open Food Facts, une base de données publique et gratuite, pour savoir de quel produit il s'agit, puis la photo du produit est chargée depuis leur site. Les images de la caméra ne quittent pas ton téléphone.</p>
     <p id="privacy-stats" hidden>Pour savoir si l'appli est utile, on compte les visites et les recettes ouvertes de façon anonyme, avec GoatCounter, un outil sans cookies qui ne permet pas de t'identifier.</p>
   </details>
-  <p class="version">Version 7</p>
+  <details class="privacy" id="credits" hidden>
+    <summary>Crédits photos</summary>
+    <ul class="credits" id="credits-list"></ul>
+  </details>
+  <p class="version">Version 8</p>
 </footer>
 
 <!-- Menu latéral -->
@@ -148,7 +152,7 @@
       <button type="button" class="menu-item" data-go="privacy"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Confidentialité</button>
       <button type="button" class="menu-item" id="reset-app"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>Tout remettre à zéro</button>
     </nav>
-    <p class="drawer-foot" id="drawer-version">Version 7</p>
+    <p class="drawer-foot" id="drawer-version">Version 8</p>
   </div>
 </dialog>
 
@@ -236,7 +240,7 @@
 
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script src="config.js?v=7"></script>
-<script src="app.js?v=7"></script>
+<script src="config.js?v=8"></script>
+<script src="app.js?v=8"></script>
 </body>
 </html>

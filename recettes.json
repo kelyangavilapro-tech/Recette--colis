@@ -711,7 +711,7 @@
     ["sucre", ["en:sugars", "en:white-sugars"], ["sucre"]],
     ["soja", ["en:soy-sauces"], ["sauce soja"]],
     ["bouillon", ["en:broths", "en:bouillon-cubes", "en:stock-cubes"], ["bouillon"]],
-    ["chocolat", ["en:chocolates", "en:dark-chocolates", "en:milk-chocolates"], ["chocolat"]],
+    ["chocolat", ["en:chocolates", "en:dark-chocolates", "en:milk-chocolates", "en:hazelnut-spreads", "en:chocolate-spreads", "en:cocoa-and-hazelnuts-spreads"], ["chocolat", "pâte à tartiner"]],
     ["curry", ["en:spices", "en:curry"], ["curry", "épices", "paprika", "cumin"]],
     ["sel", ["en:salts"], ["sel"]]
   ]

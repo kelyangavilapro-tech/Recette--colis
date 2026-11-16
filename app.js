@@ -24,6 +24,7 @@ let REGIMES = [];
 let NUTRI = {};
 let TIPS = [];
 let OFF = [];
+let PHOTOS = { recettes: {}, ingredients: {} }; // photos facultatives, déclarées dans recettes.json
 const NAMES = {};
 const INGREDIENTS = new Set(); // ingrédients seulement (ni équipement, ni régime)
 let have = new Set();
@@ -221,10 +222,16 @@ function groupNote(g) {
   return "";
 }
 
+/* Photo d'une recette ou d'un ingrédient, si elle a été ajoutée (dossier photos/). */
+const photoOf = (kind, key) => {
+  const ph = PHOTOS[kind] && PHOTOS[kind][key];
+  return ph && /^photos\/[a-z0-9/_-]+\.(jpe?g|webp|png)$/.test(ph.src) ? ph : null;
+};
+
 const chipHtml = (prefix, id, name) => `
   <span class="chip" data-name="${esc(norm(name))}">
     <input type="checkbox" id="${prefix}-${esc(id)}" data-id="${esc(id)}" ${have.has(id) ? "checked" : ""}>
-    <label for="${prefix}-${esc(id)}">${esc(name)}</label>
+    <label for="${prefix}-${esc(id)}">${photoOf("ingredients", id) ? `<img class="chip-pic" src="${esc(photoOf("ingredients", id).src)}" alt="" width="28" height="28" loading="lazy">` : ""}${esc(name)}</label>
   </span>`;
 
 function renderPantry() {
@@ -386,6 +393,7 @@ function card(r, a, state, i) {
   const c = COLORS[r.color] || COLORS.nuit;
   const fav = favs.has(r.title);
   const nut = nutrition(r);
+  const photo = photoOf("recettes", slug(r.title));
   let pill;
   if (!a.equipOk) {
     pill = `<span class="pill eq">Il faut : ${esc(r.equip.map(lower).join(" ou "))}</span>`;
@@ -406,7 +414,9 @@ function card(r, a, state, i) {
   <details class="recipe" data-state="${state}" data-i="${i}">
     <summary>
       <span class="bar" style="background: ${c.bar}" aria-hidden="true"></span>
-      <span class="thumb" style="background: ${c.tint}; color: ${c.txt}" aria-hidden="true">${svg(toolArt(r.tool), 40).replace('stroke-width="2.2"', 'stroke-width="1.8"')}</span>
+      ${photo
+        ? `<img class="thumb thumb-photo" src="${esc(photo.src)}" alt="" width="64" height="64" loading="lazy">`
+        : `<span class="thumb" style="background: ${c.tint}; color: ${c.txt}" aria-hidden="true">${svg(toolArt(r.tool), 40).replace('stroke-width="2.2"', 'stroke-width="1.8"')}</span>`}
       <span class="recipe-main">
         <h3>${fav ? `<span class="fav-mark" title="Dans tes favoris">${svg(ICON.star, 18)}<span class="sr-only">Favori : </span></span>` : ""}${esc(r.title)}</h3>
         <span class="meta"><span>${svg(ICON.clock, 15)} ${r.time} min</span><span>· ${esc(r.tool)}</span><span>· ${nut.kcal} kcal</span></span>
@@ -415,6 +425,7 @@ function card(r, a, state, i) {
       <span class="chev">${svg(ICON.chevron)}</span>
     </summary>
     <div class="recipe-body">
+      ${photo ? `<figure class="recipe-photo"><img src="${esc(photo.src)}" alt="${esc(r.title)}" loading="lazy">${photo.credit ? `<figcaption>Photo : ${esc(photo.credit)}</figcaption>` : ""}</figure>` : ""}
       <div class="actions">
         <button type="button" class="btn btn-pri btn-color" data-action="cook" data-i="${i}" style="background: ${c.bar}">${svg(ICON.cook)} Mode cuisine</button>
         ${a.missing.length ? `<button type="button" class="btn btn-sec" data-action="shop" data-i="${i}">${svg(ICON.cart)} <span data-label>Ajouter à ma liste</span></button>` : ""}
@@ -692,9 +703,20 @@ function matchProduct(p) {
   return null;
 }
 
-function addFound(ok, title, detail) {
+/* Photo du produit fournie par Open Food Facts (licence libre). On n'accepte que leurs adresses d'images. */
+function productImage(p) {
+  const url = p && (p.image_front_small_url || p.image_small_url || p.image_front_url || "");
+  return /^https:\/\/(images|static)\.openfoodfacts\.org\//.test(url) ? url : "";
+}
+
+function addFound(ok, title, detail, img) {
   const li = document.createElement("li");
-  li.innerHTML = `<span class="${ok ? "ok" : "ko"}" aria-hidden="true">${ok ? "✓" : "?"}</span><span>${esc(title)}${detail ? `<small>${esc(detail)}</small>` : ""}</span>`;
+  const pic = img
+    ? `<img class="scan-pic" src="${esc(img)}" alt="" width="64" height="64" loading="lazy" referrerpolicy="no-referrer">`
+    : `<span class="scan-pic scan-pic-empty" aria-hidden="true">${ok ? "✓" : "?"}</span>`;
+  li.innerHTML = `${pic}<span class="scan-txt"><span class="${ok ? "ok" : "ko"}">${ok && img ? "✓ " : ""}${esc(title)}</span>${detail ? `<small>${esc(detail)}</small>` : ""}</span>`;
+  const im = li.querySelector("img");
+  if (im) im.addEventListener("error", () => { im.replaceWith(Object.assign(document.createElement("span"), { className: "scan-pic scan-pic-empty", textContent: ok ? "✓" : "?" })); });
   $("scan-found").prepend(li);
 }
 
@@ -704,7 +726,7 @@ async function lookupCode(code) {
   scanStatus("Recherche du produit…");
   let product = null;
   try {
-    const res = await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json?fields=product_name,product_name_fr,generic_name_fr,brands,categories_tags`);
+    const res = await fetch(`https://world.openfoodfacts.org/api/v2/product/${code}.json?fields=product_name,product_name_fr,generic_name_fr,brands,categories_tags,image_front_small_url,image_small_url`);
     const j = await res.json();
     if (j && j.status === 1 && j.product) product = j.product;
   } catch (err) {
@@ -718,11 +740,11 @@ async function lookupCode(code) {
     const already = have.has(id);
     have.add(id);
     haveChanged();
-    addFound(true, `${NAMES[id]} ${already ? "(déjà coché)" : "coché"}`, [name, brand].filter(Boolean).join(" · "));
+    addFound(true, `${NAMES[id]} ${already ? "(déjà coché)" : "coché"}`, [name, brand].filter(Boolean).join(" · "), productImage(product));
     scanStatus(`${NAMES[id]} : ${already ? "déjà dans tes ingrédients" : "ajouté à tes ingrédients"}. Scanne le suivant !`);
     track("scan/reconnu", "Scan reconnu");
   } else if (product) {
-    addFound(false, name, "On ne sait pas encore à quel ingrédient il correspond : coche-le à la main.");
+    addFound(false, name, "On ne sait pas encore à quel ingrédient il correspond : coche-le à la main.", productImage(product));
     scanStatus("Produit trouvé, mais pas reconnu.");
     track("scan/non-reconnu", "Scan non reconnu");
   } else {
@@ -759,7 +781,7 @@ async function makeDecoder() {
       return codes.length ? codes[0].rawValue : null;
     };
   }
-  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=7");
+  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=8");
   const Z = window.ZXing;
   const reader = new Z.MultiFormatReader();
   const hints = new Map();
@@ -1023,6 +1045,7 @@ function renderCook() {
   if (cook.step === 0) {
     const extras = r.extra.filter(x => have.has(x)).map(lower);
     $("cook-step").innerHTML = `
+      ${photoOf("recettes", slug(r.title)) ? `<img class="cook-photo" src="${esc(photoOf("recettes", slug(r.title)).src)}" alt="" loading="lazy">` : ""}
       <p class="cook-lead">Sors tout ça :</p>
       <ul class="cook-ings">
         ${r.need.map(opts => `<li>${svg(ICON.check, 22)}<span>${esc(needLabel(opts))}</span></li>`).join("")}
@@ -1111,6 +1134,14 @@ function applyColisLink(firstVisit) {
 
 /* ---------- Avis et confidentialité ---------- */
 
+function renderCredits() {
+  const items = [];
+  RECIPES.forEach(r => { const ph = photoOf("recettes", slug(r.title)); if (ph && ph.credit) items.push([r.title, ph.credit]); });
+  Object.keys(PHOTOS.ingredients || {}).forEach(id => { const ph = photoOf("ingredients", id); if (ph && ph.credit && NAMES[id]) items.push([NAMES[id], ph.credit]); });
+  $("credits").hidden = items.length === 0;
+  $("credits-list").innerHTML = items.map(([what, who]) => `<li><strong>${esc(what)}</strong> : ${esc(who)}</li>`).join("");
+}
+
 function setupFeedback() {
   const url = CONFIG.avisUrl;
   document.querySelectorAll("[data-avis]").forEach(el => {
@@ -1176,6 +1207,7 @@ async function init() {
   NUTRI = data.nutrition || {};
   TIPS = data.conservation || [];
   OFF = data.openFoodFacts || [];
+  PHOTOS = Object.assign({ recettes: {}, ingredients: {} }, data.photos || {});
   GROUPS = data.groupes.slice();
   GROUPS.forEach(g => g.items.forEach(([id, n]) => { NAMES[id] = n; if (!g.type) INGREDIENTS.add(id); }));
   if (REGIMES.length) {
@@ -1227,6 +1259,7 @@ async function init() {
   renderDrawerChips();
   renderResults();
   updateShopBadge();
+  renderCredits();
   const first = document.querySelector("#list details");
   if (first) first.open = true;
 }

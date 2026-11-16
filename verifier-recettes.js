@@ -51,5 +51,19 @@ data.recettes.forEach(r => Object.keys(r.qte || {}).forEach(id => check(`${r.tit
 });
 (data.openFoodFacts || []).forEach(([id]) => check("openFoodFacts", id));
 
+// Photos (facultatives) : le fichier doit exister, correspondre à une recette ou un ingrédient, et avoir un crédit
+const norm = t => String(t).toLowerCase().replace(/œ/g, "oe").replace(/æ/g, "ae").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+const slug = t => norm(t).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+const recipeSlugs = new Set(data.recettes.map(r => slug(r.title)));
+const photos = data.photos || {};
+for (const [kind, keys] of [["recettes", recipeSlugs], ["ingredients", ids]]) {
+  Object.entries(photos[kind] || {}).forEach(([key, ph]) => {
+    if (!keys.has(key)) errors.push(`Photo ${kind} « ${key} » : aucune ${kind === "recettes" ? "recette" : "ingrédient"} ne porte ce nom${kind === "recettes" ? " (le nom attendu est le titre en minuscules, sans accents, avec des tirets)" : ""}`);
+    if (!ph || !/^photos\/[a-z0-9/_-]+\.(jpe?g|webp|png)$/.test(ph.src || "")) errors.push(`Photo ${kind} « ${key} » : chemin invalide (attendu : photos/…/nom.jpg)`);
+    else if (!require("fs").existsSync(__dirname + "/" + ph.src)) errors.push(`Photo ${kind} « ${key} » : fichier introuvable (${ph.src})`);
+    if (!ph || !ph.credit) errors.push(`Photo ${kind} « ${key} » : crédit manquant (auteur et licence)`);
+  });
+}
+
 if (errors.length) { console.error("❌ " + errors.length + " problème(s) :\n- " + errors.join("\n- ")); process.exit(1); }
 console.log(`✅ recettes.json est valide : ${data.recettes.length} recettes, ${ids.size} ingrédients.`);
