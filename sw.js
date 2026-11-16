@@ -1,8 +1,8 @@
 /* Service worker : l'appli marche hors connexion une fois ouverte une première fois.
-   À chaque mise en ligne, augmente VERSION ici ET le ?v= de style.css et app.js dans index.html. */
-const VERSION = "v4";
+   Avant chaque mise en ligne, lance : node nouvelle-version.js (il change le numéro partout). */
+const VERSION = "v5";
 const CACHE = "colis-" + VERSION;
-const FILES = ["./", "index.html", "style.css?v=4", "app.js?v=4", "recettes.json", "manifest.webmanifest",
+const FILES = ["./", "index.html", "asso.html", "style.css?v=5", "app.js?v=5", "config.js?v=5", "asso.js?v=5", "lib/qrcode.js?v=5", "recettes.json", "manifest.webmanifest",
   "icons/icon.svg", "icons/icon-192.png", "icons/icon-512.png", "icons/apple-touch-icon.png"];
 
 self.addEventListener("install", e => {

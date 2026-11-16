@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=4">
+<link rel="stylesheet" href="style.css?v=5">
 </head>
 <body>
 <header class="top">
@@ -27,18 +27,39 @@
       <h2 id="pantry-title">Ce que j'ai</h2>
       <button type="button" class="link-btn" id="clear">Tout décocher</button>
     </div>
+    <div class="banner" id="colis-banner" role="status" hidden>
+      <p id="colis-banner-text"></p>
+      <button type="button" class="link-btn" id="colis-undo">Annuler</button>
+    </div>
     <p class="note" id="example-note" hidden>Exemple déjà coché : un colis type. Décoche et coche selon ce que tu as vraiment.</p>
+    <div class="search">
+      <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <input type="search" id="search" placeholder="Chercher un ingrédient" aria-label="Chercher un ingrédient" autocomplete="off">
+    </div>
+    <p class="note" id="search-empty" hidden>Aucun ingrédient ne correspond. Essaie un autre mot, par exemple « thon » ou « pâtes ».</p>
     <div id="pantry-groups" class="stack-20"></div>
   </section>
 
-  <section class="results" id="results" tabindex="-1" aria-live="polite" aria-labelledby="results-title">
+  <section class="results" id="results" tabindex="-1" aria-labelledby="results-title">
     <h2 id="results-title" class="sr-only">Recettes</h2>
     <a class="back-link" href="#pantry">
       <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
       Modifier ce que j'ai
     </a>
-    <div class="summary"><span class="big" id="count">0</span><p id="count-text">Chargement des recettes…</p></div>
+    <div class="summary" aria-live="polite"><span class="big" id="count">0</span><p id="count-text">Chargement des recettes…</p></div>
+    <div class="view-tabs" role="group" aria-label="Recettes à afficher">
+      <button type="button" class="tab" id="view-all" aria-pressed="true">Toutes les recettes</button>
+      <button type="button" class="tab" id="view-favs" aria-pressed="false">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z"/></svg>
+        Mes favoris (<span id="view-favs-count">0</span>)
+      </button>
+    </div>
+    <p class="note" id="regime-note" hidden></p>
     <div id="list" class="stack-12"></div>
+    <aside class="feedback" data-avis>
+      <p><strong>Tu testes l'appli ?</strong> Ton avis aide à l'améliorer et à convaincre les associations de la diffuser.</p>
+      <a class="btn btn-pri" href="#" target="_blank" rel="noopener">Donner mon avis (2 min)</a>
+    </aside>
   </section>
 </main>
 
@@ -49,7 +70,19 @@
   </a>
 </div>
 
-<footer>Projet étudiant de Kelyan Gavila, Université Toulouse Capitole. Les recettes sont pour 2 portions. Vérifie toujours les étiquettes en cas d'allergie. <span class="version">Version 4</span></footer>
+<footer>
+  <p>Projet étudiant de Kelyan Gavila, Université Toulouse Capitole. Les recettes sont pour 2 portions. Vérifie toujours les étiquettes en cas d'allergie.</p>
+  <p class="footer-links">
+    <a href="#" target="_blank" rel="noopener" data-avis>Donner mon avis</a>
+    <a href="asso.html">Tu es une association ? Crée ton lien « colis du jour »</a>
+  </p>
+  <details class="privacy">
+    <summary>Confidentialité</summary>
+    <p>Pas de compte, pas de cookies. Ce que tu coches, tes favoris et tes réglages restent sur ton appareil : ils ne sont envoyés nulle part.</p>
+    <p id="privacy-stats" hidden>Pour savoir si l'appli est utile, on compte les visites et les recettes ouvertes de façon anonyme, avec GoatCounter, un outil sans cookies qui ne permet pas de t'identifier.</p>
+  </details>
+  <p class="version">Version 5</p>
+</footer>
 
 <dialog class="cook" id="cook" aria-labelledby="cook-title">
   <div class="cook-inner">
@@ -60,6 +93,11 @@
       </button>
     </div>
     <div class="cook-bar" id="cook-bar" aria-hidden="true"></div>
+    <div class="cook-timer" id="cook-timer" role="timer" aria-live="off" hidden>
+      <svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg>
+      <span id="cook-timer-text" aria-live="assertive"></span>
+      <button type="button" class="link-btn" id="cook-timer-stop">Arrêter</button>
+    </div>
     <h2 class="cook-title" id="cook-title"></h2>
     <div class="cook-step" id="cook-step" aria-live="polite"></div>
     <p class="cook-wake" id="cook-wake"></p>
@@ -70,6 +108,7 @@
   </div>
 </dialog>
 
-<script src="app.js?v=4"></script>
+<script src="config.js?v=5"></script>
+<script src="app.js?v=5"></script>
 </body>
 </html>

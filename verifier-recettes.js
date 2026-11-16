@@ -12,8 +12,19 @@ data.groupes.forEach(g => g.items.forEach(([id]) => {
 const check = (where, id) => { if (!ids.has(id)) errors.push(`${where} : "${id}" n'existe pas dans les groupes`); };
 
 (data.colisExemple || []).forEach(id => check("colisExemple", id));
+const regimeIds = new Set();
+(data.regimes || []).forEach(r => {
+  if (!r.id || !r.nom) errors.push("Régime sans id ou sans nom");
+  if (ids.has(r.id) || regimeIds.has(r.id)) errors.push(`Régime "${r.id}" : identifiant déjà utilisé`);
+  regimeIds.add(r.id);
+  (r.exclut || []).forEach(id => check(`Régime ${r.nom}`, id));
+});
+const titles = new Set();
 data.recettes.forEach(r => {
   const t = r.title || "(recette sans titre)";
+  if (titles.has(t)) errors.push(`${t} : titre en double`);
+  titles.add(t);
+  if (r.time > 35) errors.push(`${t} : plus de 35 minutes, trop long pour l'appli`);
   ["title", "tool", "swap"].forEach(k => { if (!r[k]) errors.push(`${t} : champ "${k}" manquant`); });
   if (!COLORS.includes(r.color)) errors.push(`${t} : couleur "${r.color}" inconnue (${COLORS.join(", ")})`);
   if (!(r.time > 0)) errors.push(`${t} : temps invalide`);
