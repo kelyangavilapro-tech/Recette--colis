@@ -12,7 +12,11 @@ Application web installable (PWA) pour aider les étudiants à cuisiner avec ce 
 - **Portions** : pour 1, 2 ou 4 personnes ; les quantités des étapes s'ajustent, avec des repères sans balance (« ≈ un verre », « ≈ 2 grosses poignées »). Les recettes individuelles (mug cake, porridge…) portent `"portions": 1`, celles écrites par personne `"portions": "par personne"`.
 - **Filtres et recherche** : 10 min ou moins, sans cuisson, micro-ondes, sucré (`"sucree": true`), riche en protéines ; recherche par nom ou ingrédient.
 - **Coût estimé par portion**, d'après les prix moyens de la partie `"prix"` de `recettes.json` (euros par kg ou par litre).
-- **Régimes.** Végétarien, halal / sans porc, sans lactose, sans gluten.
+- **Mode cuisine** : lecture des étapes à voix haute (voix du téléphone), puis « J'ai cuisiné ça ! » qui retire de « Ce que j'ai » les ingrédients finis et compte le repas.
+- **Compteur** (menu › Mes repas) : repas cuisinés ce mois-ci et courses évitées, calculés sur le coût estimé.
+- **À finir vite** : on marque ce qui va bientôt périmer ; les recettes qui l'utilisent passent en premier.
+- **Mes recettes** : chaque étudiant peut créer, modifier et supprimer ses propres recettes. Elles restent sur son téléphone (clé `colis-mes-recettes`) et profitent de tout le reste : portions, repères, mode cuisine, coût, valeurs nutritionnelles.
+- **Régimes.** Végétarien, végan, halal / sans porc, sans lactose, sans gluten, et allergies : sans œufs, sans poisson, sans arachides, sans fruits à coque, sans soja. Ces filtres retirent les ingrédients concernés, mais on rappelle de toujours vérifier les étiquettes (traces possibles).
 - **Dans chaque recette :** une illustration, les valeurs nutritionnelles estimées (calories, protéines, glucides, lipides), un mode cuisine (étapes en plein écran, écran maintenu allumé, minuteur), « Ajouter à ma liste » pour ce qui manque, le partage, les favoris et l'impression A4.
 - **Menu latéral :** scanner, une idée au hasard, liste de courses, favoris, conseils de conservation, thème clair / sombre / automatique, régime, équipement, remise à zéro.
 - **Pour les associations.** La page `asso.html` permet de cocher le contenu d'un colis. Elle donne un lien et un QR code qui pré-cochent ces produits chez l'étudiant, et une affiche A4. Une case « Proposer une recette » (en test) met une recette au bon format, à copier ou partager.

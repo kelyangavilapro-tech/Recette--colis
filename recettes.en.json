@@ -47,15 +47,24 @@
   "sucre": "Sugar",
   "soja": "Soy sauce",
   "bouillon": "Stock cube",
-  "chocolat": "Chocolate"
+  "chocolat": "Chocolate",
+  "mixeur": "Blender",
+  "grillepain": "Toaster",
+  "cacahuetes": "Peanut butter"
  },
  "regimes": {
   "vege": "Vegetarian",
+  "vegan": "Vegan",
   "halal": "Halal / no pork",
   "sanslactose": "Lactose-free",
-  "sansgluten": "Gluten-free"
+  "sansgluten": "Gluten-free",
+  "sansoeufs": "Egg-free",
+  "sanspoisson": "Fish-free",
+  "sansarachides": "Peanut-free",
+  "sansfruitsacoque": "Tree-nut-free",
+  "sanssoja": "Soy-free"
  },
- "noteRegimes": "Halal: remember to buy halal chicken. Always check labels.",
+ "noteRegimes": "Allergies: we remove the ingredients concerned, but always check labels, traces may be present (for example tree nuts in chocolate). Halal: remember to buy halal chicken.",
  "recettes": {
   "Pâtes tout-en-une tomate-thon": {
    "title": "One-pot tomato and tuna pasta",
@@ -451,6 +460,88 @@
     "Add a few rolled oats for crunch."
    ],
    "swap": "Slightly bruised fruit is perfect here: the ultimate no-waste recipe."
+  },
+  "Smoothie aux fruits": {
+   "title": "Fruit smoothie",
+   "tool": "1 blender",
+   "steps": [
+    "Put 1 banana or another fruit, cut into pieces, in the blender.",
+    "Add 200 ml of milk, or a yoghurt with a little water.",
+    "Add 1 tablespoon of rolled oats or peanut butter if you like, then blend for 30 seconds."
+   ],
+   "swap": "Overripe fruit is perfect: freeze it in pieces for a really cold smoothie."
+  },
+  "Pancakes": {
+   "title": "Pancakes",
+   "tool": "1 frying pan + 1 bowl",
+   "steps": [
+    "In a bowl, mix 150 g of flour, 1 egg and 2 tablespoons of sugar.",
+    "Gradually add 200 ml of milk while stirring: the batter should stay thick.",
+    "Heat the pan with a little oil and pour in a small ladle of batter per pancake.",
+    "When bubbles appear, after about 2 minutes, flip it and cook for 1 minute."
+   ],
+   "swap": "Top with fruit, apple sauce, chocolate or peanut butter."
+  },
+  "Nouilles sauce cacahuète": {
+   "title": "Peanut sauce noodles",
+   "tool": "1 saucepan",
+   "steps": [
+    "Cook the noodles or pasta, then drain them, keeping a small glass of the cooking water.",
+    "In the pan, mix 2 tablespoons of peanut butter, 1 tablespoon of soy sauce and a little cooking water.",
+    "Put the noodles back, add the vegetables and stir for 1 minute over low heat."
+   ],
+   "swap": "No soy sauce: a little salt and a splash of vinegar or lemon."
+  },
+  "Tartine cacahuète-banane": {
+   "title": "Peanut butter and banana toast",
+   "tool": "1 knife",
+   "steps": [
+    "Toast the bread if you have a toaster (optional).",
+    "Spread a layer of peanut butter.",
+    "Add slices of banana or another fruit."
+   ],
+   "swap": "A filling breakfast or snack, high in protein."
+  },
+  "Pain grillé à la tomate": {
+   "title": "Tomato toast",
+   "tool": "toaster or frying pan",
+   "steps": [
+    "Toast the slices of bread: toaster, dry frying pan or oven.",
+    "Rub them with a little garlic if you have some.",
+    "Spread crushed tomato on top (tinned, or a grated fresh tomato), a drizzle of oil and salt."
+   ],
+   "swap": "Add tuna or cheese to make it a proper meal."
+  },
+  "Galettes de pommes de terre": {
+   "title": "Potato rösti",
+   "tool": "1 frying pan + 1 bowl",
+   "steps": [
+    "Grate 3 potatoes (or cut them into very small pieces) and squeeze them in a clean tea towel to remove the water.",
+    "Mix with 1 egg, salt, pepper and a little onion if you have some.",
+    "Heat 2 tablespoons of oil in the pan and shape small flat patties.",
+    "Cook for 5 minutes on each side over medium heat, until nicely golden."
+   ],
+   "swap": "No egg: 2 tablespoons of flour are enough to hold them together."
+  },
+  "Salade de riz": {
+   "title": "Rice salad",
+   "tool": "1 saucepan",
+   "steps": [
+    "Cook 150 g of rice in salted water, drain it and rinse under cold water.",
+    "Mix it with the tuna (or hard-boiled eggs, beans) and the drained vegetables.",
+    "Season with oil, salt and pepper."
+   ],
+   "swap": "Put it in the fridge straight away and eat it the same day: cooked rice doesn't keep long."
+  },
+  "Pomme cuite": {
+   "title": "Baked apple",
+   "tool": "1 bowl",
+   "steps": [
+    "Wash 1 apple or pear per person and remove the core with a knife.",
+    "Put it in a bowl, add a little sugar and 1 tablespoon of water.",
+    "Heat for 3 to 4 minutes in the microwave (or 25 minutes in the oven at 180 °C), until soft."
+   ],
+   "swap": "Delicious with a yoghurt or a few rolled oats: a dessert for a few cents."
   }
  },
  "conservation": {

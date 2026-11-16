@@ -3,7 +3,7 @@
   "groupes": [
     { "titre": "Équipement", "type": "equip", "items": [
       ["plaque", "Plaque de cuisson"], ["micro", "Micro-ondes"], ["four", "Four"], ["airfryer", "Air fryer"],
-      ["bouilloire", "Bouilloire"] ] },
+      ["bouilloire", "Bouilloire"], ["mixeur", "Mixeur ou blender"], ["grillepain", "Grille-pain"] ] },
     { "titre": "Féculents", "items": [
       ["pates", "Pâtes"], ["riz", "Riz"], ["semoule", "Semoule"], ["pain", "Pain"],
       ["pdt", "Pommes de terre"], ["nouilles", "Nouilles"], ["avoine", "Flocons d'avoine"], ["farine", "Farine"] ] },
@@ -17,15 +17,21 @@
       ["oignon", "Oignon ou ail"], ["legfrais", "Légumes frais"], ["fruits", "Fruits frais"] ] },
     { "titre": "Placard", "items": [
       ["huile", "Huile"], ["sel", "Sel et poivre"], ["curry", "Curry ou épices"], ["sucre", "Sucre"],
-      ["soja", "Sauce soja"], ["bouillon", "Bouillon cube"], ["chocolat", "Chocolat"] ] }
+      ["soja", "Sauce soja"], ["bouillon", "Bouillon cube"], ["cacahuetes", "Beurre de cacahuète"], ["chocolat", "Chocolat"] ] }
   ],
   "regimes": [
     {"id": "vege", "nom": "Végétarien", "exclut": ["thon", "sardines", "jambon", "poulet"]},
+    {"id": "vegan", "nom": "Végan", "exclut": ["thon", "sardines", "jambon", "poulet", "oeufs", "lait", "yaourt", "fromage", "beurre", "creme"]},
     {"id": "halal", "nom": "Halal / sans porc", "exclut": ["jambon"]},
     {"id": "sanslactose", "nom": "Sans lactose", "exclut": ["lait", "yaourt", "fromage", "beurre", "creme"]},
-    {"id": "sansgluten", "nom": "Sans gluten", "exclut": ["pates", "pain", "semoule", "soja", "nouilles", "farine", "avoine"]}
+    {"id": "sansgluten", "nom": "Sans gluten", "exclut": ["pates", "pain", "semoule", "soja", "nouilles", "farine", "avoine"]},
+    {"id": "sansoeufs", "nom": "Sans œufs", "exclut": ["oeufs"]},
+    {"id": "sanspoisson", "nom": "Sans poisson", "exclut": ["thon", "sardines"]},
+    {"id": "sansarachides", "nom": "Sans arachides", "exclut": ["cacahuetes"]},
+    {"id": "sansfruitsacoque", "nom": "Sans fruits à coque", "exclut": ["chocolat"]},
+    {"id": "sanssoja", "nom": "Sans soja", "exclut": ["soja"]}
   ],
-  "noteRegimes": "Halal : pense à prendre du poulet halal. Vérifie toujours les étiquettes.",
+  "noteRegimes": "Allergies : on retire les ingrédients concernés, mais vérifie toujours les étiquettes, des traces peuvent être présentes (par exemple de fruits à coque dans le chocolat). Halal : pense à prendre du poulet halal.",
   "colisExemple": ["plaque", "pates", "riz", "tomates", "thon", "lentilles", "legboite", "oeufs", "huile", "sel", "curry"],
   "recettes": [
     {
@@ -462,7 +468,7 @@
       "equip": ["micro", "plaque"],
       "tool": "1 grand bol",
       "need": [["avoine"]],
-      "extra": ["lait", "sucre", "fruits", "compote", "chocolat", "yaourt"],
+      "extra": ["lait", "sucre", "fruits", "compote", "chocolat", "yaourt", "cacahuetes"],
       "steps": [
         "Mets 50 g de flocons d'avoine et 200 ml de lait (ou d'eau) dans un grand bol.",
         "Chauffe 1 minute au micro-ondes, remue, puis 1 minute de plus. Sur la plaque : 3 minutes à feu doux en remuant.",
@@ -516,7 +522,7 @@
       "equip": ["plaque"],
       "tool": "1 poêle",
       "need": [["nouilles"], ["oeufs", "poulet", "thon", "jambon", "poischiches"], ["legfrais", "legboite", "mais"]],
-      "extra": ["soja", "huile", "oignon", "curry"],
+      "extra": ["soja", "huile", "oignon", "curry", "cacahuetes"],
       "steps": [
         "Fais cuire les nouilles 3 minutes dans un fond d'eau bouillante dans la poêle, puis égoutte-les.",
         "Avec du poulet : coupe-le en petits morceaux et fais-le cuire 6 à 8 minutes dans un peu d'huile, jusqu'à ce qu'il ne soit plus rose à l'intérieur.",
@@ -632,7 +638,7 @@
       "equip": [],
       "tool": "1 bol",
       "need": [["fruits"], ["yaourt", "compote"]],
-      "extra": ["sucre", "avoine", "chocolat"],
+      "extra": ["sucre", "avoine", "chocolat", "cacahuetes"],
       "steps": [
         "Coupe les fruits en morceaux.",
         "Mélange-les avec un yaourt ou de la compote.",
@@ -640,6 +646,139 @@
       ],
       "swap": "Les fruits un peu abîmés sont parfaits ici : c'est la recette anti-gaspi par excellence.",
       "sucree": true
+    },
+    {
+      "title": "Smoothie aux fruits",
+      "color": "nuit",
+      "time": 5,
+      "equip": ["mixeur"],
+      "tool": "1 mixeur",
+      "need": [["fruits", "compote"], ["lait", "yaourt"]],
+      "extra": ["avoine", "sucre", "cacahuetes"],
+      "steps": [
+        "Mets 1 banane ou un autre fruit coupé en morceaux dans le mixeur.",
+        "Ajoute 200 ml de lait, ou un yaourt avec un peu d'eau.",
+        "Ajoute si tu veux 1 cuillère de flocons d'avoine ou de beurre de cacahuète, puis mixe 30 secondes."
+      ],
+      "swap": "Les fruits trop mûrs sont parfaits : congèle-les en morceaux pour un smoothie bien frais.",
+      "qte": {"lait": 200},
+      "sucree": true,
+      "portions": 1
+    },
+    {
+      "title": "Pancakes",
+      "color": "curry",
+      "time": 20,
+      "equip": ["plaque"],
+      "tool": "1 poêle + 1 bol",
+      "need": [["farine"], ["oeufs"], ["lait"]],
+      "extra": ["sucre", "beurre", "huile", "fruits", "chocolat", "compote", "cacahuetes"],
+      "steps": [
+        "Dans un bol, mélange 150 g de farine, 1 œuf et 2 cuillères à soupe de sucre.",
+        "Ajoute petit à petit 200 ml de lait en mélangeant : la pâte doit rester épaisse.",
+        "Fais chauffer la poêle avec un peu d'huile et verse une petite louche de pâte par pancake.",
+        "Quand des bulles apparaissent, après environ 2 minutes, retourne-le et laisse cuire 1 minute."
+      ],
+      "swap": "Avec des fruits, de la compote, du chocolat ou du beurre de cacahuète par-dessus.",
+      "qte": {"farine": 75, "oeufs": 25, "lait": 100},
+      "sucree": true
+    },
+    {
+      "title": "Nouilles sauce cacahuète",
+      "color": "herbe",
+      "time": 15,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
+      "need": [["nouilles", "pates"], ["cacahuetes"], ["soja"]],
+      "extra": ["legfrais", "legboite", "oeufs", "poulet", "curry"],
+      "steps": [
+        "Fais cuire les nouilles ou les pâtes, puis égoutte-les en gardant un petit verre d'eau de cuisson.",
+        "Dans la casserole, mélange 2 cuillères de beurre de cacahuète, 1 cuillère de sauce soja et un peu d'eau de cuisson.",
+        "Remets les nouilles, ajoute les légumes et mélange 1 minute à feu doux."
+      ],
+      "swap": "Pas de sauce soja : un peu de sel et un filet de vinaigre ou de citron.",
+      "qte": {"cacahuetes": 30, "soja": 10}
+    },
+    {
+      "title": "Tartine cacahuète-banane",
+      "color": "tomate",
+      "time": 5,
+      "equip": [],
+      "tool": "1 couteau",
+      "need": [["pain"], ["cacahuetes"], ["fruits"]],
+      "extra": ["chocolat", "sucre"],
+      "steps": [
+        "Fais griller le pain si tu as un grille-pain (facultatif).",
+        "Tartine une couche de beurre de cacahuète.",
+        "Ajoute des rondelles de banane ou d'un autre fruit."
+      ],
+      "swap": "Un petit-déjeuner ou un goûter qui cale, riche en protéines.",
+      "sucree": true
+    },
+    {
+      "title": "Pain grillé à la tomate",
+      "color": "tomate",
+      "time": 10,
+      "equip": ["grillepain", "plaque", "four", "airfryer"],
+      "tool": "grille-pain ou poêle",
+      "need": [["pain"], ["tomates", "legfrais"], ["huile"]],
+      "extra": ["oignon", "sel", "fromage", "thon"],
+      "steps": [
+        "Fais griller les tranches de pain : grille-pain, poêle sans huile ou four.",
+        "Frotte-les avec un peu d'ail si tu en as.",
+        "Étale dessus de la tomate écrasée (en boîte ou une tomate fraîche râpée), un filet d'huile et du sel."
+      ],
+      "swap": "Ajoute du thon ou du fromage pour en faire un vrai repas.",
+      "qte": {"tomates": 100, "pain": 80}
+    },
+    {
+      "title": "Galettes de pommes de terre",
+      "color": "curry",
+      "time": 25,
+      "equip": ["plaque"],
+      "tool": "1 poêle + 1 bol",
+      "need": [["pdt"], ["oeufs", "farine"], ["huile"]],
+      "extra": ["oignon", "fromage", "sel"],
+      "steps": [
+        "Râpe 3 pommes de terre (ou coupe-les en tout petits morceaux) et presse-les dans un torchon propre pour enlever l'eau.",
+        "Mélange avec 1 œuf, du sel, du poivre et un peu d'oignon si tu en as.",
+        "Fais chauffer 2 cuillères d'huile dans la poêle et forme de petites galettes plates.",
+        "Cuis 5 minutes de chaque côté à feu moyen, jusqu'à ce qu'elles soient bien dorées."
+      ],
+      "swap": "Sans œuf : 2 cuillères de farine suffisent pour que ça tienne.",
+      "qte": {"pdt": 200, "oeufs": 25}
+    },
+    {
+      "title": "Salade de riz",
+      "color": "herbe",
+      "time": 20,
+      "equip": ["plaque"],
+      "tool": "1 casserole",
+      "need": [["riz"], ["thon", "sardines", "oeufs", "poischiches", "haricots", "jambon"], ["mais", "legboite", "legfrais", "tomates"]],
+      "extra": ["huile", "sel", "oignon"],
+      "steps": [
+        "Fais cuire 150 g de riz dans de l'eau salée, égoutte-le et passe-le sous l'eau froide.",
+        "Mélange-le avec le thon (ou des œufs durs, des haricots) et les légumes égouttés.",
+        "Assaisonne avec de l'huile, du sel et du poivre."
+      ],
+      "swap": "Mets-la au frigo tout de suite et mange-la dans la journée : le riz cuit ne se garde pas longtemps."
+    },
+    {
+      "title": "Pomme cuite",
+      "color": "nuit",
+      "time": 5,
+      "equip": ["micro", "four"],
+      "tool": "1 bol",
+      "need": [["fruits"]],
+      "extra": ["sucre", "chocolat", "yaourt", "avoine", "compote"],
+      "steps": [
+        "Lave 1 pomme ou 1 poire par personne et retire le cœur avec un couteau.",
+        "Mets-la dans un bol, ajoute un peu de sucre et 1 cuillère d'eau.",
+        "Chauffe 3 à 4 minutes au micro-ondes (ou 25 minutes au four à 180 °C), jusqu'à ce qu'elle soit fondante."
+      ],
+      "swap": "Délicieuse avec un yaourt ou quelques flocons d'avoine : un dessert pour quelques centimes.",
+      "sucree": true,
+      "portions": "par personne"
     }
   ],
   "nutrition": {
@@ -677,7 +816,8 @@
     "soja": [60, 6, 6, 0, 10],
     "sel": [0, 0, 0, 0, 0],
     "curry": [0, 0, 0, 0, 0],
-    "bouillon": [0, 0, 0, 0, 0]
+    "bouillon": [0, 0, 0, 0, 0],
+    "cacahuetes": [600, 25, 20, 50, 30]
   },
   "conservation": [
     {"titre": "Les dates sur les emballages", "ids": [], "texte": "« À consommer jusqu'au » (DLC) : ne dépasse pas la date, c'est une question de sécurité (viande, poisson frais, laitages frais). « À consommer de préférence avant » (DDM) : le produit reste bon après la date s'il a été bien conservé (pâtes, riz, conserves, biscuits)."},
@@ -728,6 +868,7 @@
     ["sucre", ["en:sugars", "en:white-sugars"], ["sucre"]],
     ["soja", ["en:soy-sauces"], ["sauce soja"]],
     ["bouillon", ["en:broths", "en:bouillon-cubes", "en:stock-cubes"], ["bouillon"]],
+    ["cacahuetes", ["en:peanut-butters", "en:peanuts", "en:salted-peanuts", "en:roasted-peanuts"], ["beurre de cacahuète", "cacahuète", "arachide"]],
     ["chocolat", ["en:chocolates", "en:dark-chocolates", "en:milk-chocolates", "en:hazelnut-spreads", "en:chocolate-spreads", "en:cocoa-and-hazelnuts-spreads"], ["chocolat", "pâte à tartiner"]],
     ["curry", ["en:spices", "en:curry"], ["curry", "épices", "paprika", "cumin"]],
     ["sel", ["en:salts"], ["sel"]]
@@ -771,6 +912,7 @@
     "soja": 6.0,
     "sel": 0,
     "curry": 0,
-    "bouillon": 0
+    "bouillon": 0,
+    "cacahuetes": 7.0
   }
 }

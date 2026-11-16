@@ -497,3 +497,32 @@ textarea.field { resize: vertical; line-height: 1.5; }
 .welcome h2:focus { outline: none; }
 .btn[hidden] { display: none; }
 .segmented-2 { grid-template-columns: 1fr 1fr; }
+
+/* À finir vite */
+.urgent-btn { display: inline-flex; align-items: center; gap: 8px; align-self: flex-start; min-height: 44px; padding: 8px 14px; border-radius: 999px; border: 1.5px solid var(--curry); background: var(--curry-tint); color: var(--curry-txt); font-weight: 700; cursor: pointer; }
+.urgent-count { min-width: 24px; height: 24px; padding: 0 7px; border-radius: 999px; background: var(--curry); color: #FFFFFF; font-size: 13px; display: inline-flex; align-items: center; justify-content: center; font-variant-numeric: tabular-nums; }
+.pill.urgent { background: var(--curry); color: #FFFFFF; }
+
+/* Mode cuisine : voix et fin de recette */
+.cook-top { flex-wrap: wrap; }
+.cook-progress { flex: 1; }
+.cook-voice[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #FFFFFF; }
+.cook-voice[hidden] { display: none; }
+
+/* Compteur de repas */
+.stats { background: var(--herbe-tint); border-radius: 14px; padding: 12px 14px; margin: 0 4px; }
+.stats h3 { margin-left: 0 !important; color: var(--herbe-txt) !important; }
+.stats-meals { margin: 0; font-weight: 700; font-size: 17px; }
+.stats .note { margin: 2px 0 0; }
+
+/* Mes recettes */
+.pill.mine { background: var(--herbe); color: #FFFFFF; }
+.tab-create { border-color: var(--herbe); color: var(--herbe-txt); }
+.create .sheet-inner { gap: 14px; }
+.cr-row { display: grid; grid-template-columns: 1fr 1.4fr; gap: 10px; }
+.cr-group { margin: 10px 0 6px; font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.check-line { display: flex; align-items: center; gap: 10px; min-height: 44px; font-weight: 700; }
+.check-line input { width: 22px; height: 22px; accent-color: var(--herbe); }
+.cr-msg { margin: 0; color: var(--warn); font-weight: 700; min-height: 1.2em; }
+.create .cook-nav .btn-pri { background: var(--ink); color: var(--on-ink); }
+.empty .btn { margin-top: 12px; }
