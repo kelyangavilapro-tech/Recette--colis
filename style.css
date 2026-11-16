@@ -433,3 +433,7 @@ textarea.field { resize: vertical; line-height: 1.5; }
   .recipe .actions .btn-color { grid-column: 1 / -1; font-size: 16px; }
 }
 .note a, .sheet a { color: var(--link); font-weight: 700; }
+.scan-controls { display: flex; flex-wrap: wrap; gap: 8px; justify-content: space-between; align-items: center; }
+.scan-controls[hidden] { display: none; }
+.scan-controls .zoom { display: flex; gap: 6px; }
+.scan-controls .tab { min-width: 56px; justify-content: center; }

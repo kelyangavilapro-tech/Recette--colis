@@ -680,7 +680,7 @@ function printRecipe(i) {
 
 /* ---------- Scanner de code-barres ---------- */
 
-const scan = { stream: null, loop: null, reader: null, last: "", lastAt: 0 };
+const scan = { stream: null, track: null, loop: null, last: "", lastAt: 0, frame: 0, canvas: null, decode: null };
 
 function scanStatus(text) { $("scan-status").textContent = text; }
 
@@ -740,40 +740,166 @@ function onCode(code) {
   lookupCode(code);
 }
 
+/* Somme de contrôle des codes EAN-8, EAN-13 et UPC-A : écarte les lectures ratées. */
+function validCode(code) {
+  if (!/^(\d{8}|\d{12}|\d{13})$/.test(code)) return false;
+  const d = code.split("").map(Number), check = d.pop();
+  const sum = d.reverse().reduce((acc, n, k) => acc + n * (k % 2 === 0 ? 3 : 1), 0);
+  return (10 - (sum % 10)) % 10 === check;
+}
+
+/* Prépare la fonction qui lit un code-barres dans une image : lecteur du téléphone si possible, sinon ZXing. */
+async function makeDecoder() {
+  let formats = [];
+  if ("BarcodeDetector" in window) formats = await window.BarcodeDetector.getSupportedFormats().catch(() => []);
+  if (formats.includes("ean_13")) {
+    const detector = new window.BarcodeDetector({ formats: ["ean_13", "ean_8", "upc_a", "upc_e"].filter(f => formats.includes(f)) });
+    return async canvas => {
+      const codes = await detector.detect(canvas);
+      return codes.length ? codes[0].rawValue : null;
+    };
+  }
+  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=7");
+  const Z = window.ZXing;
+  const reader = new Z.MultiFormatReader();
+  const hints = new Map();
+  hints.set(Z.DecodeHintType.POSSIBLE_FORMATS, [Z.BarcodeFormat.EAN_13, Z.BarcodeFormat.EAN_8, Z.BarcodeFormat.UPC_A, Z.BarcodeFormat.UPC_E]);
+  hints.set(Z.DecodeHintType.TRY_HARDER, true);
+  reader.setHints(hints);
+  return async canvas => {
+    const source = new Z.HTMLCanvasElementLuminanceSource(canvas);
+    /* Deux façons de séparer les barres du fond : l'une marche mieux sur les images nettes, l'autre sur les floues. */
+    for (const Binarizer of [Z.HybridBinarizer, Z.GlobalHistogramBinarizer]) {
+      try { return reader.decodeWithState(new Z.BinaryBitmap(new Binarizer(source))).getText(); }
+      catch (err) { /* rien trouvé avec cette méthode */ }
+    }
+    return null;
+  };
+}
+
+/* Accentue les bords des barres (masque flou horizontal) et pousse le contraste.
+   Testé : rend lisibles les codes-barres un peu flous, fréquents quand le téléphone fait mal la mise au point de près. */
+function sharpenBars(canvas, amount, radius) {
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+  const w = canvas.width, h = canvas.height;
+  const img = ctx.getImageData(0, 0, w, h), d = img.data;
+  const lum = new Float32Array(w * h), out = new Float32Array(w * h);
+  for (let i = 0; i < w * h; i++) lum[i] = 0.299 * d[4 * i] + 0.587 * d[4 * i + 1] + 0.114 * d[4 * i + 2];
+  const n = 2 * radius + 1;
+  for (let y = 0; y < h; y++) {
+    const row = y * w;
+    let acc = 0;
+    for (let x = -radius; x <= radius; x++) acc += lum[row + Math.min(w - 1, Math.max(0, x))];
+    for (let x = 0; x < w; x++) {
+      out[row + x] = lum[row + x] + amount * (lum[row + x] - acc / n);
+      acc += lum[row + Math.min(w - 1, x + radius + 1)] - lum[row + Math.max(0, x - radius)];
+    }
+  }
+  let lo = Infinity, hi = -Infinity;
+  for (let i = 0; i < out.length; i += 7) { if (out[i] < lo) lo = out[i]; if (out[i] > hi) hi = out[i]; }
+  const span = Math.max(1, hi - lo);
+  for (let i = 0; i < w * h; i++) {
+    const v = Math.max(0, Math.min(255, (out[i] - lo) * 255 / span));
+    d[4 * i] = d[4 * i + 1] = d[4 * i + 2] = v;
+  }
+  ctx.putImageData(img, 0, 0);
+}
+
+/* Traitements essayés à tour de rôle, une image sur quatre chacun :
+   la zone du cadre telle quelle, puis accentuée, une zone plus serrée accentuée (petits codes), puis l'image entière. */
+const PASSES = [
+  { w: 0.8, h: 0.4, sharpen: 0 },
+  { w: 0.8, h: 0.4, sharpen: 2 },
+  { w: 0.5, h: 0.25, sharpen: 3 },
+  { w: 1, h: 1, sharpen: 0 }
+];
+
+async function scanFrame() {
+  const video = $("scan-video");
+  if (!scan.stream || !scan.decode) return;
+  const vw = video.videoWidth, vh = video.videoHeight;
+  if (vw && vh) {
+    const pass = PASSES[scan.frame++ % PASSES.length];
+    const sw = Math.round(vw * pass.w), sh = Math.round(vh * pass.h);
+    const sx = Math.round((vw - sw) / 2), sy = Math.round((vh - sh) / 2);
+    /* Petite image (caméra en basse définition) : on l'agrandit 2 fois, sinon on la garde telle quelle. */
+    const k = pass.w < 1 && sw < 600 ? 2 : (pass.w === 1 && sw > 1920 ? 1920 / sw : 1);
+    const c = scan.canvas;
+    c.width = Math.round(sw * k); c.height = Math.round(sh * k);
+    const ctx = c.getContext("2d", { willReadFrequently: true });
+    ctx.imageSmoothingEnabled = k !== 1;
+    ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(video, sx, sy, sw, sh, 0, 0, c.width, c.height);
+    try {
+      if (pass.sharpen) sharpenBars(c, pass.sharpen, Math.max(2, Math.round(2 * k)));
+      const code = await scan.decode(c);
+      if (code && validCode(code)) onCode(code);
+    } catch (err) { /* image suivante */ }
+  }
+  if (scan.stream) scan.loop = setTimeout(scanFrame, 80);
+}
+
+/* Zoom et lampe, quand le téléphone les propose (surtout Android). */
+function setupCameraControls() {
+  const box = $("scan-controls");
+  box.innerHTML = "";
+  const track = scan.track;
+  const caps = track && track.getCapabilities ? track.getCapabilities() : {};
+  if (caps.focusMode && caps.focusMode.includes("continuous")) {
+    track.applyConstraints({ advanced: [{ focusMode: "continuous" }] }).catch(() => {});
+  }
+  let html = "";
+  if (caps.zoom && caps.zoom.max > 1) {
+    const levels = [1, 2, 3].filter(z => z >= caps.zoom.min && z <= caps.zoom.max);
+    if (caps.zoom.max > 3 && caps.zoom.max < 4) levels.push(Math.floor(caps.zoom.max * 10) / 10);
+    html += `<div class="zoom" role="group" aria-label="Zoom">${levels.map(z => `<button type="button" class="tab" data-zoom="${z}" aria-pressed="false">${z}×</button>`).join("")}</div>`;
+  }
+  if (caps.torch) html += '<button type="button" class="tab" id="scan-torch" aria-pressed="false">Lampe</button>';
+  box.innerHTML = html;
+  box.hidden = !html;
+  const setZoom = z => {
+    track.applyConstraints({ advanced: [{ zoom: z }] }).catch(() => {});
+    box.querySelectorAll("[data-zoom]").forEach(b => b.setAttribute("aria-pressed", String(Number(b.dataset.zoom) === z)));
+  };
+  box.querySelectorAll("[data-zoom]").forEach(b => b.addEventListener("click", () => setZoom(Number(b.dataset.zoom))));
+  /* Zoom 2× par défaut : on tient le téléphone plus loin, l'image est nette et le code reste assez grand. */
+  if (caps.zoom && caps.zoom.max >= 2) setZoom(2);
+  const torch = $("scan-torch");
+  if (torch) torch.addEventListener("click", () => {
+    const on = torch.getAttribute("aria-pressed") !== "true";
+    track.applyConstraints({ advanced: [{ torch: on }] }).catch(() => {});
+    torch.setAttribute("aria-pressed", String(on));
+    torch.textContent = on ? "Lampe allumée" : "Lampe";
+  });
+}
+
 async function startCamera() {
   const video = $("scan-video");
   $("scan-video-box").hidden = false;
+  $("scan-controls").hidden = true;
   if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
     $("scan-video-box").hidden = true;
     scanStatus("La caméra n'est pas disponible ici : tape le code-barres à la main.");
     return;
   }
   scanStatus("Ouverture de la caméra…");
-  const constraints = { video: { facingMode: { ideal: "environment" } }, audio: false };
   try {
-    let formats = [];
-    if ("BarcodeDetector" in window) formats = await window.BarcodeDetector.getSupportedFormats().catch(() => []);
-    if (formats.includes("ean_13")) {
-      scan.stream = await navigator.mediaDevices.getUserMedia(constraints);
-      video.srcObject = scan.stream;
-      await video.play();
-      const detector = new window.BarcodeDetector({ formats: ["ean_13", "ean_8", "upc_a", "upc_e"].filter(f => formats.includes(f)) });
-      scanStatus("Vise un code-barres…");
-      const tick = async () => {
-        if (!scan.stream) return;
-        try { const codes = await detector.detect(video); if (codes.length) onCode(codes[0].rawValue); } catch (err) { /* image suivante */ }
-        scan.loop = setTimeout(tick, 250);
-      };
-      tick();
-      return;
-    }
-    if (!window.ZXing) await loadScript("lib/zxing.min.js?v=6");
+    scan.decode = await makeDecoder();
     if (!$("scan").hasAttribute("open")) return; // fermé pendant le chargement
-    const hints = new Map();
-    hints.set(window.ZXing.DecodeHintType.POSSIBLE_FORMATS, [window.ZXing.BarcodeFormat.EAN_13, window.ZXing.BarcodeFormat.EAN_8, window.ZXing.BarcodeFormat.UPC_A, window.ZXing.BarcodeFormat.UPC_E]);
-    scan.reader = new window.ZXing.BrowserMultiFormatReader(hints, 300);
+    /* On demande une image en haute définition : avec l'image par défaut (souvent 640 × 480),
+       les barres d'un petit code-barres ne font qu'un pixel et deviennent illisibles. */
+    scan.stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: { ideal: "environment" }, width: { ideal: 1920 }, height: { ideal: 1080 } },
+      audio: false
+    });
+    if (!$("scan").hasAttribute("open")) { stopCamera(); return; }
+    scan.track = scan.stream.getVideoTracks()[0];
+    video.srcObject = scan.stream;
+    await video.play();
+    scan.canvas = scan.canvas || document.createElement("canvas");
+    setupCameraControls();
     scanStatus("Vise un code-barres…");
-    await scan.reader.decodeFromConstraints(constraints, video, res => { if (res) onCode(res.getText()); });
+    scanFrame();
   } catch (err) {
     stopCamera();
     $("scan-video-box").hidden = true;
@@ -786,9 +912,11 @@ async function startCamera() {
 function stopCamera() {
   clearTimeout(scan.loop);
   if (scan.stream) { scan.stream.getTracks().forEach(t => t.stop()); scan.stream = null; }
-  if (scan.reader) { try { scan.reader.reset(); } catch (err) {} scan.reader = null; }
+  scan.track = null;
   const v = $("scan-video");
   if (v) v.srcObject = null;
+  const box = $("scan-controls");
+  if (box) box.hidden = true;
 }
 
 function openScan() {
