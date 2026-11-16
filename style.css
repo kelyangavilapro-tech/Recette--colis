@@ -457,3 +457,42 @@ textarea.field { resize: vertical; line-height: 1.5; }
   .cook-inner { height: min(720px, calc(100vh - 32px)); min-height: 0; }
 }
 @media (max-height: 760px) { .cook-photo { max-height: 110px; } }
+
+/* Accueil plus court sur téléphone */
+.lead-short { display: none; }
+@media (max-width: 560px) {
+  .top { padding: 14px 16px 2px; gap: 6px; }
+  .top .stripe { display: none; }
+  h1 { font-size: 28px; }
+  .lead { font-size: 16px; }
+  .lead-long { display: none; }
+  .lead-short { display: inline; }
+  .layout { padding-top: 10px; }
+}
+
+/* Recherche de recette, portions, filtres */
+.recipe-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.recipe-search { flex: 1 1 240px; background: var(--card); }
+.portions { display: inline-flex; align-items: center; gap: 4px; background: var(--soft); border-radius: 999px; padding: 4px; }
+.portions-label { font-weight: 700; font-size: 14px; padding: 0 6px 0 8px; color: var(--muted); }
+.portions input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.portions label { min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 700; cursor: pointer; }
+.portions input:checked + label { background: var(--ink); color: var(--on-ink); }
+.portions input:focus-visible + label { outline: 3px solid var(--link); outline-offset: 2px; }
+.filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+.filters::-webkit-scrollbar { display: none; }
+.tab-sm { min-height: 40px; padding: 6px 14px; font-size: 14px; white-space: nowrap; flex-shrink: 0; }
+.filter-note { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; }
+.filter-note[hidden] { display: none; }
+.filter-note .link-btn { min-height: 32px; padding: 0; }
+.step-note { margin-top: 10px; }
+
+/* Premier lancement */
+.welcome .sheet-inner { gap: 14px; }
+.welcome h2 { font-size: 24px; text-wrap: balance; }
+.welcome-bar span.on { background: var(--herbe); }
+.welcome-choices { display: flex; flex-direction: column; gap: 10px; }
+.welcome-choices .btn { width: 100%; min-height: 56px; }
+.welcome .cook-nav .btn-pri { background: var(--ink); color: var(--on-ink); }
+.welcome h2:focus { outline: none; }
+.btn[hidden] { display: none; }

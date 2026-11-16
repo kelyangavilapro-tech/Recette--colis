@@ -51,6 +51,10 @@ data.recettes.forEach(r => Object.keys(r.qte || {}).forEach(id => check(`${r.tit
 });
 (data.openFoodFacts || []).forEach(([id]) => check("openFoodFacts", id));
 
+// Prix (facultatifs) : un nombre positif ou nul par ingrédient
+if (data.prix) ingredientIds.forEach(id => { if (typeof data.prix[id] !== "number" || data.prix[id] < 0) errors.push(`Prix manquant ou invalide pour "${id}"`); });
+data.recettes.forEach(r => { if (r.portions != null && r.portions !== 1 && r.portions !== 2 && r.portions !== "par personne") errors.push(`${r.title} : "portions" doit valoir 1, 2 ou "par personne"`); });
+
 // Photos (facultatives) : le fichier doit exister, correspondre à une recette ou un ingrédient, et avoir un crédit
 const norm = t => String(t).toLowerCase().replace(/œ/g, "oe").replace(/æ/g, "ae").normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 const slug = t => norm(t).replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");

@@ -8,6 +8,10 @@ Application web installable (PWA) pour aider les étudiants à cuisiner avec ce 
 ## Ce que fait l'appli
 
 - **Pour les étudiants.** On coche ce qu'on a (avec une recherche rapide) ou on **scanne les codes-barres** de ses produits. On indique son équipement : plaque, micro-ondes, four, air fryer, bouilloire. L'appli classe 37 recettes en trois niveaux : faisables tout de suite, un seul ingrédient manquant, pour plus tard.
+- **Premier lancement guidé** : trois questions (équipement, régime, cocher / scanner / voir un exemple).
+- **Portions** : pour 1, 2 ou 4 personnes ; les quantités des étapes s'ajustent, avec des repères sans balance (« ≈ un verre », « ≈ 2 grosses poignées »). Les recettes individuelles (mug cake, porridge…) portent `"portions": 1`, celles écrites par personne `"portions": "par personne"`.
+- **Filtres et recherche** : 10 min ou moins, sans cuisson, micro-ondes, sucré (`"sucree": true`), riche en protéines ; recherche par nom ou ingrédient.
+- **Coût estimé par portion**, d'après les prix moyens de la partie `"prix"` de `recettes.json` (euros par kg ou par litre).
 - **Régimes.** Végétarien, halal / sans porc, sans lactose, sans gluten.
 - **Dans chaque recette :** une illustration, les valeurs nutritionnelles estimées (calories, protéines, glucides, lipides), un mode cuisine (étapes en plein écran, écran maintenu allumé, minuteur), « Ajouter à ma liste » pour ce qui manque, le partage, les favoris et l'impression A4.
 - **Menu latéral :** scanner, une idée au hasard, liste de courses, favoris, conseils de conservation, thème clair / sombre / automatique, régime, équipement, remise à zéro.

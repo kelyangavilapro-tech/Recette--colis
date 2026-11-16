@@ -5,7 +5,7 @@
 
 const KEYS = {
   have: "colis-have", groups: "colis-groupes-ouverts", favs: "colis-favoris",
-  shop: "colis-courses", theme: "colis-theme"
+  shop: "colis-courses", theme: "colis-theme", portions: "colis-portions", welcome: "colis-bienvenue-vue"
 };
 const MOBILE = window.matchMedia("(max-width: 880px)");
 const DARK = window.matchMedia("(prefers-color-scheme: dark)");
@@ -25,6 +25,11 @@ let NUTRI = {};
 let TIPS = [];
 let OFF = [];
 let PHOTOS = { recettes: {}, ingredients: {} }; // photos facultatives, déclarées dans recettes.json
+let PRIX = {}; // euros par kg (ou par litre), estimations
+let EXEMPLE = [];
+let portions = 2; // nombre de personnes choisi
+const filters = new Set();
+let recipeQuery = "";
 const NAMES = {};
 const INGREDIENTS = new Set(); // ingrédients seulement (ni équipement, ni régime)
 let have = new Set();
@@ -387,6 +392,95 @@ function nutrition(r) {
   return { kcal: Math.round(t.kcal / 10) * 10, prot: Math.round(t.prot), gluc: Math.round(t.gluc), lip: Math.round(t.lip) };
 }
 
+/* ---------- Quantités : portions et repères sans balance ---------- */
+
+const PAR_VERRE = { riz: 170, semoule: 140, farine: 110, avoine: 80 }; // grammes dans un verre de 20 cl
+const fmtNum = x => {
+  const whole = Math.floor(x), half = x - whole >= 0.5;
+  return whole === 0 ? (half ? "½" : "0") : `${whole}${half ? " ½" : ""}`;
+};
+function verres(ml) {
+  const q = Math.round(ml / 200 * 4) / 4;
+  const words = { 0: "quelques cuillères", 0.25: "un quart de verre", 0.5: "un demi-verre", 0.75: "trois quarts de verre", 1: "un verre",
+    1.25: "un peu plus d'un verre", 1.5: "un verre et demi", 1.75: "presque 2 verres", 2: "2 verres", 2.25: "un peu plus de 2 verres", 2.5: "2 verres et demi" };
+  return words[q] || `${fmtNum(Math.round(q * 2) / 2)} verres`;
+}
+/* Repère sans balance pour une quantité en grammes ou en millilitres, d'après l'ingrédient cité autour. */
+function repere(qty, unit, around) {
+  if (unit === "ml") return verres(qty);
+  const t = norm(around);
+  if (/pates/.test(t)) { const n = Math.max(0.5, Math.round(qty / 100 * 2) / 2); return n === 0.5 ? "une petite poignée" : `${fmtNum(n)} grosse${n > 1 ? "s" : ""} poignée${n > 1 ? "s" : ""}`; }
+  if (/poulet/.test(t)) { const n = Math.max(0.5, Math.round(qty / 125 * 2) / 2); return `${fmtNum(n)} blanc${n > 1 ? "s" : ""} de poulet`; }
+  for (const [k, g] of Object.entries(PAR_VERRE)) if (t.includes(k === "avoine" ? "avoine" : k)) return verres(qty / g * 200);
+  return "";
+}
+/* Facteur de multiplication d'une recette selon le nombre de personnes choisi. */
+const recipeFactor = r => (r.portions === 1 || r.portions === "par personne") ? 1 : portions / 2;
+const portionLabel = r => r.portions === 1 ? "1 portion" : `${portions} portion${portions > 1 ? "s" : ""}`;
+
+/* Texte d'une étape avec les quantités ajustées et un repère sans balance entre parenthèses. */
+function stepText(text, factor) {
+  const SING = { "œufs": "œuf", "cuillères": "cuillère", "pommes de terre": "pomme de terre" };
+  const PLUR = { "œuf": "œufs", "cuillère": "cuillères", "pomme de terre": "pommes de terre" };
+  let out = text.replace(/(\d+)(\s+(?:ou|à)\s+)?(\d+)?\s+(œufs?|pommes? de terre|cuillères?)/g, (m, a, sep, b, word, offset, whole) => {
+    if (factor === 1 || /par personne/.test(whole.slice(offset, offset + m.length + 30))) return m;
+    const min = word.startsWith("cuill") ? 0.5 : 1;
+    const sc = v => { const x = Math.max(min, Math.round(Number(v) * factor * 2) / 2); return min === 1 ? Math.max(1, Math.round(x)) : x; };
+    const A = sc(a), B = b ? sc(b) : null;
+    const top = B != null ? B : A;
+    let w = word.replace(/^pomme de terre$/, "pomme de terre");
+    if (top > 1 && PLUR[w]) w = PLUR[w];
+    if (top <= 1 && SING[w]) w = SING[w];
+    if (B != null && B === A) return `${fmtNum(A)} ${w}`;
+    return `${fmtNum(A)}${B != null ? sep + fmtNum(B) : ""} ${w}`;
+  });
+  out = out.replace(/(\d+)\s*(g|ml)\b/g, (m, v, unit, offset, whole) => {
+    const perPerson = /par personne/.test(whole.slice(offset, offset + 40));
+    let q = Number(v) * (perPerson ? 1 : factor);
+    q = unit === "g" ? (q < 50 ? Math.round(q / 5) * 5 : Math.round(q / 10) * 10) : Math.round(q / 10) * 10;
+    const rp = repere(q, unit, whole.slice(Math.max(0, offset - 30), offset + m.length + 30));
+    return `${q} ${unit}${rp ? ` (≈ ${rp})` : ""}`;
+  });
+  return out;
+}
+const stepsOf = r => r.steps.map(s => stepText(s, recipeFactor(r)));
+
+/* Coût estimé par portion, aux prix moyens en supermarché, pour les ingrédients indispensables. */
+function costOf(r) {
+  let euros = 0;
+  r.need.forEach(opts => {
+    const id = pick(opts);
+    const n = NUTRI[id];
+    if (!n || PRIX[id] == null) return;
+    const grams = r.qte && r.qte[id] != null ? r.qte[id] : n[4];
+    euros += PRIX[id] * grams / 1000;
+  });
+  return euros;
+}
+const fmtEuros = e => e < 0.1 ? "moins de 0,10 €" : `${(Math.round(e * 20) / 20).toFixed(2).replace(".", ",")} €`;
+
+/* ---------- Filtres et recherche de recettes ---------- */
+
+const FILTERS = [
+  ["rapide", "10 min ou moins", r => r.time <= 10],
+  ["froid", "Sans cuisson", r => r.equip.length === 0],
+  ["micro", "Au micro-ondes", r => r.equip.includes("micro")],
+  ["sucre", "Sucré", r => !!r.sucree],
+  ["prot", "Riche en protéines", r => nutrition(r).prot >= 20]
+];
+function matchesFilters(r) {
+  for (const [id, , test] of FILTERS) if (filters.has(id) && !test(r)) return false;
+  if (recipeQuery) {
+    const words = norm(r.title) + " " + r.need.flat().map(id => norm(NAMES[id] || "")).join(" ");
+    if (!words.includes(recipeQuery)) return false;
+  }
+  return true;
+}
+function renderFilters() {
+  $("filters").innerHTML = FILTERS.map(([id, label]) =>
+    `<button type="button" class="tab tab-sm" data-filter="${id}" aria-pressed="${filters.has(id)}">${esc(label)}</button>`).join("");
+}
+
 /* ---------- Cartes recettes ---------- */
 
 function card(r, a, state, i) {
@@ -409,7 +503,15 @@ function card(r, a, state, i) {
     return `<li class="ing ${ok ? "have" : "missing"}"><span class="mark" aria-hidden="true">${ok ? "✓" : "!"}</span><span>${esc(needLabel(opts))}${ok ? "" : " (à trouver)"}</span></li>`;
   }).join("");
   const extras = r.extra.filter(x => have.has(x)).map(lower);
-  const steps = r.steps.map((s, n) => `<li class="step"><b style="background: ${c.bar}">${n + 1}</b><span>${esc(s)}</span></li>`).join("");
+  const scaled = stepsOf(r);
+  const steps = scaled.map((s, n) => `<li class="step"><b style="background: ${c.bar}">${n + 1}</b><span>${esc(s)}</span></li>`).join("");
+  const factor = recipeFactor(r);
+  const notes = [];
+  if (r.portions === 1 && portions > 1) notes.push(`Recette pour 1 personne : prépare-la ${portions} fois.`);
+  if (r.steps.some(s => /boîte/.test(s)) && factor < 1) notes.push("Pour 1 personne, utilise une demi-boîte et garde le reste au frigo dans un bol fermé, 2 à 3 jours.");
+  if (r.steps.some(s => /boîte/.test(s)) && factor > 1) notes.push(`Pour ${portions} personnes, prends 2 boîtes.`);
+  if (scaled.some(s => s.includes("(≈"))) notes.push("Repères : un verre = un verre à eau (20 cl), une poignée = ce que tient ta main.");
+  const cost = costOf(r);
   return `
   <details class="recipe" data-state="${state}" data-i="${i}">
     <summary>
@@ -419,7 +521,7 @@ function card(r, a, state, i) {
         : `<span class="thumb" style="background: ${c.tint}; color: ${c.txt}" aria-hidden="true">${svg(toolArt(r.tool), 40).replace('stroke-width="2.2"', 'stroke-width="1.8"')}</span>`}
       <span class="recipe-main">
         <h3>${fav ? `<span class="fav-mark" title="Dans tes favoris">${svg(ICON.star, 18)}<span class="sr-only">Favori : </span></span>` : ""}${esc(r.title)}</h3>
-        <span class="meta"><span>${svg(ICON.clock, 15)} ${r.time} min</span><span>· ${esc(r.tool)}</span><span>· ${nut.kcal} kcal</span></span>
+        <span class="meta"><span>${svg(ICON.clock, 15)} ${r.time} min</span><span>· ${esc(r.tool)}</span><span>· ${portionLabel(r)}</span><span>· ≈ ${fmtEuros(cost)} la portion</span></span>
         <span class="pills">${pill}${protPill}</span>
       </span>
       <span class="chev">${svg(ICON.chevron)}</span>
@@ -441,6 +543,7 @@ function card(r, a, state, i) {
       <div>
         <h4 style="color: ${c.txt}">Étapes</h4>
         <ol>${steps}</ol>
+        ${notes.map(n => `<p class="note step-note">${esc(n)}</p>`).join("")}
       </div>
       <p class="swap" style="background: ${c.tint}"><strong style="color: ${c.txt}">Selon ton colis :</strong> ${esc(r.swap)}</p>
       <div class="nutri">
@@ -448,7 +551,8 @@ function card(r, a, state, i) {
         <span class="nutri-item"><b>${nut.prot} g</b> protéines</span>
         <span class="nutri-item"><b>${nut.gluc} g</b> glucides</span>
         <span class="nutri-item"><b>${nut.lip} g</b> lipides</span>
-        <p class="nutri-note">Estimation par portion, calculée sur les ingrédients indispensables. Ce sont des ordres de grandeur, pas des valeurs exactes.</p>
+        <span class="nutri-item"><b>≈ ${fmtEuros(cost)}</b> la portion</span>
+        <p class="nutri-note">Estimations par portion, sur les ingrédients indispensables : ordres de grandeur, pas des valeurs exactes. Le coût est calculé aux prix moyens en supermarché ; avec un colis, c'est gratuit.</p>
       </div>
       <p class="print-only print-foot">Recette trouvée avec « Qu'est-ce que je cuisine avec mon colis ? » : ${esc(appUrl())}</p>
     </div>
@@ -485,14 +589,20 @@ function renderResults() {
     ? "1 recette est cachée parce qu'elle ne correspond pas à ton régime."
     : `${hiddenByRegime} recettes sont cachées parce qu'elles ne correspondent pas à ton régime.`;
 
-  const shown = view === "favs" ? rows.filter(x => favs.has(x.r.title)) : rows;
+  const viewRows = view === "favs" ? rows.filter(x => favs.has(x.r.title)) : rows;
+  const shown = viewRows.filter(x => matchesFilters(x.r));
+  const filtering = filters.size > 0 || !!recipeQuery;
+  $("filter-note").hidden = !filtering;
+  if (filtering) $("filter-text").textContent = shown.length === 1 ? "1 recette correspond." : `${shown.length} recettes correspondent.`;
   const ready = shown.filter(isReady).sort(byTime);
   const almost = shown.filter(x => x.a.equipOk && x.a.missing.length === 1).sort(byTime);
   const later = shown.filter(x => !(x.a.equipOk && x.a.missing.length <= 1))
     .sort((x, y) => (x.a.equipOk === y.a.equipOk ? 0 : x.a.equipOk ? -1 : 1) || x.a.missing.length - y.a.missing.length);
 
   let html;
-  if (view === "favs" && !shown.length) {
+  if (filtering && !shown.length) {
+    html = '<p class="empty">Aucune recette ne correspond à ces filtres. Enlève un filtre ou change ta recherche.</p>';
+  } else if (view === "favs" && !shown.length) {
     html = '<p class="empty">Tu n\'as pas encore de favoris. Ouvre une recette et touche « Favori » pour la retrouver ici.</p>';
   } else {
     html = ready.length
@@ -540,14 +650,14 @@ function recipeText(r) {
   const extras = r.extra.filter(x => have.has(x)).map(lower);
   return [
     `🍳 ${r.title}`,
-    `${r.time} min · ${r.tool} · 2 portions`,
+    `${r.time} min · ${r.tool} · ${portionLabel(r)}`,
     "",
     "Il faut :",
     ...r.need.map(opts => `- ${needLabel(opts)}`),
     ...(extras.length ? [`En plus si tu as : ${extras.join(", ")}`] : []),
     "",
     "Étapes :",
-    ...r.steps.map((s, n) => `${n + 1}. ${s}`),
+    ...stepsOf(r).map((s, n) => `${n + 1}. ${s}`),
     "",
     `Selon ton colis : ${r.swap}`,
     "",
@@ -781,7 +891,7 @@ async function makeDecoder() {
       return codes.length ? codes[0].rawValue : null;
     };
   }
-  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=10");
+  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=11");
   const Z = window.ZXing;
   const reader = new Z.MultiFormatReader();
   const hints = new Map();
@@ -1053,7 +1163,7 @@ function renderCook() {
       </ul>
       ${extras.length ? `<p class="cook-extra">Si tu veux : ${esc(extras.join(", "))}.</p>` : ""}`;
   } else {
-    const text = r.steps[cook.step - 1];
+    const text = stepsOf(r)[cook.step - 1];
     const secs = stepDuration(text);
     $("cook-step").innerHTML = `<p class="cook-text">${esc(text)}</p>
       ${secs ? `<button type="button" class="btn btn-sec cook-timer-btn" data-secs="${secs}">${svg(ICON.timer)} Lancer un minuteur de ${durLabel(secs)}</button>` : ""}`;
@@ -1209,6 +1319,10 @@ async function init() {
   TIPS = data.conservation || [];
   OFF = data.openFoodFacts || [];
   PHOTOS = Object.assign({ recettes: {}, ingredients: {} }, data.photos || {});
+  PRIX = data.prix || {};
+  EXEMPLE = data.colisExemple || [];
+  const savedPortions = readJSON(KEYS.portions);
+  if ([1, 2, 4].includes(savedPortions)) portions = savedPortions;
   GROUPS = data.groupes.slice();
   GROUPS.forEach(g => g.items.forEach(([id, n]) => { NAMES[id] = n; if (!g.type) INGREDIENTS.add(id); }));
   if (REGIMES.length) {
@@ -1227,10 +1341,12 @@ async function init() {
   if (Array.isArray(savedGroups)) openGroups = savedGroups;
   const fromLink = applyColisLink(firstVisit);
   $("example-note").hidden = !firstVisit || fromLink;
+  const showWelcome = firstVisit && !fromLink && !readJSON(KEYS.welcome);
 
   setupDrawer();
   setupShop();
   setupScan();
+  setupWelcome();
 
   $("clear").addEventListener("click", () => {
     have.clear();
@@ -1242,6 +1358,25 @@ async function init() {
   $("view-all").addEventListener("click", () => setView("all"));
   $("view-favs").addEventListener("click", () => setView("favs"));
   $("random-btn").addEventListener("click", randomRecipe);
+
+  renderFilters();
+  $("filters").addEventListener("click", e => {
+    const b = e.target.closest("[data-filter]");
+    if (!b) return;
+    const id = b.dataset.filter;
+    if (filters.has(id)) filters.delete(id); else filters.add(id);
+    b.setAttribute("aria-pressed", String(filters.has(id)));
+    renderResults();
+  });
+  $("recipe-search").addEventListener("input", e => { recipeQuery = norm(e.target.value.trim()); renderResults(); });
+  $("filter-clear").addEventListener("click", () => {
+    filters.clear(); recipeQuery = ""; $("recipe-search").value = "";
+    renderFilters(); renderResults();
+  });
+  document.querySelectorAll('input[name="portions"]').forEach(r => {
+    r.checked = Number(r.value) === portions;
+    r.addEventListener("change", () => { portions = Number(r.value); writeJSON(KEYS.portions, portions); renderResults(); });
+  });
 
   $("list").addEventListener("click", e => {
     const btn = e.target.closest("button[data-action]");
@@ -1263,6 +1398,66 @@ async function init() {
   renderCredits();
   const first = document.querySelector("#list details");
   if (first) first.open = true;
+  if (showWelcome) openWelcome();
+}
+
+/* ---------- Premier lancement : trois questions rapides ---------- */
+
+let welcomeStep = 1;
+function renderWelcome() {
+  const equip = GROUPS.find(g => g.type === "equip"), regime = GROUPS.find(g => g.type === "regime");
+  $("welcome-progress").textContent = `Étape ${welcomeStep} sur 3`;
+  $("welcome-bar").innerHTML = [1, 2, 3].map(n => `<span class="${n <= welcomeStep ? "on" : ""}"></span>`).join("");
+  let body = "";
+  if (welcomeStep === 1) body = `<h2 id="welcome-title" tabindex="-1">Avec quoi peux-tu cuisiner ?</h2>
+    <p class="note">Coche tout ce que tu as. Rien du tout ? Pas de souci, il y a des recettes sans cuisson.</p>
+    <div class="chips">${equip.items.map(([id, n]) => chipHtml("w", id, n)).join("")}</div>`;
+  if (welcomeStep === 2) body = `<h2 id="welcome-title" tabindex="-1">Tu suis un régime ?</h2>
+    <p class="note">On cachera les recettes qui ne te conviennent pas. Tu pourras changer ça plus tard dans le menu.</p>
+    <div class="chips">${regime ? regime.items.map(([id, n]) => chipHtml("w", id, n)).join("") : ""}</div>`;
+  if (welcomeStep === 3) body = `<h2 id="welcome-title" tabindex="-1">Comment veux-tu commencer ?</h2>
+    <div class="welcome-choices">
+      <button type="button" class="btn btn-pri" data-start="check">Je coche mes ingrédients</button>
+      <button type="button" class="btn btn-sec" data-start="scan">Je scanne mes produits</button>
+      <button type="button" class="btn btn-sec" data-start="example">Montre-moi un exemple de colis</button>
+    </div>`;
+  $("welcome-body").innerHTML = body;
+  $("welcome-body").querySelectorAll("input[data-id]").forEach(inp => inp.addEventListener("change", () => {
+    if (inp.checked) have.add(inp.dataset.id); else have.delete(inp.dataset.id);
+  }));
+  $("welcome-next").hidden = welcomeStep === 3;
+  $("welcome-back").disabled = welcomeStep === 1;
+  setTimeout(() => { const t = $("welcome-title"); if (t) t.focus({ preventScroll: true }); }, 0);
+}
+function openWelcome() {
+  /* On repart de zéro : l'étudiant choisit lui-même au lieu du colis d'exemple. */
+  have = new Set();
+  welcomeStep = 1;
+  renderWelcome();
+  openDialog($("welcome"));
+}
+function finishWelcome(start) {
+  writeJSON(KEYS.welcome, true);
+  if (start === "example") EXEMPLE.forEach(id => { if (INGREDIENTS.has(id)) have.add(id); });
+  $("example-note").hidden = start !== "example";
+  if (start === "skip") { have = new Set(EXEMPLE); $("example-note").hidden = false; }
+  closeDialog($("welcome"));
+  haveChanged();
+  if (start === "scan") openScan();
+  if (start === "check") {
+    const g = document.querySelector("details.group:not([data-g='0']):not([data-g='1'])");
+    if (g) { g.open = true; g.scrollIntoView({ block: "start" }); }
+  }
+}
+function setupWelcome() {
+  $("welcome-next").addEventListener("click", () => { welcomeStep = Math.min(3, welcomeStep + 1); renderWelcome(); });
+  $("welcome-back").addEventListener("click", () => { welcomeStep = Math.max(1, welcomeStep - 1); renderWelcome(); });
+  $("welcome-skip").addEventListener("click", () => finishWelcome("skip"));
+  $("welcome-body").addEventListener("click", e => {
+    const b = e.target.closest("[data-start]");
+    if (b) finishWelcome(b.dataset.start);
+  });
+  $("welcome").addEventListener("close", () => { if (!readJSON(KEYS.welcome)) finishWelcome("skip"); });
 }
 
 init();

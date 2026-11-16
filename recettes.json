@@ -90,7 +90,8 @@
         "Fais dorer à la poêle, 2 à 3 minutes par face."
       ],
       "swap": "Pas de lait : de l'eau marche aussi, le pain perdu sera un peu moins moelleux.",
-      "qte": {"pain": 70, "oeufs": 50, "lait": 75}
+      "qte": {"pain": 70, "oeufs": 50, "lait": 75},
+      "sucree": true
     },
     {
       "title": "Omelette vide-frigo",
@@ -168,7 +169,8 @@
         "Le riz est prêt quand il est fondant et que le lait a épaissi. Se mange tiède ou froid."
       ],
       "swap": "Le riz rond est idéal, mais le riz long marche aussi.",
-      "qte": {"riz": 35, "lait": 250, "sucre": 15}
+      "qte": {"riz": 35, "lait": 250, "sucre": 15},
+      "sucree": true
     },
     {
       "title": "Omelette en tasse au micro-ondes",
@@ -184,7 +186,8 @@
         "Chauffe 1 minute, mélange, puis 30 à 60 secondes de plus jusqu'à ce que ce soit bien pris."
       ],
       "swap": "Pour ceux qui n'ont qu'un micro-ondes : un repas chaud en 3 minutes.",
-      "qte": {"oeufs": 50}
+      "qte": {"oeufs": 50},
+      "portions": 1
     },
     {
       "title": "Œufs pochés à la tomate",
@@ -265,7 +268,8 @@
         "Coupe-la en deux, écrase un peu la chair, sale et poivre.",
         "Garnis avec ce que tu as : fromage, thon, yaourt, haricots ou maïs."
       ],
-      "swap": "Attention, elle est très chaude à la sortie : laisse-la reposer 1 minute avant de la couper."
+      "swap": "Attention, elle est très chaude à la sortie : laisse-la reposer 1 minute avant de la couper.",
+      "portions": "par personne"
     },
     {
       "title": "Semoule au lait",
@@ -282,7 +286,8 @@
         "Verse dans des bols. Se mange tiède ou froid."
       ],
       "swap": "Le dessert le plus rapide avec un colis : la semoule cuit 4 fois plus vite que le riz.",
-      "qte": {"semoule": 30, "lait": 250, "sucre": 20}
+      "qte": {"semoule": 30, "lait": 250, "sucre": 20},
+      "sucree": true
     },
     {
       "title": "Riz à la tomate tout-en-un",
@@ -379,7 +384,8 @@
         "Égoutte avec précaution : le bol est très chaud, prends un torchon.",
         "Ajoute le fromage, la sauce tomate ou le thon, mélange et chauffe encore 1 minute."
       ],
-      "swap": "Prends un bol bien plus grand que nécessaire : l'eau mousse et peut déborder."
+      "swap": "Prends un bol bien plus grand que nécessaire : l'eau mousse et peut déborder.",
+      "portions": "par personne"
     },
     {
       "title": "Bol de riz au micro-ondes",
@@ -395,7 +401,8 @@
         "Ajoute le thon émietté (ou les haricots) et les légumes égouttés.",
         "Assaisonne avec un peu de sauce soja ou d'huile. Avec un œuf : bats-le, mélange au riz et réchauffe 1 minute."
       ],
-      "swap": "Le même bol marche avec de la semoule : versé dans l'eau bouillante, prêt en 5 minutes."
+      "swap": "Le même bol marche avec de la semoule : versé dans l'eau bouillante, prêt en 5 minutes.",
+      "portions": "par personne"
     },
     {
       "title": "Croque au fromage à la poêle",
@@ -411,7 +418,8 @@
         "Pose le croque, appuie avec une spatule et laisse dorer 2 à 3 minutes.",
         "Retourne-le et laisse dorer encore 2 minutes, jusqu'à ce que le fromage fonde."
       ],
-      "swap": "Version complète : trempe le croque dans un œuf battu avant de le cuire."
+      "swap": "Version complète : trempe le croque dans un œuf battu avant de le cuire.",
+      "portions": 1
     },
     {
       "title": "Riz au lait au micro-ondes",
@@ -428,7 +436,8 @@
         "Ajoute 2 cuillères de sucre, mélange et laisse reposer : il épaissit en refroidissant."
       ],
       "swap": "Surveille bien : le lait monte vite. Si ça déborde, baisse la puissance.",
-      "qte": {"riz": 25, "lait": 175, "sucre": 12}
+      "qte": {"riz": 25, "lait": 175, "sucre": 12},
+      "sucree": true
     },
     {
       "title": "Salade de pâtes",
@@ -460,7 +469,9 @@
         "Ajoute un fruit écrasé, de la compote, un peu de sucre ou un carré de chocolat."
       ],
       "swap": "Un petit-déjeuner qui tient jusqu'à midi pour quelques centimes.",
-      "qte": {"avoine": 50, "lait": 200}
+      "qte": {"avoine": 50, "lait": 200},
+      "sucree": true,
+      "portions": 1
     },
     {
       "title": "Crêpes",
@@ -477,7 +488,8 @@
         "Cuis environ 1 minute, retourne et laisse 30 secondes. Garnis en sucré ou en salé."
       ],
       "swap": "Pas assez de lait : moitié lait, moitié eau. Version salée avec fromage et jambon.",
-      "qte": {"farine": 65, "oeufs": 50, "lait": 150}
+      "qte": {"farine": 65, "oeufs": 50, "lait": 150},
+      "sucree": true
     },
     {
       "title": "Mug cake au chocolat",
@@ -493,7 +505,9 @@
         "Chauffe 1 minute au micro-ondes, puis par 15 secondes si besoin : le gâteau doit gonfler et rester moelleux au centre."
       ],
       "swap": "Sans chocolat : une cuillère de compote au milieu de la pâte.",
-      "qte": {"farine": 30, "oeufs": 50, "sucre": 20}
+      "qte": {"farine": 30, "oeufs": 50, "sucre": 20},
+      "sucree": true,
+      "portions": 1
     },
     {
       "title": "Nouilles sautées",
@@ -592,7 +606,8 @@
         "Sers avec du pain à tremper."
       ],
       "swap": "Au micro-ondes, couvre le ramequin d'une assiette pour éviter les projections.",
-      "qte": {"creme": 20}
+      "qte": {"creme": 20},
+      "portions": 1
     },
     {
       "title": "Soupe de nouilles express",
@@ -607,7 +622,8 @@
         "Verse 400 ml d'eau bouillante (bouilloire, plaque ou micro-ondes).",
         "Couvre 3 à 4 minutes, puis mélange."
       ],
-      "swap": "Ajoute une cuillère de sauce soja ou un peu de curry pour varier."
+      "swap": "Ajoute une cuillère de sauce soja ou un peu de curry pour varier.",
+      "portions": 1
     },
     {
       "title": "Salade de fruits au yaourt",
@@ -622,7 +638,8 @@
         "Mélange-les avec un yaourt ou de la compote.",
         "Ajoute quelques flocons d'avoine pour le croquant."
       ],
-      "swap": "Les fruits un peu abîmés sont parfaits ici : c'est la recette anti-gaspi par excellence."
+      "swap": "Les fruits un peu abîmés sont parfaits ici : c'est la recette anti-gaspi par excellence.",
+      "sucree": true
     }
   ],
   "nutrition": {
@@ -718,5 +735,42 @@
   "photos": {
     "recettes": {"riz-saute-vide-frigo": {"src": "photos/recettes/riz-saute-vide-frigo.jpg", "credit": "Gnawme, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/71525439@N00/51535896652"}, "curry-express-de-legumineuses": {"src": "photos/recettes/curry-express-de-legumineuses.jpg", "credit": "George M. Groutas, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/22083482@N03/51426337043"}, "pain-perdu-anti-gaspi": {"src": "photos/recettes/pain-perdu-anti-gaspi.jpg", "credit": "VisitPlano, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/90124379@N08/15225712397"}, "omelette-vide-frigo": {"src": "photos/recettes/omelette-vide-frigo.jpg", "credit": "Ruth and Dave, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/95142644@N00/52217025674"}, "salade-de-semoule-facon-taboule": {"src": "photos/recettes/salade-de-semoule-facon-taboule.jpg", "credit": "Lachlan Hardy, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/98983159@N00/19210086386"}, "soupe-de-legumes-express": {"src": "photos/recettes/soupe-de-legumes-express.jpg", "credit": "Ruth and Dave, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/95142644@N00/52152194824"}, "riz-au-lait": {"src": "photos/recettes/riz-au-lait.jpg", "credit": "Haydn Blackey, CC BY-SA 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/54549113@N00/52571950853"}, "omelette-en-tasse-au-micro-ondes": {"src": "photos/recettes/omelette-en-tasse-au-micro-ondes.jpg", "credit": "MattCC716, CC BY-SA 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/27874898@N00/52025235482"}, "oeufs-poches-a-la-tomate": {"src": "photos/recettes/oeufs-poches-a-la-tomate.jpg", "credit": "quinn.anya, CC BY-SA 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/53326337@N00/53869205952"}, "pommes-de-terre-sautees": {"src": "photos/recettes/pommes-de-terre-sautees.jpg", "credit": "Nemeth/Star Productions, CC0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/192268789@N06/51336252808"}, "houmous-a-la-fourchette": {"src": "photos/recettes/houmous-a-la-fourchette.jpg", "credit": "France1978, CC BY-SA 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/51764518@N02/52521238976"}, "soupe-de-lentilles-a-la-tomate": {"src": "photos/recettes/soupe-de-lentilles-a-la-tomate.jpg", "credit": "Key West Wedding Photography, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/58003213@N00/51980498151"}, "pates-au-micro-ondes": {"src": "photos/recettes/pates-au-micro-ondes.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/6047454/free-public-domain-cc0-photo"}, "bol-de-riz-au-micro-ondes": {"src": "photos/recettes/bol-de-riz-au-micro-ondes.jpg", "credit": "Kawin Harasai, CC0, via stocksnap (recadrée)", "source": "https://stocksnap.io/photo/rice-bowl-CCBWIQCNEJ"}, "croque-au-fromage-a-la-poele": {"src": "photos/recettes/croque-au-fromage-a-la-poele.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5967139/grilled-cheese-sandwich"}, "riz-au-lait-au-micro-ondes": {"src": "photos/recettes/riz-au-lait-au-micro-ondes.jpg", "credit": "veritatem, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/66722164@N00/54490397033"}, "salade-de-pates": {"src": "photos/recettes/salade-de-pates.jpg", "credit": "Freestocks.org, CC0, via stocksnap (recadrée)", "source": "https://stocksnap.io/photo/pasta-salad-0SKW4T9BAC"}, "crepes": {"src": "photos/recettes/crepes.jpg", "credit": "vwcampin, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/125112383@N06/32717037753"}, "mug-cake-au-chocolat": {"src": "photos/recettes/mug-cake-au-chocolat.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/6040531/chocolate-mug-cake-free-public-domain-cc0-photo"}, "nouilles-sautees": {"src": "photos/recettes/nouilles-sautees.jpg", "credit": "johl, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/37996627153@N01/51825558966"}, "poulet-au-curry": {"src": "photos/recettes/poulet-au-curry.jpg", "credit": "IainCameron, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/67872859@N00/48684485972"}, "potatoes-au-four-ou-a-l-air-fryer": {"src": "photos/recettes/potatoes-au-four-ou-a-l-air-fryer.jpg", "credit": "Krzysztof%20Puszczy%u0144ski, CC0, via stocksnap (recadrée)", "source": "https://stocksnap.io/photo/potatoes-wedges-8YEENVJPZX"}, "pois-chiches-croustillants": {"src": "photos/recettes/pois-chiches-croustillants.jpg", "credit": "sarahstierch, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/7633518@N08/52306205265"}, "oeufs-cocotte": {"src": "photos/recettes/oeufs-cocotte.jpg", "credit": "anoldent, CC BY-SA 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/8563790@N08/52483018522"}, "soupe-de-nouilles-express": {"src": "photos/recettes/soupe-de-nouilles-express.jpg", "credit": "debbietingzon, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/32031278@N03/15413977775"}, "salade-de-fruits-au-yaourt": {"src": "photos/recettes/salade-de-fruits-au-yaourt.jpg", "credit": "Ruth and Dave, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/95142644@N00/52103968763"}, "pates-tout-en-une-tomate-thon": {"src": "photos/recettes/pates-tout-en-une-tomate-thon.jpg", "credit": "USDAgov, domaine public, via flickr (recadrée)", "source": "https://www.flickr.com/photos/41284017@N08/51798568657"}, "pates-au-fromage-express": {"src": "photos/recettes/pates-au-fromage-express.jpg", "credit": "cyclonebill, CC BY-SA 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/23178876@N03/13628468255"}, "chili-sans-viande": {"src": "photos/recettes/chili-sans-viande.jpg", "credit": "jeffreyw, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/7927684@N03/42035685974"}, "rillettes-de-thon-ou-de-sardines": {"src": "photos/recettes/rillettes-de-thon-ou-de-sardines.jpg", "credit": "The Marmot, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/38142119@N00/53881364681"}, "porridge-express": {"src": "photos/recettes/porridge-express.jpg", "credit": "Andrew Pons, CC0, via stocksnap (recadrée)", "source": "https://stocksnap.io/photo/oatmeal-blueberries-F7TE35CV6D"}, "pates-creme-et-jambon": {"src": "photos/recettes/pates-creme-et-jambon.jpg", "credit": "sarahstierch, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/7633518@N08/52060793144"}, "salade-express-sans-cuisson": {"src": "photos/recettes/salade-express-sans-cuisson.jpg", "credit": "mlcastle, CC BY-SA 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/66458073@N00/54559124016"}, "puree-maison-a-la-fourchette": {"src": "photos/recettes/puree-maison-a-la-fourchette.jpg", "credit": "sarahstierch, CC0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/7633518@N08/54954431138"}, "pomme-de-terre-garnie-au-micro-ondes": {"src": "photos/recettes/pomme-de-terre-garnie-au-micro-ondes.jpg", "credit": "anoldent, CC BY-SA 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/8563790@N08/54235144345"}, "riz-a-la-tomate-tout-en-un": {"src": "photos/recettes/riz-a-la-tomate-tout-en-un.jpg", "credit": "sarahstierch, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/7633518@N08/51579620673"}},
     "ingredients": {"riz": {"src": "photos/ingredients/riz.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5922922/photo-image-public-domain-food-free"}, "semoule": {"src": "photos/ingredients/semoule.jpg", "credit": "Wesley Fryer, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/31442459@N00/53862125925"}, "pain": {"src": "photos/ingredients/pain.jpg", "credit": "Nutrition, Food Safety & Health, CC0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/93936679@N05/52502598318"}, "nouilles": {"src": "photos/ingredients/nouilles.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5907248/photo-image-public-domain-food-free"}, "avoine": {"src": "photos/ingredients/avoine.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5921094/free-public-domain-cc0-photo"}, "farine": {"src": "photos/ingredients/farine.jpg", "credit": "Agnieszka Bladzik, CC0, via stocksnap (recadrée)", "source": "https://stocksnap.io/photo/baking-flour-HOKEB8G6JM"}, "thon": {"src": "photos/ingredients/thon.jpg", "credit": "eamathe, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/93839835@N04/53411302463"}, "sardines": {"src": "photos/ingredients/sardines.jpg", "credit": "Kzoo Cowboy, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/92871081@N03/52576448142"}, "lentilles": {"src": "photos/ingredients/lentilles.jpg", "credit": "terri_bateman, CC0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/134468672@N06/40800367721"}, "poischiches": {"src": "photos/ingredients/poischiches.jpg", "credit": "sarahstierch, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/7633518@N08/52306205265"}, "haricots": {"src": "photos/ingredients/haricots.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5913548/image-public-domain-plant-red"}, "legboite": {"src": "photos/ingredients/legboite.jpg", "credit": "mededeler, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/132603569@N08/53995275642"}, "lait": {"src": "photos/ingredients/lait.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5903566/photo-image-background-public-domain-table"}, "yaourt": {"src": "photos/ingredients/yaourt.jpg", "credit": "Daria Nepriakhina, CC0, via stocksnap (recadrée)", "source": "https://stocksnap.io/photo/yogurt-granola-ELZKUZYJK0"}, "jambon": {"src": "photos/ingredients/jambon.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5923318/photo-image-public-domain-kitchen-food"}, "fruits": {"src": "photos/ingredients/fruits.jpg", "credit": "scott1346, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/42549779@N06/51912346095"}, "huile": {"src": "photos/ingredients/huile.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/6112104/photo-image-public-domain-free"}, "curry": {"src": "photos/ingredients/curry.jpg", "credit": "M McBey, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/158652122@N02/51697651549"}, "chocolat": {"src": "photos/ingredients/chocolat.jpg", "credit": "Brett Jordan, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/55497864@N00/51372559180"}, "pates": {"src": "photos/ingredients/pates.jpg", "credit": "Lukasz Kowalewski, CC0, via stocksnap (recadrée)", "source": "https://stocksnap.io/photo/penne-pasta-0CAMWFFE17"}, "pdt": {"src": "photos/ingredients/pdt.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5920748/photo-image-public-domain-plant-fruit"}, "mais": {"src": "photos/ingredients/mais.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/6039371/dried-corn-kernels-free-public-domain-cc0-photo"}, "oeufs": {"src": "photos/ingredients/oeufs.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5920771/photo-image-background-public-domain-food"}, "fromage": {"src": "photos/ingredients/fromage.jpg", "credit": "britishhamper, CC BY 2.0, via flickr (recadrée)", "source": "https://www.flickr.com/photos/194291384@N08/51622388993"}, "poulet": {"src": "photos/ingredients/poulet.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5914179/photo-image-public-domain-food-branch"}, "oignon": {"src": "photos/ingredients/oignon.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5914812/image-background-public-domain-free"}, "sel": {"src": "photos/ingredients/sel.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/6019081/salt-shaker-free-public-domain-cc0-image"}, "sucre": {"src": "photos/ingredients/sucre.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5904051/photo-image-background-public-domain-kidcore"}, "soja": {"src": "photos/ingredients/soja.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/3294672/free-photo-image-alcohol-asian-bar-counter"}, "creme": {"src": "photos/ingredients/creme.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5968220/bowl-ice-cream"}, "legfrais": {"src": "photos/ingredients/legfrais.jpg", "credit": "auteur inconnu, CC0, via rawpixel (recadrée)", "source": "https://www.rawpixel.com/image/5916958/image-public-domain-plant-greens"}}
+  },
+  "prix": {
+    "pates": 1.2,
+    "riz": 1.6,
+    "semoule": 1.6,
+    "pain": 3.0,
+    "pdt": 1.3,
+    "nouilles": 4.0,
+    "avoine": 2.0,
+    "farine": 0.9,
+    "tomates": 2.0,
+    "thon": 13.0,
+    "sardines": 10.0,
+    "lentilles": 2.5,
+    "poischiches": 2.3,
+    "haricots": 2.3,
+    "legboite": 2.5,
+    "mais": 3.5,
+    "compote": 3.0,
+    "oeufs": 5.0,
+    "lait": 1.0,
+    "yaourt": 2.5,
+    "fromage": 10.0,
+    "beurre": 9.0,
+    "creme": 4.5,
+    "jambon": 12.0,
+    "poulet": 9.0,
+    "oignon": 2.0,
+    "legfrais": 2.5,
+    "fruits": 2.5,
+    "huile": 3.0,
+    "sucre": 1.2,
+    "chocolat": 10.0,
+    "soja": 6.0,
+    "sel": 0,
+    "curry": 0,
+    "bouillon": 0
   }
 }

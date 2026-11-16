@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=10">
+<link rel="stylesheet" href="style.css?v=11">
 </head>
 <body>
 <div class="appbar">
@@ -35,7 +35,7 @@
 <header class="top">
   <div class="stripe" aria-hidden="true"><span class="s-tomate"></span><span class="s-herbe"></span><span class="s-curry"></span><span class="s-nuit"></span></div>
   <h1>Qu'est-ce que je cuisine avec mon colis ?</h1>
-  <p class="lead">Coche ce que tu as dans ton colis ou ton frigo, ou scanne tes produits. Les recettes que tu peux faire tout de suite s'affichent en premier.</p>
+  <p class="lead"><span class="lead-long">Coche ce que tu as dans ton colis ou ton frigo, ou scanne tes produits. Les recettes que tu peux faire tout de suite s'affichent en premier.</span><span class="lead-short">Coche ou scanne ce que tu as : on te dit quoi cuisiner.</span></p>
 </header>
 
 <main class="layout">
@@ -77,6 +77,20 @@
         Une idée au hasard
       </button>
     </div>
+    <div class="recipe-tools">
+      <div class="search recipe-search">
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+        <input type="search" id="recipe-search" placeholder="Chercher une recette (crêpes, thon…)" aria-label="Chercher une recette" autocomplete="off">
+      </div>
+      <div class="portions" role="radiogroup" aria-label="Je cuisine pour">
+        <span class="portions-label" aria-hidden="true">Pour</span>
+        <input type="radio" name="portions" id="por-1" value="1"><label for="por-1">1</label>
+        <input type="radio" name="portions" id="por-2" value="2"><label for="por-2">2</label>
+        <input type="radio" name="portions" id="por-4" value="4"><label for="por-4">4</label>
+      </div>
+    </div>
+    <div class="filters" id="filters" role="group" aria-label="Filtres"></div>
+    <p class="note filter-note" id="filter-note" hidden><span id="filter-text"></span> <button type="button" class="link-btn" id="filter-clear">Effacer les filtres</button></p>
     <p class="note" id="regime-note" hidden></p>
     <div id="list" class="stack-12"></div>
     <aside class="feedback" data-avis>
@@ -94,7 +108,7 @@
 </div>
 
 <footer>
-  <p>Projet étudiant de Kelyan Gavila, Université Toulouse Capitole. Les recettes sont pour 2 portions. Vérifie toujours les étiquettes en cas d'allergie.</p>
+  <p>Projet étudiant de Kelyan Gavila, Université Toulouse Capitole. Les quantités s'adaptent au nombre de personnes choisi. Vérifie toujours les étiquettes en cas d'allergie.</p>
   <p class="footer-links">
     <a href="#" target="_blank" rel="noopener" data-avis>Donner mon avis</a>
     <a href="asso.html">Tu es une association ? Crée ton lien « colis du jour »</a>
@@ -109,7 +123,7 @@
     <summary>Crédits photos</summary>
     <ul class="credits" id="credits-list"></ul>
   </details>
-  <p class="version">Version 10</p>
+  <p class="version">Version 11</p>
 </footer>
 
 <!-- Menu latéral -->
@@ -152,7 +166,24 @@
       <button type="button" class="menu-item" data-go="privacy"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Confidentialité</button>
       <button type="button" class="menu-item" id="reset-app"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>Tout remettre à zéro</button>
     </nav>
-    <p class="drawer-foot" id="drawer-version">Version 10</p>
+    <p class="drawer-foot" id="drawer-version">Version 11</p>
+  </div>
+</dialog>
+
+<!-- Premier lancement -->
+<dialog class="sheet welcome" id="welcome" aria-labelledby="welcome-title">
+  <div class="sheet-inner">
+    <div class="sheet-head">
+      <p class="cook-progress" id="welcome-progress"></p>
+      <button type="button" class="link-btn" id="welcome-skip">Passer</button>
+    </div>
+    <div class="cook-bar welcome-bar" id="welcome-bar" aria-hidden="true"></div>
+    <p class="eyebrow">Bienvenue !</p>
+    <div class="stack-12" id="welcome-body" aria-live="polite"></div>
+    <div class="cook-nav">
+      <button type="button" class="btn btn-sec" id="welcome-back">Retour</button>
+      <button type="button" class="btn btn-pri" id="welcome-next">Suivant</button>
+    </div>
   </div>
 </dialog>
 
@@ -240,7 +271,7 @@
 
 <div class="toast" id="toast" role="status" hidden></div>
 
-<script src="config.js?v=10"></script>
-<script src="app.js?v=10"></script>
+<script src="config.js?v=11"></script>
+<script src="app.js?v=11"></script>
 </body>
 </html>
