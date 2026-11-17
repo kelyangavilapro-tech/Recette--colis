@@ -156,8 +156,8 @@ async function init() {
   if (LANG !== "fr") {
     try {
       const [ui, content] = await Promise.all([
-        fetch(`i18n-${LANG}.json?v=16`, { cache: "no-cache" }).then(r => r.json()),
-        fetch(`recettes.${LANG}.json?v=16`, { cache: "no-cache" }).then(r => r.json())
+        fetch(`i18n-${LANG}.json?v=17`, { cache: "no-cache" }).then(r => r.json()),
+        fetch(`recettes.${LANG}.json?v=17`, { cache: "no-cache" }).then(r => r.json())
       ]);
       DICT = ui; tr = content;
       translateStatic();
