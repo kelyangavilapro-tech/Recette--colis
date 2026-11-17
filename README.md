@@ -7,6 +7,15 @@ Application web installable (PWA) pour aider les étudiants à cuisiner avec ce 
 
 ## Ce que fait l'appli
 
+**Interface (version 18)** : une appli mobile avec une barre d'onglets en bas, aux couleurs terracotta.
+- **Accueil** : compteur de recettes possibles, catégories qui défilent (sans cuisson, micro-ondes, moins de 10 min, végé, sucré, petit budget…), « Recette du jour » en carrousel, puis des sélections en carrousels : « Ce soir avec ton colis », « À finir vite », « Il ne te manque qu'un ingrédient », « De saison » (partie `"saisons"` de `recettes.json`), « Moins de 1 € la portion ».
+- **Recherche** : tuiles thématiques (« Étudiant fauché », « Végétarien »…), filtres rapides, filtres détaillés en accordéon avec « Valider » et « Réinitialiser ».
+- **Mon frigo** (bouton rond au centre) : les ingrédients seulement, le scanner, « À finir vite », et une barre « N recettes possibles » toujours visible.
+- **Carnet** : favoris, mes recettes et mes notes personnelles (clé `colis-notes`), liste de courses et menu de la semaine.
+- **Profil** : équipement, régime, allergies, nombre de personnes, affichage, taille du texte, langue, aide.
+- **Page recette en plein écran** : grande photo, ingrédients à cocher, nombre de personnes réglable, préparation, ma note, valeurs nutritionnelles. Le mode pas à pas montre une étape par écran : on glisse le doigt pour passer à la suivante.
+- Les adresses des écrans sont partageables : `#recherche`, `#frigo`, `#recette/crepes`…
+
 - **Pour les étudiants.** On coche ce qu'on a (avec une recherche rapide) ou on **scanne les codes-barres** de ses produits. On indique son équipement : plaque, micro-ondes, four, air fryer, bouilloire, mixeur, grille-pain, cuiseur à riz, autocuiseur, gaufrier, appareil à croque-monsieur. L'appli classe 51 recettes en trois niveaux : faisables tout de suite, un seul ingrédient manquant, pour plus tard.
 - **Premier lancement guidé** : trois questions (équipement, régime, cocher / scanner / voir un exemple).
 - **Portions** : pour 1, 2 ou 4 personnes ; les quantités des étapes s'ajustent, avec des repères sans balance (« ≈ un verre », « ≈ 2 grosses poignées »). Les recettes individuelles (mug cake, porridge…) portent `"portions": 1`, celles écrites par personne `"portions": "par personne"`.

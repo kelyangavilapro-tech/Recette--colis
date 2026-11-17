@@ -921,6 +921,12 @@
     "bouillon": [0, 0, 0, 0, 0],
     "cacahuetes": [600, 25, 20, 50, 30]
   },
+  "saisons": {
+    "hiver": ["Soupe de légumes express", "Soupe de lentilles à la tomate", "Soupe de légumes à l'autocuiseur", "Chili sans viande", "Curry express de légumineuses", "Poulet au curry", "Purée maison à la fourchette", "Riz au lait", "Semoule au lait", "Crêpes", "Gaufres", "Porridge express", "Pomme cuite", "Soupe de nouilles express", "Riz à la tomate tout-en-un"],
+    "printemps": ["Omelette vide-frigo", "Salade de pâtes", "Salade de semoule façon taboulé", "Pancakes", "Œufs cocotte", "Riz sauté vide-frigo", "Nouilles sautées", "Houmous à la fourchette", "Galettes de pommes de terre", "Œufs pochés à la tomate", "Pâtes tout-en-une tomate-thon", "Pain perdu anti-gaspi"],
+    "ete": ["Salade express sans cuisson", "Salade de semoule façon taboulé", "Salade de riz", "Salade de pâtes", "Smoothie aux fruits", "Salade de fruits au yaourt", "Pain grillé à la tomate", "Rillettes de thon ou de sardines", "Houmous à la fourchette", "Pois chiches croustillants", "Tartine cacahuète-banane", "Omelette en tasse au micro-ondes"],
+    "automne": ["Soupe de légumes express", "Curry express de légumineuses", "Pommes de terre sautées", "Pomme cuite", "Potatoes au four ou à l'air fryer", "Gaufres de pommes de terre", "Chili sans viande", "Soupe de nouilles express", "Purée maison à la fourchette", "Crêpes", "Pomme de terre garnie au micro-ondes", "Riz tout-en-un au cuiseur", "Nouilles sauce cacahuète"]
+  },
   "bases": [
     {"titre": "Cuire des pâtes", "etapes": ["Fais bouillir une grande casserole d'eau (1 litre pour 100 g de pâtes), puis sale.", "Verse les pâtes dans l'eau qui bout et remue tout de suite pour qu'elles ne collent pas.", "Compte le temps écrit sur le paquet et goûte 1 minute avant : elles doivent être tendres mais un peu fermes.", "Égoutte-les. Garde un petit verre d'eau de cuisson : il rend la sauce crémeuse."]},
     {"titre": "Cuire du riz sans le rater", "etapes": ["Rince le riz dans une passoire jusqu'à ce que l'eau soit presque claire.", "Mets 1 volume de riz pour 2 volumes d'eau et une pincée de sel dans une casserole.", "Porte à ébullition, puis baisse au plus doux et couvre. Ne remue plus.", "Après 12 minutes, coupe le feu et laisse 5 minutes à couvert avant d'ouvrir."]},
