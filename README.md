@@ -15,6 +15,12 @@ Application web installable (PWA) pour aider les étudiants à cuisiner avec ce 
 - **Mode cuisine** : lecture des étapes à voix haute (voix du téléphone), puis « J'ai cuisiné ça ! » qui retire de « Ce que j'ai » les ingrédients finis et compte le repas.
 - **Compteur** (menu › Mes repas) : repas cuisinés ce mois-ci et courses évitées, calculés sur le coût estimé.
 - **Menu de la semaine** : 5 repas variés avec ce qu'on a, chaque jour peut être changé, et ce qui manque part dans la liste de courses.
+- **Les bases de la cuisine** (menu) : 10 fiches courtes, comme cuire du riz, couper un oignon ou savoir si un œuf est frais. Elles sont dans la partie `"bases"` de `recettes.json`.
+- **Photo de mon plat** : dans chaque recette, l'étudiant peut ajouter sa propre photo. Elle est réduite et gardée sur son téléphone (clé `colis-mes-photos`).
+- **Partage par lien** : une recette créée par l'étudiant se partage avec un lien qui l'ajoute chez la personne qui l'ouvre (`?recette=`). La liste de courses se partage aussi entre colocataires (`?courses=`).
+- **Petit budget** : un filtre pour les recettes à 0,50 € la portion ou moins, et le coût estimé du menu de la semaine.
+- **Colocation** : portions pour 1, 2, 4 ou 6 personnes.
+- **Taille du texte** (menu) : normal, grand ou très grand.
 - **À finir vite** : on marque ce qui va bientôt périmer ; les recettes qui l'utilisent passent en premier.
 - **Mes recettes** : chaque étudiant peut créer, modifier et supprimer ses propres recettes. Elles restent sur son téléphone (clé `colis-mes-recettes`) et profitent de tout le reste : portions, repères, mode cuisine, coût, valeurs nutritionnelles.
 - **Régimes.** Végétarien, végan, halal / sans porc, sans lactose, sans gluten, et allergies : sans œufs, sans poisson, sans arachides, sans fruits à coque, sans soja. Ces filtres retirent les ingrédients concernés, mais on rappelle de toujours vérifier les étiquettes (traces possibles).
@@ -78,7 +84,7 @@ L'appli existe en français, en anglais et en espagnol. Elle choisit la langue d
 
 Dans les étapes traduites, écris les quantités comme en français (« 200 g », « 400 ml », « 2 eggs » / « 2 huevos », « 1 teaspoon » / « 1 cucharadita », « per person » / « por persona ») : l'appli les ajuste au nombre de personnes et ajoute les repères.
 
-La page pour les associations reste en français.
+La page pour les associations suit la langue choisie dans l'appli. On peut aussi en changer en bas de cette page.
 
 ## Mettre en ligne une modification
 

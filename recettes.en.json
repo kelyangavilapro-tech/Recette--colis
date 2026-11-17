@@ -669,5 +669,92 @@
    "titre": "The fridge",
    "texte": "Set it to around 4 °C and don't overfill it: air needs to circulate. Put what goes off first at the front."
   }
+ },
+ "bases": {
+  "Cuire des pâtes": {
+   "titre": "Cooking pasta",
+   "etapes": [
+    "Bring a large pan of water to the boil (1 litre for 100 g of pasta), then add salt.",
+    "Add the pasta to the boiling water and stir straight away so it doesn't stick.",
+    "Follow the time on the packet and taste 1 minute before: it should be tender but still a little firm.",
+    "Drain it. Keep a small glass of the cooking water: it makes the sauce creamy."
+   ]
+  },
+  "Cuire du riz sans le rater": {
+   "titre": "Perfect rice every time",
+   "etapes": [
+    "Rinse the rice in a sieve until the water is almost clear.",
+    "Put 1 volume of rice, 2 volumes of water and a pinch of salt in a saucepan.",
+    "Bring to the boil, then turn the heat right down and cover. Don't stir any more.",
+    "After 12 minutes, turn off the heat and leave for 5 minutes, covered, before opening."
+   ]
+  },
+  "Cuire un œuf": {
+   "titre": "Boiling an egg",
+   "etapes": [
+    "Lower the egg into boiling water with a spoon so it doesn't crack.",
+    "3 minutes: soft-boiled (runny yolk). 6 minutes: jammy. 9 minutes: hard-boiled.",
+    "Run it under cold water to stop the cooking and make it easier to peel."
+   ]
+  },
+  "Savoir si un œuf est frais": {
+   "titre": "Is my egg fresh?",
+   "etapes": [
+    "Put the egg in a glass of cold water.",
+    "It lies flat on the bottom: it's fresh.",
+    "It stands up: eat it soon, well cooked.",
+    "It floats: throw it away without cracking it."
+   ]
+  },
+  "Couper un oignon": {
+   "titre": "Chopping an onion",
+   "etapes": [
+    "Cut off both ends, cut the onion in half from top to bottom and peel it.",
+    "Lay each half flat on the board: it won't slip.",
+    "Slice it thinly, then cut across the slices to get small dice.",
+    "To cry less: use a sharp knife and put the onion in the fridge for 10 minutes first."
+   ]
+  },
+  "Utiliser les légumineuses en boîte": {
+   "titre": "Using tinned pulses",
+   "etapes": [
+    "Tinned chickpeas, beans and lentils are already cooked: no need to cook them for long.",
+    "Tip them into a sieve and rinse them under the tap: it removes salt and makes them easier to digest.",
+    "The chickpea liquid can be used for hummus."
+   ]
+  },
+  "Mesurer sans balance": {
+   "titre": "Measuring without scales",
+   "etapes": [
+    "1 glass = 200 ml.",
+    "1 tablespoon = 15 ml; 1 teaspoon = 5 ml.",
+    "Pasta: a big handful ≈ 100 g, one portion.",
+    "Rice: half a glass ≈ 85 g, one portion. Couscous: half a glass ≈ 70 g."
+   ]
+  },
+  "Assaisonner un plat": {
+   "titre": "Seasoning a dish",
+   "etapes": [
+    "Add a little salt at the start and taste at the end: you can add more, not take it out.",
+    "Bland dish? A drop of something sour (lemon, vinegar, yoghurt) often wakes it up better than salt.",
+    "Fry spices (curry, paprika, cumin) in hot oil for 30 seconds: they smell much stronger."
+   ]
+  },
+  "Cuisiner la viande sans risque": {
+   "titre": "Handling meat safely",
+   "etapes": [
+    "Wash your hands after touching raw meat.",
+    "Use a clean board and knife for vegetables, or wash them in between.",
+    "Chicken must be cooked through: cut the biggest piece, it shouldn't be pink in the middle."
+   ]
+  },
+  "Réchauffer au micro-ondes": {
+   "titre": "Reheating in the microwave",
+   "etapes": [
+    "Use a microwave-safe dish, never metal or foil.",
+    "Cover with a plate to avoid splatters and keep it moist.",
+    "Heat for 1 to 2 minutes, stir, then repeat until it's piping hot all the way through, even in the centre."
+   ]
+  }
  }
 }

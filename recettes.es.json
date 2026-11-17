@@ -669,5 +669,92 @@
    "titre": "La nevera",
    "texte": "Ponla a unos 4 °C y no la llenes demasiado: el aire tiene que circular. Pon delante lo que caduca antes."
   }
+ },
+ "bases": {
+  "Cuire des pâtes": {
+   "titre": "Cocer pasta",
+   "etapes": [
+    "Pon a hervir un cazo grande de agua (1 litro por cada 100 g de pasta) y sala.",
+    "Echa la pasta en el agua hirviendo y remueve enseguida para que no se pegue.",
+    "Cuenta el tiempo del paquete y prueba 1 minuto antes: debe estar tierna pero algo firme.",
+    "Escúrrela. Guarda medio vaso del agua de cocción: hace la salsa más cremosa."
+   ]
+  },
+  "Cuire du riz sans le rater": {
+   "titre": "Arroz que siempre sale bien",
+   "etapes": [
+    "Enjuaga el arroz en un colador hasta que el agua salga casi clara.",
+    "Pon 1 volumen de arroz, 2 volúmenes de agua y una pizca de sal en un cazo.",
+    "Lleva a ebullición, baja el fuego al mínimo y tapa. No remuevas más.",
+    "A los 12 minutos, apaga el fuego y deja 5 minutos tapado antes de abrir."
+   ]
+  },
+  "Cuire un œuf": {
+   "titre": "Cocer un huevo",
+   "etapes": [
+    "Mete el huevo en el agua hirviendo con una cuchara para que no se rompa.",
+    "3 minutos: pasado por agua (yema líquida). 6 minutos: mollet. 9 minutos: duro.",
+    "Pásalo por agua fría para cortar la cocción y pelarlo más fácil."
+   ]
+  },
+  "Savoir si un œuf est frais": {
+   "titre": "Saber si un huevo es fresco",
+   "etapes": [
+    "Pon el huevo en un vaso de agua fría.",
+    "Se queda tumbado en el fondo: está fresco.",
+    "Se pone de pie: cómelo pronto y bien hecho.",
+    "Flota: tíralo sin romperlo."
+   ]
+  },
+  "Couper un oignon": {
+   "titre": "Cortar una cebolla",
+   "etapes": [
+    "Corta los dos extremos, parte la cebolla por la mitad de arriba abajo y pélala.",
+    "Apoya cada mitad plana sobre la tabla: así no resbala.",
+    "Córtala en láminas finas y luego en el otro sentido para tener daditos.",
+    "Para llorar menos: un cuchillo bien afilado y la cebolla 10 minutos en la nevera antes."
+   ]
+  },
+  "Utiliser les légumineuses en boîte": {
+   "titre": "Usar legumbres en lata",
+   "etapes": [
+    "Los garbanzos, alubias y lentejas en lata ya están cocidos: no hace falta cocerlos mucho.",
+    "Échalos en un colador y enjuágalos con agua: quita sal y sientan mejor.",
+    "El líquido de los garbanzos sirve para el hummus."
+   ]
+  },
+  "Mesurer sans balance": {
+   "titre": "Medir sin báscula",
+   "etapes": [
+    "1 vaso de agua = 200 ml.",
+    "1 cucharada = 15 ml; 1 cucharadita = 5 ml.",
+    "Pasta: un puñado grande ≈ 100 g, una ración.",
+    "Arroz: medio vaso ≈ 85 g, una ración. Cuscús: medio vaso ≈ 70 g."
+   ]
+  },
+  "Assaisonner un plat": {
+   "titre": "Sazonar un plato",
+   "etapes": [
+    "Sala un poco al principio y prueba al final: se puede añadir, no quitar.",
+    "¿Plato soso? Unas gotas de algo ácido (limón, vinagre, yogur) lo animan a menudo mejor que la sal.",
+    "Sofríe las especias (curry, pimentón, comino) 30 segundos en aceite caliente: huelen mucho más."
+   ]
+  },
+  "Cuisiner la viande sans risque": {
+   "titre": "Cocinar carne sin riesgos",
+   "etapes": [
+    "Lávate las manos después de tocar carne cruda.",
+    "Usa una tabla y un cuchillo limpios para las verduras, o lávalos entre medias.",
+    "El pollo debe estar bien hecho por dentro: corta el trozo más grande, no debe quedar rosado en el centro."
+   ]
+  },
+  "Réchauffer au micro-ondes": {
+   "titre": "Recalentar en el microondas",
+   "etapes": [
+    "Usa un recipiente apto para microondas, nunca metal ni papel de aluminio.",
+    "Tápalo con un plato para que no salpique y no se seque.",
+    "Calienta 1 o 2 minutos, remueve y repite hasta que esté muy caliente por todas partes, también en el centro."
+   ]
+  }
  }
 }

@@ -6,14 +6,14 @@
 <title>Qu'est-ce que je cuisine ?</title>
 <meta name="description" content="Coche ce que tu as dans ton colis ou ton frigo : l'appli te dit ce que tu peux cuisiner tout de suite.">
 <meta name="theme-color" content="#F4F5F0">
-<script>try { var t = localStorage.getItem("colis-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); } catch (e) {}</script>
+<script>try { var t = localStorage.getItem("colis-theme"); if (t === "light" || t === "dark") document.documentElement.setAttribute("data-theme", t); var s = JSON.parse(localStorage.getItem("colis-texte") || "null"); if (s === "grand" || s === "tres-grand") document.documentElement.setAttribute("data-text", s); } catch (e) {}</script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css?v=16">
+<link rel="stylesheet" href="style.css?v=17">
 </head>
 <body>
 <div class="appbar">
@@ -101,6 +101,7 @@
         <input type="radio" name="portions" id="por-1" value="1"><label for="por-1">1</label>
         <input type="radio" name="portions" id="por-2" value="2"><label for="por-2">2</label>
         <input type="radio" name="portions" id="por-4" value="4"><label for="por-4">4</label>
+        <input type="radio" name="portions" id="por-6" value="6"><label for="por-6">6</label>
       </div>
     </div>
     <div class="filters" id="filters" role="group" aria-label="Filtres"></div>
@@ -137,7 +138,7 @@
     <summary>Crédits photos</summary>
     <ul class="credits" id="credits-list"></ul>
   </details>
-  <p class="version">Version 16</p>
+  <p class="version">Version 17</p>
 </footer>
 
 <!-- Menu latéral -->
@@ -157,6 +158,7 @@
       <button type="button" class="menu-item" data-go="shop"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/></svg>Ma liste de courses<span class="count" id="drawer-shop-count">0</span></button>
       <button type="button" class="menu-item" data-go="favs"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9z"/></svg>Mes favoris<span class="count" id="drawer-fav-count">0</span></button>
       <button type="button" class="menu-item" data-go="keep"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><path d="M5 10h14M9 6v1M9 14v3"/></svg>Bien conserver ses aliments</button>
+      <button type="button" class="menu-item" data-go="basics"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21a2 2 0 0 1 2-2h13v2H6"/><path d="M9 7h6M9 11h4"/></svg>Les bases de la cuisine</button>
       <button type="button" class="menu-item" data-go="create"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/></svg>Créer ma recette</button>
     </nav>
     <section class="drawer-section stats" aria-labelledby="set-stats">
@@ -170,6 +172,14 @@
         <input type="radio" name="theme" id="theme-auto" value="auto"><label for="theme-auto">Auto</label>
         <input type="radio" name="theme" id="theme-light" value="light"><label for="theme-light">Clair</label>
         <input type="radio" name="theme" id="theme-dark" value="dark"><label for="theme-dark">Sombre</label>
+      </div>
+    </section>
+    <section class="drawer-section" aria-labelledby="set-text">
+      <h3 id="set-text">Taille du texte</h3>
+      <div class="segmented" role="radiogroup" aria-labelledby="set-text">
+        <input type="radio" name="textsize" id="text-normal" value="normal"><label for="text-normal">Normal</label>
+        <input type="radio" name="textsize" id="text-grand" value="grand"><label for="text-grand" class="text-big">Grand</label>
+        <input type="radio" name="textsize" id="text-tres-grand" value="tres-grand"><label for="text-tres-grand" class="text-bigger">Très grand</label>
       </div>
     </section>
     <section class="drawer-section" aria-labelledby="set-lang">
@@ -195,7 +205,7 @@
       <button type="button" class="menu-item" data-go="privacy"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10" width="14" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>Confidentialité</button>
       <button type="button" class="menu-item" id="reset-app"><svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></svg>Tout remettre à zéro</button>
     </nav>
-    <p class="drawer-foot" id="drawer-version">Version 16</p>
+    <p class="drawer-foot" id="drawer-version">Version 17</p>
   </div>
 </dialog>
 
@@ -225,6 +235,7 @@
     </div>
     <p class="note">5 repas variés avec ce que tu as. Touche « Changer » pour une autre idée, ou le nom d'une recette pour l'ouvrir.</p>
     <ol class="menu-list" id="menu-list"></ol>
+    <p class="menu-cost" id="menu-cost" hidden></p>
     <div class="sheet-actions">
       <button type="button" class="btn btn-pri" id="menu-new">Nouveau menu</button>
       <button type="button" class="btn btn-sec" id="menu-shop">Ajouter ce qui manque à ma liste</button>
@@ -258,6 +269,15 @@
     <div><label class="field-label" for="cr-swap">Astuce ou remplacement (facultatif)</label>
       <input class="field" id="cr-swap" type="text" maxlength="200" placeholder="Sans crème : un yaourt marche aussi."></div>
     <label class="check-line"><input type="checkbox" id="cr-single"> C'est une recette pour 1 personne (une tasse, un bol…)</label>
+    <div class="cr-photo">
+      <span class="field-label">Photo de ton plat (facultatif)</span>
+      <img id="cr-photo-preview" alt="" hidden>
+      <div class="actions">
+        <label class="btn btn-sec" for="cr-photo"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg> <span id="cr-photo-label">Ajouter une photo</span></label>
+        <button type="button" class="link-btn" id="cr-photo-remove" hidden>Retirer la photo</button>
+      </div>
+      <input type="file" id="cr-photo" accept="image/*" class="sr-only">
+    </div>
     <p class="cr-msg" id="cr-msg" role="alert"></p>
     <div class="cook-nav">
       <button type="button" class="btn btn-sec" id="create-cancel">Annuler</button>
@@ -298,6 +318,18 @@
       <button type="button" class="btn btn-sec" id="shop-clear">Vider la liste</button>
     </div>
     <p class="note">« Ranger mes achats » coche ce que tu as acheté dans tes ingrédients et le retire de la liste.</p>
+  </div>
+</dialog>
+
+<!-- Les bases -->
+<dialog class="sheet" id="basics" aria-labelledby="basics-title">
+  <div class="sheet-inner">
+    <div class="sheet-head">
+      <h2 id="basics-title">Les bases de la cuisine</h2>
+      <button type="button" class="icon-btn" data-close aria-label="Fermer"><svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    </div>
+    <p class="note">Les gestes de base, expliqués simplement. Touche une fiche pour l'ouvrir.</p>
+    <div class="stack-12" id="basics-list"></div>
   </div>
 </dialog>
 
@@ -365,8 +397,9 @@
 </dialog>
 
 <div class="toast" id="toast" role="status" hidden></div>
+<input type="file" id="photo-input" accept="image/*" hidden>
 
-<script src="config.js?v=16"></script>
-<script src="app.js?v=16"></script>
+<script src="config.js?v=17"></script>
+<script src="app.js?v=17"></script>
 </body>
 </html>

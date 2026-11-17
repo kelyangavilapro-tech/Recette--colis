@@ -115,7 +115,7 @@ h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(34px, 
 .lead { margin: 0; color: var(--muted); font-size: 18px; max-width: 62ch; }
 
 .layout { max-width: 1180px; margin: 0 auto; padding: 16px 20px 40px; display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
-.pantry { flex: 1 1 340px; max-width: 460px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
+.pantry { flex: 1 1 340px; min-width: 0; max-width: 460px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px; display: flex; flex-direction: column; gap: 20px; }
 @media (max-width: 880px) { .pantry { max-width: none; } }
 .results { flex: 999 1 480px; min-width: 0; display: flex; flex-direction: column; gap: 16px; }
 
@@ -208,7 +208,7 @@ dialog:not([open]) { display: none; }
 .pill.eq { background: var(--soft); color: var(--muted); }
 .chev { align-self: center; margin-right: 16px; transition: transform .2s; flex-shrink: 0; display: flex; }
 details[open] .chev { transform: rotate(180deg); }
-.recipe-body { padding: 0 20px 20px 26px; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
+.recipe-body { padding: 0 20px 20px 26px; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 20px; }
 .recipe-body h4 { margin: 0 0 8px; font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; }
 .recipe-body ul, .recipe-body ol { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
 .ing { display: flex; gap: 10px; align-items: flex-start; }
@@ -428,8 +428,9 @@ footer p { margin: 0 0 10px; }
 textarea.field { resize: vertical; line-height: 1.5; }
 @media print { .propose { display: none !important; } }
 @media (max-width: 560px) {
-  .recipe .actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .recipe .actions .btn { font-size: 15px; padding: 8px 10px; min-height: 48px; }
+  .recipe .actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+  html[data-text="tres-grand"] .recipe .actions { grid-template-columns: minmax(0, 1fr); }
+  .recipe .actions .btn { font-size: 15px; padding: 8px 10px; min-height: 48px; min-width: 0; text-align: center; }
   .recipe .actions .btn-color { grid-column: 1 / -1; font-size: 16px; }
 }
 .note a, .sheet a { color: var(--link); font-weight: 700; }
@@ -472,11 +473,11 @@ textarea.field { resize: vertical; line-height: 1.5; }
 
 /* Recherche de recette, portions, filtres */
 .recipe-tools { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
-.recipe-search { flex: 1 1 240px; background: var(--card); }
+.recipe-search { flex: 1 1 240px; min-width: 0; background: var(--card); }
 .portions { display: inline-flex; align-items: center; gap: 4px; background: var(--soft); border-radius: 999px; padding: 4px; }
 .portions-label { font-weight: 700; font-size: 14px; padding: 0 6px 0 8px; color: var(--muted); }
 .portions input { position: absolute; opacity: 0; width: 1px; height: 1px; }
-.portions label { min-width: 40px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 700; cursor: pointer; }
+.portions label { min-width: 38px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; font-weight: 700; cursor: pointer; }
 .portions input:checked + label { background: var(--ink); color: var(--on-ink); }
 .portions input:focus-visible + label { outline: 3px solid var(--link); outline-offset: 2px; }
 .filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
@@ -535,3 +536,30 @@ textarea.field { resize: vertical; line-height: 1.5; }
 .menu-recipe small { display: block; font-family: var(--font-body); font-weight: 400; font-size: 13px; color: var(--muted); }
 .menu-day .pill { grid-column: 1; }
 .menu-day .link-btn { grid-column: 2; grid-row: 2 / span 2; }
+
+/* Taille du texte (menu › Taille du texte) : on agrandit toute l'interface */
+/* On agrandit le contenu de la page et l'intérieur des fenêtres, pas les fenêtres elles-mêmes : rien ne déborde de l'écran. */
+html[data-text="grand"] :is(.appbar, header.top, main, .jump-bar > *, footer, .drawer-inner, .sheet-inner, .cook-inner, .toast) { zoom: 1.15; }
+html[data-text="tres-grand"] :is(.appbar, header.top, main, .jump-bar > *, footer, .drawer-inner, .sheet-inner, .cook-inner, .toast) { zoom: 1.3; }
+.segmented .text-big { font-size: 17px; }
+.segmented .text-bigger { font-size: 19px; }
+
+/* Coût du menu de la semaine */
+.menu-cost { margin: 0; padding: 12px 14px; border-radius: 14px; background: var(--herbe-tint); color: var(--ink); font-size: 15px; }
+
+/* Photo dans le formulaire « Créer ma recette » */
+.cr-photo { display: grid; gap: 8px; }
+.cr-photo img { width: 100%; max-width: 320px; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 14px; }
+.cr-photo .actions { align-items: center; }
+.recipe-photo figcaption .link-btn { font-size: inherit; }
+
+/* Les bases de la cuisine */
+.basic { background: var(--card); border-radius: 14px; border: 1.5px solid var(--line); }
+.basic summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; padding: 10px 16px; font-weight: 700; font-size: 17px; cursor: pointer; list-style: none; }
+.basic summary::-webkit-details-marker { display: none; }
+.basic[open] summary svg { transform: rotate(180deg); }
+.basic ol { margin: 0; padding: 0 16px 14px 36px; display: grid; gap: 8px; }
+.lang-links a[aria-current="true"] { font-weight: 700; text-decoration: none; color: var(--ink); }
+/* En gros texte sur un petit écran : l'étape garde de la place, et le mode cuisine défile si besoin */
+html[data-text] .cook-inner { overflow-y: auto; }
+html[data-text] .cook-step { min-height: 180px; flex-shrink: 0; flex-grow: 1; }

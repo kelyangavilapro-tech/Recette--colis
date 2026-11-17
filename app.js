@@ -6,7 +6,8 @@
 const KEYS = {
   have: "colis-have", groups: "colis-groupes-ouverts", favs: "colis-favoris",
   shop: "colis-courses", theme: "colis-theme", portions: "colis-portions", welcome: "colis-bienvenue-vue", lang: "colis-langue",
-  voice: "colis-voix", history: "colis-repas", urgent: "colis-a-finir", mine: "colis-mes-recettes", menu: "colis-menu"
+  voice: "colis-voix", history: "colis-repas", urgent: "colis-a-finir", mine: "colis-mes-recettes", menu: "colis-menu",
+  text: "colis-texte", photos: "colis-mes-photos"
 };
 const MOBILE = window.matchMedia("(max-width: 880px)");
 const DARK = window.matchMedia("(prefers-color-scheme: dark)");
@@ -24,6 +25,7 @@ let RECIPES = [];
 let REGIMES = [];
 let NUTRI = {};
 let TIPS = [];
+let BASICS = [];          // fiches « Les bases »
 let OFF = [];
 let PHOTOS = { recettes: {}, ingredients: {} }; // photos facultatives, déclarées dans recettes.json
 let PRIX = {}; // euros par kg (ou par litre), estimations
@@ -39,6 +41,7 @@ let urgent = new Set();   // produits à finir vite
 let history = [];         // repas cuisinés : { id, date, euros }
 let BASE = [];            // recettes de l'appli (sans celles créées par l'étudiant)
 let mine = [];            // recettes créées par l'étudiant, gardées sur son téléphone
+let myPhotos = {};        // photos prises par l'étudiant : identifiant de recette -> image
 let favs = new Set();
 let shop = [];
 let view = "all"; // "all" ou "favs"
@@ -183,7 +186,8 @@ const ICON = {
   cart: '<path d="M3 4h2l2.4 11.2a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.5L21 8H6.2"/><circle cx="10" cy="20" r="1.3"/><circle cx="17" cy="20" r="1.3"/>',
   trash: '<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
   edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13 7 4 4"/>',
-  plus: '<path d="M12 5v14M5 12h14"/>'
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  camera: '<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>'
 };
 /* Illustration de chaque recette, d'après son ustensile. */
 const TOOL_ART = {
@@ -227,6 +231,24 @@ function setupTheme() {
   }));
   const onSystem = () => { if (currentTheme() === "auto") applyTheme("auto"); };
   if (DARK.addEventListener) DARK.addEventListener("change", onSystem);
+}
+
+/* ---------- Taille du texte ---------- */
+
+const TEXT_SIZES = ["normal", "grand", "tres-grand"];
+function applyTextSize(size) {
+  if (size === "normal") document.documentElement.removeAttribute("data-text");
+  else document.documentElement.setAttribute("data-text", size);
+  const radio = $("text-" + size);
+  if (radio) radio.checked = true;
+}
+function setupTextSize() {
+  const saved = readJSON(KEYS.text);
+  applyTextSize(TEXT_SIZES.includes(saved) ? saved : "normal");
+  document.querySelectorAll('input[name="textsize"]').forEach(r => r.addEventListener("change", () => {
+    writeJSON(KEYS.text, r.value);
+    applyTextSize(r.value);
+  }));
 }
 
 /* ---------- Garde-manger ---------- */
@@ -357,6 +379,7 @@ function setupDrawer() {
     if (go === "random") randomRecipe();
     if (go === "shop") openShop();
     if (go === "keep") openTips();
+    if (go === "basics") openBasics();
     if (go === "create") openCreate(null);
     if (go === "menu") openMenu();
     if (go === "favs") { setView("favs"); $("results").scrollIntoView(); }
@@ -533,6 +556,7 @@ const FILTERS = [
   ["froid", "Sans cuisson", r => r.equip.length === 0],
   ["micro", "Au micro-ondes", r => r.equip.includes("micro")],
   ["sucre", "Sucré", r => !!r.sucree],
+  ["budget", "Petit budget", r => costOf(r) <= 0.5],
   ["prot", "Riche en protéines", r => nutrition(r).prot >= 20]
   /* les libellés sont traduits à l'affichage */
 ];
@@ -555,7 +579,7 @@ function card(r, a, state, i) {
   const c = COLORS[r.color] || COLORS.nuit;
   const fav = favs.has(r.id);
   const nut = nutrition(r);
-  const photo = photoOf("recettes", slug(r.id));
+  const photo = recipePhoto(r);
   let pill;
   if (!a.equipOk) {
     pill = `<span class="pill eq">${t("Il faut :")} ${esc(r.equip.map(lower).join(t(" ou ")))}</span>`;
@@ -580,7 +604,7 @@ function card(r, a, state, i) {
   if (r.portions === 1 && portions > 1) notes.push(t("Recette pour 1 personne : prépare-la {n} fois.", { n: portions }));
   const usesCan = r.steps.some(s => /boîte|\btin\b|\bcan\b|\blata\b/.test(s));
   if (usesCan && factor < 1) notes.push(t("Pour 1 personne, utilise une demi-boîte et garde le reste au frigo dans un bol fermé, 2 à 3 jours."));
-  if (usesCan && factor > 1) notes.push(t("Pour {n} personnes, prends 2 boîtes.", { n: portions }));
+  if (usesCan && factor > 1) notes.push(factor >= 3 ? t("Pour {n} personnes, prends 3 boîtes.", { n: portions }) : t("Pour {n} personnes, prends 2 boîtes.", { n: portions }));
   if (scaled.some(s => s.includes("(≈"))) notes.push(t("Repères : un verre = un verre à eau (20 cl), une poignée = ce que tient ta main."));
   const cost = costOf(r);
   return `
@@ -598,7 +622,9 @@ function card(r, a, state, i) {
       <span class="chev">${svg(ICON.chevron)}</span>
     </summary>
     <div class="recipe-body">
-      ${photo ? `<figure class="recipe-photo"><img src="${esc(photo.src)}" alt="${esc(r.title)}" loading="lazy">${photo.credit ? `<figcaption>${t("Photo :")} ${esc(photo.credit)}</figcaption>` : ""}</figure>` : ""}
+      ${photo ? `<figure class="recipe-photo"><img src="${esc(photo.src)}" alt="${esc(r.title)}" loading="lazy">${photo.mine
+        ? `<figcaption>${t("Ta photo")} · <button type="button" class="link-btn" data-action="unphoto" data-i="${i}">${t("Retirer ma photo")}</button></figcaption>`
+        : photo.credit ? `<figcaption>${t("Photo :")} ${esc(photo.credit)}</figcaption>` : ""}</figure>` : ""}
       <div class="actions">
         <button type="button" class="btn btn-pri btn-color" data-action="cook" data-i="${i}" style="background: ${c.bar}">${svg(ICON.cook)} ${t("Mode cuisine")}</button>
         ${a.missing.length ? `<button type="button" class="btn btn-sec" data-action="shop" data-i="${i}">${svg(ICON.cart)} <span data-label>${t("Ajouter à ma liste")}</span></button>` : ""}
@@ -606,6 +632,7 @@ function card(r, a, state, i) {
         <button type="button" class="btn btn-sec btn-fav" data-action="fav" data-i="${i}" aria-pressed="${fav}">${svg(ICON.star)} <span data-label>${fav ? t("Dans mes favoris") : t("Favori")}</span></button>
         ${r.mine ? `<button type="button" class="btn btn-sec" data-action="edit" data-i="${i}">${svg(ICON.edit)} <span data-label>${t("Modifier")}</span></button>
         <button type="button" class="btn btn-sec" data-action="delete" data-i="${i}">${svg(ICON.trash)} <span data-label>${t("Supprimer")}</span></button>` : ""}
+        <button type="button" class="btn btn-sec" data-action="photo" data-i="${i}">${svg(ICON.camera)} <span data-label>${photo && photo.mine ? t("Changer ma photo") : t("Photo de mon plat")}</span></button>
         <button type="button" class="btn btn-sec" data-action="print" data-i="${i}">${svg(ICON.print)} <span data-label>${t("Imprimer")}</span></button>
       </div>
       <div>
@@ -644,7 +671,7 @@ const isReady = x => x.a.equipOk && x.a.missing.length === 0;
 
 function renderResults() {
   const { rows, hidden: hiddenByRegime } = computeRows();
-  const byTime = (x, y) => x.r.time - y.r.time;
+  const byTime = filters.has("budget") ? (x, y) => costOf(x.r) - costOf(y.r) : (x, y) => x.r.time - y.r.time;
   const readyAll = rows.filter(isReady);
 
   $("count").textContent = readyAll.length;
@@ -738,8 +765,8 @@ function recipeText(r) {
     t("Étapes :"),
     ...stepsOf(r).map((s, n) => `${n + 1}. ${s}`),
     "",
-    `${t("Selon ton colis :")} ${r.swap}`,
-    "",
+    ...(r.swap ? [`${t("Selon ton colis :")} ${r.swap}`, ""] : []),
+    ...(r.mine ? [t("Pour ajouter cette recette dans ton appli, ouvre ce lien :"), recipeLink(r), ""] : []),
     `${t("Trouvé avec « Qu'est-ce que je cuisine avec mon colis ? » :")} ${appUrl()}`
   ].join("\n");
 }
@@ -837,13 +864,27 @@ function setupShop() {
     toast(plural(bought.length, "1 achat rangé dans tes ingrédients", "{n} achats rangés dans tes ingrédients"));
   });
   $("shop-share").addEventListener("click", e => {
-    const items = shop.filter(x => !x.done).map(x => `- ${x.label}`);
-    shareText("Ma liste de courses", ["Ma liste de courses :", ...items].join("\n"), e.currentTarget);
+    const todo = shop.filter(x => !x.done);
+    const items = todo.map(x => `- ${x.label}`);
+    shareText(t("Ma liste de courses"), [t("Ma liste de courses") + " :", ...items, "",
+      t("Pour ajouter cette liste dans ton appli (colocation, famille), ouvre ce lien :"), shopLink(todo)].join("\n"), e.currentTarget);
   });
   $("shop-clear").addEventListener("click", () => {
     if (!window.confirm(t("Vider toute la liste de courses ?"))) return;
     shop = []; saveShop(); renderShop();
   });
+}
+
+/* ---------- Les bases de la cuisine ---------- */
+
+function openBasics() {
+  $("basics-list").innerHTML = BASICS.map((b, k) => `
+    <details class="basic">
+      <summary><span>${esc(b.titre)}</span>${svg(ICON.chevron)}</summary>
+      <ol>${b.etapes.map(x => `<li>${esc(x)}</li>`).join("")}</ol>
+    </details>`).join("");
+  openDialog($("basics"));
+  track("bases", "Les bases de la cuisine");
 }
 
 /* ---------- Conservation ---------- */
@@ -971,7 +1012,7 @@ async function makeDecoder() {
       return codes.length ? codes[0].rawValue : null;
     };
   }
-  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=16");
+  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=17");
   const Z = window.ZXing;
   const reader = new Z.MultiFormatReader();
   const hints = new Map();
@@ -1343,6 +1384,10 @@ function renderMenu() {
     </li>`;
   }).join("") : `<li class="note">${t("Pas assez de recettes possibles avec ce que tu as. Coche plus d'ingrédients ou ton équipement.")}</li>`;
   $("menu-shop").disabled = !weekMenu.some(id => !isReady(byId.get(id)));
+  const total = weekMenu.reduce((sum, id) => sum + costOf(byId.get(id).r) * portions, 0); // coût par portion × nombre de personnes
+  $("menu-cost").hidden = !weekMenu.length;
+  $("menu-cost").innerHTML = t("Coût estimé de la semaine : <strong>≈ {e}</strong> pour {p}, soit ≈ {d} par repas et par personne. Avec un colis, c'est gratuit.", {
+    e: fmtEuros(total), p: plural(portions, "1 personne", "{n} personnes"), d: fmtEuros(total / weekMenu.length / portions) });
 }
 function openMenu() {
   const saved = readJSON(KEYS.menu);
@@ -1398,6 +1443,13 @@ function saveMine() {
   renderResults();
 }
 let editingUid = null;
+let crPhoto = { file: null, removed: false }; // photo choisie dans le formulaire, enregistrée avec la recette
+function showCreatePhoto(src) {
+  $("cr-photo-preview").hidden = !src;
+  if (src) $("cr-photo-preview").src = src; else $("cr-photo-preview").removeAttribute("src");
+  $("cr-photo-remove").hidden = !src;
+  $("cr-photo-label").textContent = src ? t("Changer la photo") : t("Ajouter une photo");
+}
 function openCreate(r) {
   editingUid = r && r.mine ? r.uid : null;
   const m = editingUid ? mine.find(x => x.uid === editingUid) : null;
@@ -1416,9 +1468,11 @@ function openCreate(r) {
     <p class="cr-group">${esc(g.titre)}</p>
     <div class="chips">${g.items.map(([id, n]) => `<span class="chip"><input type="checkbox" id="crn-${esc(id)}" data-id="${esc(id)}" ${chosenNeed.has(id) ? "checked" : ""}><label for="crn-${esc(id)}">${esc(n)}</label></span>`).join("")}</div>`).join("");
   $("cr-msg").textContent = "";
+  crPhoto = { file: null, removed: false };
+  showCreatePhoto(editingUid ? myPhotos["mine:" + editingUid] : null);
   openDialog($("create"));
 }
-function submitCreate(e) {
+async function submitCreate(e) {
   e.preventDefault();
   const title = $("cr-name").value.trim().slice(0, 60);
   const need = [...$("cr-ings").querySelectorAll("input:checked")].map(i => [i.dataset.id]);
@@ -1434,6 +1488,9 @@ function submitCreate(e) {
     swap: $("cr-swap").value.trim().slice(0, 200), portions: $("cr-single").checked ? 1 : 2
   };
   if (editingUid) mine = mine.map(x => x.uid === editingUid ? rec : x); else mine.push(rec);
+  const photoId = "mine:" + rec.uid;
+  if (crPhoto.file) await storePhoto(photoId, crPhoto.file);
+  else if (crPhoto.removed && myPhotos[photoId]) { delete myPhotos[photoId]; savePhotos(); }
   track(editingUid ? "ma-recette/modifiee" : "ma-recette/creee", "Recette personnelle");
   closeDialog($("create"));
   view = "mine";
@@ -1444,11 +1501,158 @@ function deleteMine(r) {
   if (!window.confirm(t("Supprimer la recette « {x} » ?", { x: r.title }))) return;
   mine = mine.filter(x => x.uid !== r.uid);
   favs.delete(r.id); saveFavs();
+  if (myPhotos[r.id]) { delete myPhotos[r.id]; savePhotos(); }
   saveMine();
 }
 function setupCreate() {
   $("create-form").addEventListener("submit", submitCreate);
   $("create-cancel").addEventListener("click", () => closeDialog($("create")));
+  $("cr-photo").addEventListener("change", e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    crPhoto = { file, removed: false };
+    showCreatePhoto(URL.createObjectURL(file));
+  });
+  $("cr-photo-remove").addEventListener("click", () => {
+    crPhoto = { file: null, removed: true };
+    $("cr-photo").value = "";
+    showCreatePhoto(null);
+  });
+}
+
+/* ---------- Photo de mon plat : prise par l'étudiant, gardée sur son téléphone ---------- */
+
+function recipePhoto(r) {
+  if (myPhotos[r.id]) return { src: myPhotos[r.id], mine: true };
+  return r.mine ? null : photoOf("recettes", slug(r.id));
+}
+function savePhotos() {
+  try { localStorage.setItem(KEYS.photos, JSON.stringify(myPhotos)); return true; }
+  catch (err) { return false; }
+}
+/* Réduit la photo (640 px au plus) pour qu'elle prenne peu de place. */
+function shrinkPhoto(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, 640 / Math.max(img.naturalWidth, img.naturalHeight));
+      const c = document.createElement("canvas");
+      c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      URL.revokeObjectURL(url);
+      resolve(c.toDataURL("image/jpeg", 0.72));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error("image illisible")); };
+    img.src = url;
+  });
+}
+async function storePhoto(id, file) {
+  let data;
+  try { data = await shrinkPhoto(file); } catch (err) { toast(t("Impossible de lire cette photo.")); return false; }
+  const before = myPhotos[id];
+  myPhotos[id] = data;
+  if (!savePhotos()) {
+    if (before) myPhotos[id] = before; else delete myPhotos[id];
+    toast(t("Plus assez de place sur ce téléphone pour cette photo. Retire d'anciennes photos."));
+    return false;
+  }
+  track("photo/ajoutee", "Photo de mon plat");
+  return true;
+}
+let photoFor = null;
+function pickPhoto(id) {
+  photoFor = id;
+  $("photo-input").value = "";
+  $("photo-input").click();
+}
+function setupPhotos() {
+  const saved = readJSON(KEYS.photos);
+  if (saved && typeof saved === "object") myPhotos = saved;
+  $("photo-input").addEventListener("change", async e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file || !photoFor) return;
+    if (await storePhoto(photoFor, file)) { renderResults(); toast(t("Photo ajoutée à la recette")); }
+  });
+}
+
+/* ---------- Liens de partage : une recette perso, une liste de courses ---------- */
+
+const toB64 = str => btoa(unescape(encodeURIComponent(str))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const fromB64 = b64 => decodeURIComponent(escape(atob(b64.replace(/-/g, "+").replace(/_/g, "/"))));
+function recipeLink(r) {
+  const m = mine.find(x => x.uid === r.uid) || r;
+  const data = { t: m.title, m: m.time, e: m.equip, o: m.tool, n: m.need.map(x => Array.isArray(x) ? x[0] : x), s: m.steps, w: m.swap, p: m.portions === 1 ? 1 : 2 };
+  const url = new URL("./", location.href);
+  url.searchParams.set("recette", toB64(JSON.stringify(data)));
+  return url.href;
+}
+function shopLink(items) {
+  const url = new URL("./", location.href);
+  url.searchParams.set("courses", items.map(x => x.id ? x.id : "~" + x.label).join("|"));
+  return url.href;
+}
+function showBanner(html, undo) {
+  $("colis-banner-text").innerHTML = html;
+  $("colis-banner").hidden = false;
+  $("colis-undo").onclick = () => { undo(); $("colis-banner").hidden = true; };
+}
+const dropParam = () => { try { window.history.replaceState(null, "", location.pathname + location.hash); } catch (err) { /* rien */ } };
+/* Une recette envoyée par un ami : on l'ajoute à « Mes recettes ». */
+function applyRecipeLink() {
+  const raw = new URLSearchParams(location.search).get("recette");
+  if (!raw) return false;
+  dropParam();
+  let d;
+  try { d = JSON.parse(fromB64(raw)); } catch (err) { return false; }
+  const equipIds = new Set((GROUPS.find(g => g.type === "equip") || { items: [] }).items.map(([id]) => id));
+  const str = (v, max) => typeof v === "string" ? v.trim().slice(0, max) : "";
+  const rec = {
+    uid: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    title: str(d.t, 60), time: Math.max(1, Math.min(180, Number(d.m) || 15)),
+    equip: (Array.isArray(d.e) ? d.e : []).filter(id => equipIds.has(id)),
+    tool: str(d.o, 40), need: (Array.isArray(d.n) ? d.n : []).filter(id => INGREDIENTS.has(id)).map(id => [id]), extra: [],
+    steps: (Array.isArray(d.s) ? d.s : []).map(x => str(x, 400)).filter(Boolean).slice(0, 15),
+    swap: str(d.w, 200), portions: d.p === 1 ? 1 : 2
+  };
+  if (!rec.title || !rec.need.length || !rec.steps.length) return false;
+  const same = mine.find(x => x.title === rec.title && x.steps.join("|") === rec.steps.join("|"));
+  view = "mine";
+  if (same) { toast(t("Cette recette est déjà dans « Mes recettes ».")); return true; }
+  mine.push(rec);
+  writeJSON(KEYS.mine, mine);
+  RECIPES = BASE.concat(mine.map(prepareMine));
+  track("ma-recette/recue", "Recette reçue par lien");
+  showBanner(t("Recette « <strong>{x}</strong> » ajoutée à « Mes recettes ».", { x: esc(rec.title) }), () => {
+    mine = mine.filter(x => x.uid !== rec.uid);
+    view = "all";
+    saveMine();
+  });
+  return true;
+}
+/* Une liste de courses envoyée par un colocataire : on l'ajoute à la sienne. */
+function applyShopLink() {
+  const raw = new URLSearchParams(location.search).get("courses");
+  if (raw == null) return false;
+  dropParam();
+  const added = [];
+  raw.split("|").slice(0, 60).forEach(part => {
+    const item = part.startsWith("~")
+      ? { id: null, label: part.slice(1).trim().slice(0, 60) }
+      : INGREDIENTS.has(part) ? { id: part, label: NAMES[part] } : null;
+    if (!item || !item.label) return;
+    if (shop.some(x => !x.done && (item.id ? x.id === item.id : norm(x.label) === norm(item.label)))) return;
+    const entry = { id: item.id, label: item.label, from: t("Liste partagée"), done: false };
+    shop.push(entry); added.push(entry);
+  });
+  saveShop();
+  track("courses/recue", "Liste de courses reçue par lien");
+  if (!added.length) { toast(t("C'est déjà dans ta liste de courses")); return true; }
+  showBanner(plural(added.length, "Liste partagée : 1 article ajouté à ta liste de courses.", "Liste partagée : {n} articles ajoutés à ta liste de courses."), () => {
+    shop = shop.filter(x => !added.includes(x));
+    saveShop(); updateShopBadge();
+  });
+  return true;
 }
 
 /* ---------- Produits à finir vite ---------- */
@@ -1567,7 +1771,7 @@ function applyColisLink(firstVisit) {
   if (!raw) return false;
   const ids = raw.split(/[.,\s]+/).filter(id => INGREDIENTS.has(id));
   const asso = (params.get("asso") || "").trim().slice(0, 40);
-  try { history.replaceState(null, "", location.pathname + location.hash); } catch (err) { /* rien */ }
+  try { window.history.replaceState(null, "", location.pathname + location.hash); } catch (err) { /* rien */ }
   if (!ids.length) return false;
 
   const before = new Set(have);
@@ -1684,6 +1888,10 @@ function applyContent(en, data) {
     ["title", "tool", "swap"].forEach(k => { if (tr[k]) r[k] = tr[k]; });
     if (Array.isArray(tr.steps) && tr.steps.length === r.steps.length) r.steps = tr.steps;
   });
+  (data.bases || []).forEach(b => {
+    const tr = en.bases && en.bases[b.titre];
+    if (tr && Array.isArray(tr.etapes)) { b.titre = tr.titre; b.etapes = tr.etapes; }
+  });
   (data.conservation || []).forEach(c => {
     const tr = en.conservation && en.conservation[c.titre];
     if (tr) { c.titre = tr.titre; c.texte = tr.texte; }
@@ -1705,8 +1913,8 @@ async function init() {
   if (LANG !== "fr") {
     try {
       const [ui, content] = await Promise.all([
-        fetch(`i18n-${LANG}.json?v=16`, { cache: "no-cache" }).then(r => r.json()),
-        fetch(`recettes.${LANG}.json?v=16`, { cache: "no-cache" }).then(r => r.json())
+        fetch(`i18n-${LANG}.json?v=17`, { cache: "no-cache" }).then(r => r.json()),
+        fetch(`recettes.${LANG}.json?v=17`, { cache: "no-cache" }).then(r => r.json())
       ]);
       DICT = ui; enContent = content;
       translateStatic();
@@ -1714,6 +1922,7 @@ async function init() {
   }
   setupLang();
   setupTheme();
+  setupTextSize();
   setupStats();
   setupFeedback();
   setupDialogs();
@@ -1739,12 +1948,13 @@ async function init() {
   RECIPES = BASE.concat(mine.map(prepareMine));
   NUTRI = data.nutrition || {};
   TIPS = data.conservation || [];
+  BASICS = data.bases || [];
   OFF = data.openFoodFacts || [];
   PHOTOS = Object.assign({ recettes: {}, ingredients: {} }, data.photos || {});
   PRIX = data.prix || {};
   EXEMPLE = data.colisExemple || [];
   const savedPortions = readJSON(KEYS.portions);
-  if ([1, 2, 4].includes(savedPortions)) portions = savedPortions;
+  if ([1, 2, 4, 6].includes(savedPortions)) portions = savedPortions;
   GROUPS = data.groupes.slice();
   GROUPS.forEach(g => g.items.forEach(([id, n]) => { NAMES[id] = n; if (!g.type) INGREDIENTS.add(id); }));
   if (REGIMES.length) {
@@ -1765,7 +1975,7 @@ async function init() {
   if (Array.isArray(savedHistory)) history = savedHistory.filter(h => h && h.id);
   const savedGroups = readJSON(KEYS.groups);
   if (Array.isArray(savedGroups)) openGroups = savedGroups;
-  const fromLink = applyColisLink(firstVisit);
+  const fromLink = applyColisLink(firstVisit) | applyRecipeLink() | applyShopLink();
   $("example-note").hidden = !firstVisit || fromLink;
   const showWelcome = firstVisit && !fromLink && !readJSON(KEYS.welcome);
 
@@ -1776,6 +1986,7 @@ async function init() {
   setupUrgent();
   setupCreate();
   setupMenu();
+  setupPhotos();
 
   $("clear").addEventListener("click", () => {
     have.clear();
@@ -1822,6 +2033,8 @@ async function init() {
     if (act === "shop") addMissingToShop(r, analyse(r));
     if (act === "edit") openCreate(RECIPES[i]);
     if (act === "delete") deleteMine(RECIPES[i]);
+    if (act === "photo") pickPhoto(r.id);
+    if (act === "unphoto") { delete myPhotos[r.id]; savePhotos(); renderResults(); }
   });
 
   renderPantry();
