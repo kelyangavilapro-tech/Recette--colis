@@ -797,3 +797,28 @@ html[data-text] .logo-script { transform: rotate(-4deg); }
 html[data-text] .tabbar-item { font-size: 13.5px; }
 html[data-text] .tabbar-item svg { width: 28px; height: 28px; }
 @media (max-width: 360px) { .tabbar-item { font-size: 11.5px; } html[data-text] .tabbar-item { font-size: 12.5px; } }
+
+/* ---------- Mes ajouts (version 21) ---------- */
+.chip-add { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 8px 14px; border: 1.5px dashed var(--brand); border-radius: 999px; background: transparent; color: var(--brand-ink); font: inherit; font-size: 15px; font-weight: 700; cursor: pointer; }
+.chip-add svg { width: 18px; height: 18px; flex-shrink: 0; }
+.chip-add:hover { background: var(--brand-tint); }
+.chip-add:focus-visible { outline: 3px solid var(--link); outline-offset: 2px; }
+.chip-mine { display: inline-flex; align-items: center; }
+.chip-mine label { padding-right: 44px; }
+.chip-del { position: absolute; right: 4px; top: 50%; transform: translateY(-50%); width: 36px; height: 36px; display: grid; place-items: center; border: 0; border-radius: 999px; background: transparent; color: var(--muted); cursor: pointer; }
+.chip-del svg { width: 18px; height: 18px; }
+.chip-mine input:checked ~ .chip-del { color: #FFFFFF; }
+.chip-del:hover { background: rgba(0, 0, 0, .08); }
+.chip-del:focus-visible { outline: 3px solid var(--link); outline-offset: 0; }
+#add-item-preview { width: 120px; height: 120px; object-fit: cover; border-radius: 16px; }
+
+/* Rubriques du profil repliables */
+details.fold { gap: 0; }
+.fold-head { list-style: none; cursor: pointer; display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 10px; row-gap: 2px; min-height: 44px; }
+.fold-head::-webkit-details-marker { display: none; }
+.fold-head svg { color: var(--muted); transition: transform .2s; }
+details.fold[open] .fold-head svg { transform: rotate(180deg); }
+.fold-sum { grid-column: 1 / -1; font-size: 15px; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+details.fold[open] .fold-sum { display: none; }
+.fold-head:focus-visible { outline: 3px solid var(--link); outline-offset: 4px; border-radius: 8px; }
+.fold-body { display: flex; flex-direction: column; gap: 10px; padding-top: 10px; }

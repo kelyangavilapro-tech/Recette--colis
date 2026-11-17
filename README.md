@@ -12,7 +12,7 @@ Application web installable (PWA) pour aider les étudiants à cuisiner avec ce 
 - **Recherche** : tuiles thématiques (« Étudiant fauché », « Végétarien »…), filtres rapides, filtres détaillés en accordéon avec « Valider » et « Réinitialiser ».
 - **Mon frigo** (bouton rond au centre) : les ingrédients seulement, le scanner, « À finir vite », et une barre « N recettes possibles » toujours visible.
 - **Carnet** : favoris, mes recettes et mes notes personnelles (clé `colis-notes`), liste de courses et menu de la semaine.
-- **Profil** : équipement, régime, allergies, nombre de personnes, affichage, taille du texte, langue, aide.
+- **Profil** : équipement, régime, allergies (en volets fermés qui montrent ce qui est coché ; on les ouvre pour changer), nombre de personnes, affichage, taille du texte, langue, aide.
 - **Page recette en plein écran** : grande photo, ingrédients à cocher, nombre de personnes réglable, préparation, ma note, valeurs nutritionnelles. Le mode pas à pas montre une étape par écran : on glisse le doigt pour passer à la suivante.
 - Les adresses des écrans sont partageables : `#recherche`, `#frigo`, `#recette/crepes`…
 
@@ -31,6 +31,7 @@ Application web installable (PWA) pour aider les étudiants à cuisiner avec ce 
 - **Colocation** : portions pour 1, 2, 4 ou 6 personnes.
 - **Taille du texte** (menu) : normal, grand ou très grand.
 - **À finir vite** : on marque ce qui va bientôt périmer ; les recettes qui l'utilisent passent en premier.
+- **Mes ajouts** (version 21) : un bouton « + Ajouter un aliment » dans chaque rayon de Mon frigo, et « + Ajouter un équipement » dans le profil. On donne un nom et, si on veut, une photo. L'ajout reste sur le téléphone (clé `colis-mes-aliments`, photo dans `colis-mes-photos`), il est coché tout de suite et sert dans « Créer ma recette ». Une recette partagée par lien recrée chez l'ami les ajouts qu'elle utilise. On retire un ajout avec sa petite poubelle, sauf s'il sert encore dans une recette.
 - **Mes recettes** : chaque étudiant peut créer, modifier et supprimer ses propres recettes. Elles restent sur son téléphone (clé `colis-mes-recettes`) et profitent de tout le reste : portions, repères, mode cuisine, coût, valeurs nutritionnelles.
 - **Régimes.** Végétarien, végan, halal / sans porc, sans lactose, sans gluten, et allergies : sans œufs, sans poisson, sans arachides, sans fruits à coque, sans soja. Ces filtres retirent les ingrédients concernés, mais on rappelle de toujours vérifier les étiquettes (traces possibles).
 - **Dans chaque recette :** une illustration, les valeurs nutritionnelles estimées (calories, protéines, glucides, lipides), un mode cuisine (étapes en plein écran, écran maintenu allumé, minuteur), « Ajouter à ma liste » pour ce qui manque, le partage, les favoris et l'impression A4.

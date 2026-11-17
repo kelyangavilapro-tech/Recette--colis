@@ -7,7 +7,7 @@ const KEYS = {
   have: "colis-have", groups: "colis-groupes-ouverts", favs: "colis-favoris",
   shop: "colis-courses", theme: "colis-theme", portions: "colis-portions", welcome: "colis-bienvenue-vue", lang: "colis-langue",
   voice: "colis-voix", history: "colis-repas", urgent: "colis-a-finir", mine: "colis-mes-recettes", menu: "colis-menu",
-  text: "colis-texte", photos: "colis-mes-photos", notes: "colis-notes"
+  text: "colis-texte", photos: "colis-mes-photos", notes: "colis-notes", custom: "colis-mes-aliments"
 };
 const MOBILE = window.matchMedia("(max-width: 880px)");
 const DARK = window.matchMedia("(prefers-color-scheme: dark)");
@@ -43,6 +43,7 @@ let BASE = [];            // recettes de l'appli (sans celles créées par l'ét
 let mine = [];            // recettes créées par l'étudiant, gardées sur son téléphone
 let myPhotos = {};        // photos prises par l'étudiant : identifiant de recette -> image
 let favs = new Set();
+let custom = [];          // aliments et équipements ajoutés par l'étudiant : { id: "perso-…", name, g }
 let shop = [];
 let SEASON = new Set();   // recettes de la saison en cours
 let openGroups = null; // null = état par défaut (ouverts sur ordinateur, repliés sur téléphone)
@@ -269,11 +270,17 @@ const photoOf = (kind, key) => {
   return ph && /^photos\/[a-z0-9/_-]+\.(jpe?g|webp|png)$/.test(ph.src) ? ph : null;
 };
 
+const isCustom = id => String(id).startsWith("perso-");
+const chipPic = id => {
+  const src = isCustom(id) ? myPhotos["item:" + id] : (photoOf("ingredients", id) || {}).src;
+  return src ? `<img class="chip-pic" src="${esc(src)}" alt="" width="28" height="28" loading="lazy">` : "";
+};
 const chipHtml = (prefix, id, name) => `
-  <span class="chip" data-name="${esc(norm(name))}">
+  <span class="chip${isCustom(id) ? " chip-mine" : ""}" data-name="${esc(norm(name))}">
     <input type="checkbox" id="${prefix}-${esc(id)}" data-id="${esc(id)}" ${have.has(id) ? "checked" : ""}>
-    <label for="${prefix}-${esc(id)}">${photoOf("ingredients", id) ? `<img class="chip-pic" src="${esc(photoOf("ingredients", id).src)}" alt="" width="28" height="28" loading="lazy">` : ""}${esc(name)}</label>
+    <label for="${prefix}-${esc(id)}">${chipPic(id)}${esc(name)}</label>${isCustom(id) ? `<button type="button" class="chip-del" data-del="${esc(id)}" aria-label="${esc(t("Retirer « {x} »", { x: name }))}">${svg(ICON.trash)}</button>` : ""}
   </span>`;
+const addBtn = (g, label) => `<button type="button" class="chip-add" data-add="${g.key}">${svg(ICON.plus)}${esc(label)}</button>`;
 
 /* Mon frigo ne montre que les ingrédients : l'équipement et le régime sont dans le profil. */
 function renderPantry() {
@@ -291,7 +298,7 @@ function renderPantry() {
       </summary>
       <fieldset>
         <legend class="sr-only">${esc(g.titre)}</legend>
-        <div class="chips">${g.items.map(([id, name]) => chipHtml("c", id, name)).join("")}</div>
+        <div class="chips">${g.items.map(([id, name]) => chipHtml("c", id, name)).join("")}${addBtn(g, t("Ajouter un aliment"))}</div>
       </fieldset>
     </details>`;
   }).join("");
@@ -353,18 +360,27 @@ const DIETS = ["vege", "vegan", "halal"]; // le reste des régimes, ce sont des 
 function renderProfile() {
   const equip = GROUPS.find(g => g.type === "equip");
   const regime = GROUPS.find(g => g.type === "regime");
-  $("profile-equip").innerHTML = equip ? equip.items.map(([id, n]) => chipHtml("p", id, n)).join("") : "";
+  $("profile-equip").innerHTML = equip ? equip.items.map(([id, n]) => chipHtml("p", id, n)).join("") + addBtn(equip, t("Ajouter un équipement")) : "";
   $("profile-regime").innerHTML = regime ? regime.items.filter(([id]) => DIETS.includes(id)).map(([id, n]) => chipHtml("p", id, n)).join("") : "";
   $("profile-allergy").innerHTML = regime ? regime.items.filter(([id]) => !DIETS.includes(id)).map(([id, n]) => chipHtml("p", id, n)).join("") : "";
   $("profile-allergy-note").textContent = `${t("On cache les recettes qui ne te conviennent pas.")} ${regime && regime.note ? regime.note : ""}`;
+  updateFolds();
   renderStats();
   $("drawer-shop-count").textContent = shop.filter(x => !x.done).length;
+}
+/* Les rubriques du profil sont repliées : on voit d'un coup d'œil ce qui est coché, et on ouvre pour changer. */
+function updateFolds() {
+  document.querySelectorAll("#screen-profil details.fold").forEach(d => {
+    const got = [...d.querySelectorAll(".fold-body input:checked")].map(i => (i.nextElementSibling || i).textContent.trim()).filter(Boolean);
+    d.querySelector("[data-fold-sum]").textContent = got.length ? got.join(", ") : t("Rien de coché");
+  });
 }
 function setupProfile() {
   $("screen-profil").addEventListener("change", e => {
     const inp = e.target;
     if (!inp.dataset.id) return;
     if (inp.checked) have.add(inp.dataset.id); else have.delete(inp.dataset.id);
+    updateFolds();
     save(); renderResults();
   });
   $("reset-app").addEventListener("click", () => {
@@ -374,6 +390,10 @@ function setupProfile() {
   });
   /* Boutons « raccourcis » présents un peu partout (accueil, carnet, profil). */
   document.addEventListener("click", e => {
+    const add = e.target.closest("[data-add]");
+    if (add) { openAddItem(Number(add.dataset.add)); return; }
+    const del = e.target.closest("[data-del]");
+    if (del) { removeCustom(del.dataset.del); return; }
     const b = e.target.closest("[data-go]");
     if (b) {
       const go = b.dataset.go;
@@ -387,6 +407,104 @@ function setupProfile() {
     }
     if (e.target.closest("[data-open-shop]")) openShop();
   });
+}
+
+/* ---------- Mes ajouts : aliments et équipements ajoutés par l'étudiant ---------- */
+
+const saveCustom = () => writeJSON(KEYS.custom, custom);
+const groupByKey = key => GROUPS.find(g => g.key === key && g.type !== "regime");
+/* Range un ajout dans son groupe, pour qu'il apparaisse partout comme les autres (frigo, profil, création de recette). */
+function placeCustom(c) {
+  const g = groupByKey(c.g);
+  if (!g) return false;
+  if (!g.items.some(([id]) => id === c.id)) g.items.push([c.id, c.name]);
+  NAMES[c.id] = c.name;
+  if (!g.type) INGREDIENTS.add(c.id);
+  return true;
+}
+/* Ajoute (ou retrouve, s'il existe déjà sous ce nom) un aliment ou un équipement ; renvoie son identifiant. */
+function addCustom(name, key) {
+  const g = groupByKey(key);
+  if (!g) return null;
+  const same = g.items.find(([, n]) => norm(n) === norm(name));
+  if (same) return same[0];
+  const c = { id: "perso-" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), name, g: key };
+  custom.push(c);
+  placeCustom(c);
+  saveCustom();
+  return c.id;
+}
+const usedInMine = id => mine.find(m => m.need.some(x => (Array.isArray(x) ? x : [x]).includes(id)) || (m.equip || []).includes(id));
+function removeCustom(id) {
+  const c = custom.find(x => x.id === id);
+  if (!c) return;
+  const used = usedInMine(id);
+  if (used) { toast(t("« {x} » sert dans ta recette « {r} ». Retire-le d'abord de la recette.", { x: c.name, r: used.title })); return; }
+  if (!window.confirm(t("Retirer « {x} » ?", { x: c.name }))) return;
+  custom = custom.filter(x => x.id !== id);
+  const g = groupByKey(c.g);
+  if (g) g.items = g.items.filter(([i]) => i !== id);
+  INGREDIENTS.delete(id);
+  have.delete(id);
+  if (urgent.delete(id)) writeJSON(KEYS.urgent, [...urgent]);
+  if (myPhotos["item:" + id]) { delete myPhotos["item:" + id]; savePhotos(); }
+  saveCustom();
+  haveChanged();
+  toast(t("« {x} » retiré", { x: c.name }));
+}
+
+let addKey = null;
+let addPhoto = null;
+function showAddPhoto(src) {
+  $("add-item-preview").hidden = !src;
+  if (src) $("add-item-preview").src = src; else $("add-item-preview").removeAttribute("src");
+  $("add-item-photo-remove").hidden = !src;
+  $("add-item-photo-label").textContent = src ? t("Changer la photo") : t("Ajouter une photo");
+}
+function openAddItem(key) {
+  const g = groupByKey(key);
+  if (!g) return;
+  addKey = key; addPhoto = null;
+  const isEquip = g.type === "equip";
+  $("add-item-title").textContent = isEquip ? t("Ajouter un équipement") : t("Ajouter un aliment");
+  $("add-item-where").textContent = isEquip ? t("Dans : Mon équipement") : t("Dans : {x}", { x: g.titre });
+  $("add-item-name").value = "";
+  $("add-item-name").placeholder = isEquip ? t("Par exemple : Plancha") : t("Par exemple : Quinoa");
+  $("add-item-photo").value = "";
+  $("add-item-msg").textContent = "";
+  showAddPhoto(null);
+  openDialog($("add-item"));
+  setTimeout(() => $("add-item-name").focus(), 50);
+}
+async function submitAddItem(e) {
+  e.preventDefault();
+  const g = groupByKey(addKey);
+  const name = $("add-item-name").value.replace(/\s+/g, " ").trim().slice(0, 40);
+  if (!name) { $("add-item-msg").textContent = t("Écris le nom de ton ajout."); $("add-item-name").focus(); return; }
+  const taken = Object.keys(NAMES).find(id => (INGREDIENTS.has(id) || g.items.some(([i]) => i === id)) && norm(NAMES[id]) === norm(name));
+  if (taken) { $("add-item-msg").textContent = t("« {x} » existe déjà : coche-le dans la liste.", { x: NAMES[taken] }); return; }
+  const id = addCustom(name, addKey);
+  if (addPhoto) await storePhoto("item:" + id, addPhoto, 240);
+  have.add(id);
+  track(g.type === "equip" ? "ajout/equipement" : "ajout/aliment", "Ajout perso");
+  closeDialog($("add-item"));
+  haveChanged();
+  toast(t("« {x} » ajouté et coché", { x: name }));
+}
+function loadCustom() {
+  const saved = readJSON(KEYS.custom);
+  if (Array.isArray(saved)) custom = saved.filter(c => c && isCustom(c.id) && typeof c.name === "string" && c.name.trim() && Number.isInteger(c.g) && placeCustom(c));
+}
+function setupAddItem() {
+  $("add-item-form").addEventListener("submit", submitAddItem);
+  $("add-item-cancel").addEventListener("click", () => closeDialog($("add-item")));
+  $("add-item-photo").addEventListener("change", e => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) return;
+    addPhoto = file;
+    showAddPhoto(URL.createObjectURL(file));
+  });
+  $("add-item-photo-remove").addEventListener("click", () => { addPhoto = null; $("add-item-photo").value = ""; showAddPhoto(null); });
 }
 
 /* ---------- Correspondance ---------- */
@@ -1334,7 +1452,7 @@ async function makeDecoder() {
       return codes.length ? codes[0].rawValue : null;
     };
   }
-  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=20");
+  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=21");
   const Z = window.ZXing;
   const reader = new Z.MultiFormatReader();
   const hints = new Map();
@@ -1852,12 +1970,12 @@ function savePhotos() {
   catch (err) { return false; }
 }
 /* Réduit la photo (640 px au plus) pour qu'elle prenne peu de place. */
-function shrinkPhoto(file) {
+function shrinkPhoto(file, max = 640) {
   return new Promise((resolve, reject) => {
     const url = URL.createObjectURL(file);
     const img = new Image();
     img.onload = () => {
-      const k = Math.min(1, 640 / Math.max(img.naturalWidth, img.naturalHeight));
+      const k = Math.min(1, max / Math.max(img.naturalWidth, img.naturalHeight));
       const c = document.createElement("canvas");
       c.width = Math.round(img.naturalWidth * k); c.height = Math.round(img.naturalHeight * k);
       c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
@@ -1868,9 +1986,9 @@ function shrinkPhoto(file) {
     img.src = url;
   });
 }
-async function storePhoto(id, file) {
+async function storePhoto(id, file, max) {
   let data;
-  try { data = await shrinkPhoto(file); } catch (err) { toast(t("Impossible de lire cette photo.")); return false; }
+  try { data = await shrinkPhoto(file, max); } catch (err) { toast(t("Impossible de lire cette photo.")); return false; }
   const before = myPhotos[id];
   myPhotos[id] = data;
   if (!savePhotos()) {
@@ -1903,14 +2021,16 @@ const toB64 = str => btoa(unescape(encodeURIComponent(str))).replace(/\+/g, "-")
 const fromB64 = b64 => decodeURIComponent(escape(atob(b64.replace(/-/g, "+").replace(/_/g, "/"))));
 function recipeLink(r) {
   const m = mine.find(x => x.uid === r.uid) || r;
-  const data = { t: m.title, m: m.time, e: m.equip, o: m.tool, n: m.need.map(x => Array.isArray(x) ? x[0] : x), s: m.steps, w: m.swap, p: m.portions === 1 ? 1 : 2 };
+  /* Un ajout perso n'existe pas chez l'ami : on envoie son nom et son groupe, il sera recréé chez lui. */
+  const share = id => { const c = custom.find(x => x.id === id); return c ? { c: c.name, g: c.g } : id; };
+  const data = { t: m.title, m: m.time, e: m.equip.map(share), o: m.tool, n: m.need.map(x => share(Array.isArray(x) ? x[0] : x)), s: m.steps, w: m.swap, p: m.portions === 1 ? 1 : 2 };
   const url = new URL("./", location.href);
   url.searchParams.set("recette", toB64(JSON.stringify(data)));
   return url.href;
 }
 function shopLink(items) {
   const url = new URL("./", location.href);
-  url.searchParams.set("courses", items.map(x => x.id ? x.id : "~" + x.label).join("|"));
+  url.searchParams.set("courses", items.map(x => x.id && !isCustom(x.id) ? x.id : "~" + x.label).join("|"));
   return url.href;
 }
 function showBanner(html, undo) {
@@ -1926,8 +2046,23 @@ function applyRecipeLink() {
   dropParam();
   let d;
   try { d = JSON.parse(fromB64(raw)); } catch (err) { return false; }
-  const equipIds = new Set((GROUPS.find(g => g.type === "equip") || { items: [] }).items.map(([id]) => id));
+  const equipG = GROUPS.find(g => g.type === "equip") || { items: [] };
+  const equipIds = new Set(equipG.items.map(([id]) => id));
   const str = (v, max) => typeof v === "string" ? v.trim().slice(0, max) : "";
+  /* Ajout perso de l'ami : on le retrouve chez soi par son nom, sinon on le crée. */
+  const firstIng = (GROUPS.find(g => !g.type) || {}).key;
+  const resolve = (x, equip) => {
+    if (!x || typeof x !== "object") return x;
+    const name = str(x.c, 40);
+    if (!name) return null;
+    const g = groupByKey(x.g);
+    const key = equip ? equipG.key : (g && !g.type ? g.key : firstIng);
+    const id = addCustom(name, key);
+    if (id && equip) equipIds.add(id);
+    return id;
+  };
+  if (Array.isArray(d.e)) d.e = d.e.map(x => resolve(x, true));
+  if (Array.isArray(d.n)) d.n = d.n.map(x => resolve(x, false));
   const rec = {
     uid: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
     title: str(d.t, 60), time: Math.max(1, Math.min(180, Number(d.m) || 15)),
@@ -2225,8 +2360,8 @@ async function init() {
   if (LANG !== "fr") {
     try {
       const [ui, content] = await Promise.all([
-        fetch(`i18n-${LANG}.json?v=20`, { cache: "no-cache" }).then(r => r.json()),
-        fetch(`recettes.${LANG}.json?v=20`, { cache: "no-cache" }).then(r => r.json())
+        fetch(`i18n-${LANG}.json?v=21`, { cache: "no-cache" }).then(r => r.json()),
+        fetch(`recettes.${LANG}.json?v=21`, { cache: "no-cache" }).then(r => r.json())
       ]);
       DICT = ui; enContent = content;
       translateStatic();
@@ -2265,7 +2400,7 @@ async function init() {
   EXEMPLE = data.colisExemple || [];
   const savedPortions = readJSON(KEYS.portions);
   if (Number.isInteger(savedPortions) && savedPortions >= 1 && savedPortions <= 8) portions = savedPortions;
-  GROUPS = data.groupes.slice();
+  GROUPS = data.groupes.map((g, key) => Object.assign({}, g, { key, items: g.items.slice() }));
   GROUPS.forEach(g => g.items.forEach(([id, n]) => { NAMES[id] = n; if (!g.type) INGREDIENTS.add(id); }));
   if (REGIMES.length) {
     const equipAt = GROUPS.findIndex(g => g.type === "equip");
@@ -2285,6 +2420,7 @@ async function init() {
   if (Array.isArray(savedHistory)) history = savedHistory.filter(h => h && h.id);
   const savedGroups = readJSON(KEYS.groups);
   if (Array.isArray(savedGroups)) openGroups = savedGroups;
+  loadCustom();
   const fromLink = applyColisLink(firstVisit) | applyRecipeLink() | applyShopLink();
   $("example-note").hidden = !firstVisit || fromLink;
   const showWelcome = firstVisit && !fromLink && !readJSON(KEYS.welcome);
@@ -2297,6 +2433,7 @@ async function init() {
   setupCreate();
   setupMenu();
   setupPhotos();
+  setupAddItem();
   setupBook();
   setupHome();
   setupSearch();
