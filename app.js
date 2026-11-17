@@ -1334,7 +1334,7 @@ async function makeDecoder() {
       return codes.length ? codes[0].rawValue : null;
     };
   }
-  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=18");
+  if (!window.ZXing) await loadScript("lib/zxing.min.js?v=19");
   const Z = window.ZXing;
   const reader = new Z.MultiFormatReader();
   const hints = new Map();
@@ -2225,8 +2225,8 @@ async function init() {
   if (LANG !== "fr") {
     try {
       const [ui, content] = await Promise.all([
-        fetch(`i18n-${LANG}.json?v=18`, { cache: "no-cache" }).then(r => r.json()),
-        fetch(`recettes.${LANG}.json?v=18`, { cache: "no-cache" }).then(r => r.json())
+        fetch(`i18n-${LANG}.json?v=19`, { cache: "no-cache" }).then(r => r.json()),
+        fetch(`recettes.${LANG}.json?v=19`, { cache: "no-cache" }).then(r => r.json())
       ]);
       DICT = ui; enContent = content;
       translateStatic();
